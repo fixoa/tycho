@@ -104,7 +104,7 @@ export default function Team() {
               <span className="inline-flex items-center gap-1 text-ink-3 text-xs"><Lock size={12} /> nur aggregiert</span>
             ) : (
               <div className="flex items-center gap-2 justify-end">
-                <div className="w-20"><MiniBar value={s.score} max={100} tone={s.score >= 80 ? '#3dcc91' : s.score >= 65 ? '#ffb366' : '#ff9980'} /></div>
+                <div className="w-20"><MiniBar value={s.score} max={100} tone={s.score >= 80 ? '#4fb3a8' : s.score >= 65 ? '#b9bb5f' : '#d9834a'} /></div>
                 <span className="font-medium w-7">{s.score}</span>
                 <Delta value={s.score - s.prevScore} />
               </div>

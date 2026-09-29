@@ -33,21 +33,22 @@ export default {
           8: 'var(--series-8)',
         },
         status: {
-          good: '#3dcc91',
-          warning: '#ffb366',
-          serious: '#ff9980',
-          critical: '#ff7373',
+          good: '#4fb3a8',
+          warning: '#b9bb5f',
+          serious: '#d9834a',
+          critical: '#d64545',
         },
       },
       fontFamily: {
-        sans: ['"Source Sans 3"', 'system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'sans-serif'],
+        display: ['"Inter Tight"', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       boxShadow: {
         card: '0 0 0 1px var(--line-2)',
       },
       borderRadius: {
-        DEFAULT: '3px',
+        DEFAULT: '2px',
       },
     },
   },

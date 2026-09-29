@@ -77,7 +77,7 @@ export default function Person() {
                         <span className="text-ink-1 inline-flex items-center gap-1" title={c.hint}>{c.label} <Info size={10} className="text-ink-3" /></span>
                         <span className="text-ink-3 tabular">{show(c.value)} <span className="text-ink-3/60">/ {c.invert ? '≤ ' : ''}{show(c.target)}</span> · <span className="text-ink-1">{pct} %</span> · {Math.round(c.weight * 100)} % Gewicht</span>
                       </div>
-                      <MiniBar value={pct} max={100} tone={pct >= 90 ? '#3dcc91' : pct >= 70 ? '#ffb366' : '#ff9980'} height={5} />
+                      <MiniBar value={pct} max={100} tone={pct >= 90 ? '#4fb3a8' : pct >= 70 ? '#b9bb5f' : '#d9834a'} height={5} />
                       <div className="text-[10px] text-ink-3 mt-0.5">{c.hint}</div>
                     </div>
                   )

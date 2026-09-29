@@ -1,12 +1,11 @@
 import { useEffect, useRef } from 'react'
 
-// Gepunkteter Globus mit Kontinenten, Gradnetz, Satelliten auf geneigten Bahnen,
-// Scan-Strahlen und Zielmarker. Canvas 2D mit eigener 3D-Projektion – keine Abhängigkeiten.
+// Gotham-Hero: nah gesehene Erdkugel, dunkle Landmassen mit feinen Grenzen, dichter
+// Punktgürtel (oliv/rot/türkis/weiß), statische Tracking-Marker, sehr langsame Drehung.
 
 type V3 = [number, number, number]
 const DEG = Math.PI / 180
 
-// Grobe Kontinentumrisse (Lon, Lat) – rein für die Optik.
 const LAND: [number, number][][] = [
   [[-168, 66], [-140, 70], [-95, 75], [-60, 60], [-55, 47], [-75, 35], [-80, 25], [-97, 20], [-105, 22], [-120, 33], [-125, 48], [-150, 60]],
   [[-80, 10], [-60, 8], [-50, 0], [-35, -8], [-40, -22], [-52, -33], [-68, -52], [-75, -45], [-72, -20], [-80, -5]],
@@ -16,6 +15,12 @@ const LAND: [number, number][][] = [
   [[114, -22], [130, -12], [142, -11], [153, -25], [150, -38], [135, -35], [115, -34]],
   [[-55, 60], [-20, 70], [-20, 82], [-60, 82], [-70, 75]],
   [[-180, -70], [180, -70], [180, -90], [-180, -90]],
+]
+// Grobe Ländergrenzen als zusätzliche Linien (nur Optik)
+const BORDERS: [number, number][][] = [
+  [[-10, 43], [3, 43]], [[8, 47], [17, 47]], [[9, 47], [13, 46], [14, 44]], [[14, 55], [24, 55], [24, 50], [22, 48]], [[30, 52], [40, 52]], [[26, 42], [40, 42]],
+  [[33, 31], [35, 33], [42, 37]], [[36, 30], [50, 30]], [[44, 28], [56, 25]], [[60, 25], [62, 35], [70, 37]], [[73, 36], [78, 35], [88, 27]], [[35, 22], [25, 22]], [[25, 22], [25, 32]],
+  [[-100, 49], [-125, 49]], [[-117, 32], [-97, 26]], [[70, 37], [90, 48], [120, 50]], [[100, 22], [108, 22]], [[45, 40], [47, 46], [40, 45]],
 ]
 
 function inPoly(lon: number, lat: number, poly: [number, number][]) {
@@ -27,28 +32,17 @@ function inPoly(lon: number, lat: number, poly: [number, number][]) {
   return inside
 }
 const isLand = (lon: number, lat: number) => LAND.some((p) => inPoly(lon, lat, p))
-
 function ll(lon: number, lat: number, r = 1): V3 {
   const la = lat * DEG, lo = lon * DEG
   return [r * Math.cos(la) * Math.cos(lo), r * Math.sin(la), -r * Math.cos(la) * Math.sin(lo)]
 }
 const rotY = ([x, y, z]: V3, a: number): V3 => [x * Math.cos(a) + z * Math.sin(a), y, -x * Math.sin(a) + z * Math.cos(a)]
 const rotX = ([x, y, z]: V3, a: number): V3 => [x, y * Math.cos(a) - z * Math.sin(a), y * Math.sin(a) + z * Math.cos(a)]
-const rotZ = ([x, y, z]: V3, a: number): V3 => [x * Math.cos(a) - y * Math.sin(a), x * Math.sin(a) + y * Math.cos(a), z]
 
-interface Sat { r: number; inc: number; node: number; speed: number; phase: number; hue: string }
-const SATS: Sat[] = [
-  { r: 1.32, inc: 52, node: 0, speed: 0.55, phase: 0, hue: '#48aff0' },
-  { r: 1.45, inc: 98, node: 60, speed: 0.42, phase: 2.1, hue: '#3dcc91' },
-  { r: 1.6, inc: 28, node: 130, speed: 0.33, phase: 4.0, hue: '#48aff0' },
-  { r: 1.38, inc: 75, node: 200, speed: 0.5, phase: 1.2, hue: '#ffb366' },
-  { r: 1.52, inc: 63, node: 280, speed: 0.38, phase: 3.3, hue: '#48aff0' },
-  { r: 1.7, inc: 15, node: 330, speed: 0.27, phase: 5.1, hue: '#bfccd6' },
-]
-const TARGETS = [
-  { lon: 16.37, lat: 48.2, label: 'ORDINATION · WIEN 21', primary: true },
-  { lon: -74, lat: 40.7, label: 'NYC' }, { lon: 139.7, lat: 35.7, label: 'TYO' }, { lon: 28.2, lat: -25.7, label: 'PTA' }, { lon: -46.6, lat: -23.5, label: 'SAO' }, { lon: 77.2, lat: 28.6, label: 'DEL' },
-]
+interface Dot { v: V3; r: number; c: string; s: number; w: number }
+const BELT_COLORS = ['#b9bb5f', '#b9bb5f', '#b9bb5f', '#b9bb5f', '#c9cb6e', '#d64545', '#d64545', '#4fb3a8', '#e6e8ea', '#e6e8ea']
+
+function seeded(seed: number) { let a = seed >>> 0; return () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296 } }
 
 export default function Globe({ className = '' }: { className?: string }) {
   const ref = useRef<HTMLCanvasElement>(null)
@@ -56,140 +50,110 @@ export default function Globe({ className = '' }: { className?: string }) {
     const canvas = ref.current!
     const ctx = canvas.getContext('2d')!
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    let raf = 0, w = 0, h = 0, dpr = 1
+    let raf = 0, w = 0, h = 0
     const resize = () => {
-      dpr = Math.min(2, window.devicePixelRatio || 1)
+      const dpr = Math.min(2, window.devicePixelRatio || 1)
       w = canvas.clientWidth; h = canvas.clientHeight
       canvas.width = w * dpr; canvas.height = h * dpr
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
     resize()
     const ro = new ResizeObserver(resize); ro.observe(canvas)
+    const rnd = seeded(7)
 
-    // Punktwolke (Fibonacci-Sphäre), Land vs. Wasser
-    const N = 4200
-    const pts: { v: V3; land: boolean }[] = []
+    // Landpunkte (dicht, dunkel)
+    const N = 14000
+    const land: V3[] = []
     const golden = Math.PI * (3 - Math.sqrt(5))
     for (let i = 0; i < N; i++) {
-      const y = 1 - (i / (N - 1)) * 2
-      const rad = Math.sqrt(1 - y * y)
-      const th = golden * i
+      const y = 1 - (i / (N - 1)) * 2, rad = Math.sqrt(1 - y * y), th = golden * i
       const x = Math.cos(th) * rad, z = Math.sin(th) * rad
-      const lat = Math.asin(y) / DEG, lon = Math.atan2(-z, x) / DEG
-      pts.push({ v: [x, y, z], land: isLand(lon, lat) })
+      if (isLand(Math.atan2(-z, x) / DEG, Math.asin(y) / DEG)) land.push([x, y, z])
     }
+    // Punktgürtel im Orbit + Oberflächen-Cluster
+    const belt: Dot[] = []
+    for (let i = 0; i < 2600; i++) {
+      const lat = (rnd() - 0.5) * 70 + (rnd() < 0.5 ? 20 : -5), lon = rnd() * 360 - 180
+      belt.push({ v: ll(lon, lat), r: 1.03 + rnd() * 0.14, c: BELT_COLORS[Math.floor(rnd() * BELT_COLORS.length)], s: 0.8 + rnd() * 1.6, w: 0.004 + rnd() * 0.01 })
+    }
+    const surface: Dot[] = []
+    for (let i = 0; i < 700; i++) {
+      const near = rnd() < 0.5
+      const lat = near ? 30 + rnd() * 30 : rnd() * 140 - 60, lon = near ? rnd() * 60 : rnd() * 360 - 180
+      surface.push({ v: ll(lon, lat), r: 1.002, c: rnd() < 0.25 ? '#d64545' : rnd() < 0.7 ? '#b9bb5f' : '#4fb3a8', s: 0.9 + rnd() * 1.4, w: 0 })
+    }
+    const markers = [
+      { lon: 16.37, lat: 48.2, kind: 'ring' as const, label: 'WIEN 21' }, { lon: 24, lat: 46, kind: 'box' as const }, { lon: 35, lat: 39, kind: 'box' as const }, { lon: 45, lat: 34, kind: 'ring' as const },
+      { lon: 55, lat: 25, kind: 'box' as const }, { lon: 8, lat: 52, kind: 'box' as const }, { lon: -3, lat: 40, kind: 'box' as const }, { lon: 30, lat: 27, kind: 'ring' as const }, { lon: 69, lat: 41, kind: 'box' as const },
+    ]
 
     const t0 = performance.now()
     const draw = (now: number) => {
       const t = reduced ? 0 : (now - t0) / 1000
-      const cx = w >= 1024 ? w * 0.52 : w * 0.5, cy = h * 0.5
-      const R = Math.min(w, h) * (w >= 1024 ? 0.36 : 0.3)
-      const spin = t * 0.08
-      const tilt = 23 * DEG
-      const proj = (v: V3): [number, number, number] => {
+      const wide = w >= 1024
+      const cx = w * 0.5, cy = wide ? h * 1.22 : h * 1.3
+      const R = wide ? Math.max(w * 0.6, h * 1.12) : Math.max(w * 0.95, h * 0.95)
+      const spin = -0.55 + t * 0.006 // Europa/Nahost im Blick, sehr langsam
+      const tilt = -38 * DEG // Blick von schräg oben
+      const proj = (v: V3, r = 1): [number, number, number] => {
         const p = rotX(rotY(v, spin), tilt)
-        return [cx + p[0] * R, cy - p[1] * R, p[2]]
+        return [cx + p[0] * R * r, cy - p[1] * R * r, p[2]]
       }
       ctx.clearRect(0, 0, w, h)
+      // Erdkörper + Randlicht
+      ctx.fillStyle = '#0c1014'; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill()
+      const rim = ctx.createRadialGradient(cx, cy, R * 0.96, cx, cy, R * 1.01)
+      rim.addColorStop(0, 'rgba(120,150,180,0)'); rim.addColorStop(0.85, 'rgba(120,150,180,0.14)'); rim.addColorStop(1, 'rgba(120,150,180,0.5)')
+      ctx.fillStyle = rim; ctx.beginPath(); ctx.arc(cx, cy, R * 1.01, 0, Math.PI * 2); ctx.fill()
+      ctx.strokeStyle = 'rgba(160,190,215,0.35)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke()
 
-      // Atmosphäre
-      const glow = ctx.createRadialGradient(cx, cy, R * 0.9, cx, cy, R * 1.35)
-      glow.addColorStop(0, 'rgba(72,175,240,0.16)'); glow.addColorStop(0.5, 'rgba(72,175,240,0.04)'); glow.addColorStop(1, 'rgba(72,175,240,0)')
-      ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(cx, cy, R * 1.35, 0, Math.PI * 2); ctx.fill()
-      ctx.fillStyle = 'rgba(16,22,26,0.85)'; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill()
-
-      // Gradnetz
-      ctx.lineWidth = 0.6
-      for (let lat = -60; lat <= 60; lat += 30) {
+      // Land (dunkle Punkte), Grenzen (feine Linien)
+      ctx.fillStyle = '#1f262d'
+      for (const v of land) { const [x, y, z] = proj(v); if (z < 0.02 || y < -10 || y > h + 10) continue; ctx.fillRect(x - 1.3, y - 1.3, 2.6, 2.6) }
+      ctx.strokeStyle = 'rgba(96,110,124,0.7)'; ctx.lineWidth = 0.9
+      const poly = (pl: [number, number][], close: boolean) => {
         ctx.beginPath(); let first = true
-        for (let lon = -180; lon <= 180; lon += 4) {
-          const [x, y, z] = proj(ll(lon, lat))
-          if (z < -0.02) { first = true; continue }
+        for (let i = 0; i < pl.length + (close ? 1 : 0); i++) {
+          const [lon, lat] = pl[i % pl.length]; const [x, y, z] = proj(ll(lon, lat))
+          if (z < 0.02) { first = true; continue }
           if (first) { ctx.moveTo(x, y); first = false } else ctx.lineTo(x, y)
         }
-        ctx.strokeStyle = 'rgba(138,155,168,0.18)'; ctx.stroke()
+        ctx.stroke()
       }
-      for (let lon = -180; lon < 180; lon += 30) {
-        ctx.beginPath(); let first = true
-        for (let lat = -90; lat <= 90; lat += 4) {
-          const [x, y, z] = proj(ll(lon, lat))
-          if (z < -0.02) { first = true; continue }
-          if (first) { ctx.moveTo(x, y); first = false } else ctx.lineTo(x, y)
-        }
-        ctx.strokeStyle = 'rgba(138,155,168,0.14)'; ctx.stroke()
+      for (const p of LAND.slice(0, 7)) poly(p, true)
+      ctx.strokeStyle = 'rgba(96,110,124,0.5)'
+      for (const b of BORDERS) poly(b, false)
+
+      // Oberflächen-Cluster
+      for (const d of surface) { const [x, y, z] = proj(d.v, d.r); if (z < 0.03) continue; ctx.fillStyle = d.c; ctx.globalAlpha = 0.55 + 0.45 * z; ctx.beginPath(); ctx.arc(x, y, d.s, 0, Math.PI * 2); ctx.fill() }
+      ctx.globalAlpha = 1
+      // Tracking-Marker
+      ctx.lineWidth = 1
+      for (const m of markers) {
+        const [x, y, z] = proj(ll(m.lon, m.lat), 1.003); if (z < 0.05) continue
+        ctx.strokeStyle = 'rgba(200,210,220,0.55)'
+        if (m.kind === 'box') { ctx.strokeRect(x - 7, y - 7, 14, 14); ctx.fillStyle = 'rgba(200,210,220,0.8)'; ctx.fillRect(x - 1.5, y - 1.5, 3, 3) }
+        else { ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.ellipse(x, y, 34, 22, 0, 0, Math.PI * 2); ctx.stroke(); ctx.setLineDash([]); ctx.strokeRect(x - 6, y - 6, 12, 12) }
+        if (m.label) { ctx.fillStyle = 'rgba(230,232,234,0.7)'; ctx.font = '500 10px Inter, system-ui, sans-serif'; ctx.fillText(m.label, x + 12, y - 10) }
       }
-
-      // Punkte
-      for (const p of pts) {
-        const [x, y, z] = proj(p.v)
-        if (z < 0) continue
-        const a = 0.25 + 0.75 * z
-        if (p.land) { ctx.fillStyle = `rgba(140,205,255,${a})`; ctx.fillRect(x - 1, y - 1, 2, 2) }
-        else { ctx.fillStyle = `rgba(92,112,128,${a * 0.45})`; ctx.fillRect(x - 0.5, y - 0.5, 1, 1) }
+      // Punktgürtel (Orbit), sehr langsam
+      for (const d of belt) {
+        const v = rotY(d.v, t * d.w)
+        const [x, y, z] = proj(v, d.r)
+        const dist = Math.hypot(x - cx, y - cy)
+        const behind = z < 0 && dist < R
+        if (behind || y < -10 || y > h + 10) continue
+        // Sichtbar vor allem am Horizont: außerhalb der Scheibe voll, auf der Fläche nur nahe am Rand
+        const edge = dist >= R ? 1 : Math.max(0, 1 - (R - dist) / (R * 0.22))
+        if (edge <= 0.02) continue
+        ctx.fillStyle = d.c; ctx.globalAlpha = 0.25 + 0.75 * edge
+        ctx.beginPath(); ctx.arc(x, y, d.s, 0, Math.PI * 2); ctx.fill()
       }
-
-      // Terminator-Schatten
-      const shade = ctx.createLinearGradient(cx - R, cy, cx + R, cy)
-      shade.addColorStop(0, 'rgba(16,22,26,0.55)'); shade.addColorStop(0.45, 'rgba(16,22,26,0)'); shade.addColorStop(1, 'rgba(16,22,26,0)')
-      ctx.fillStyle = shade; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill()
-      ctx.strokeStyle = 'rgba(72,175,240,0.35)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke()
-
-      // Zielmarker
-      ctx.font = '10px "JetBrains Mono", ui-monospace, monospace'
-      for (const tg of TARGETS) {
-        const [x, y, z] = proj(ll(tg.lon, tg.lat, 1.005))
-        if (z < 0.05) continue
-        const pulse = (((t * 1.2 + tg.lon / 37) % 1) + 1) % 1
-        const col = tg.primary ? '#ffb366' : '#48aff0'
-        ctx.strokeStyle = col; ctx.lineWidth = 1
-        ctx.globalAlpha = 1 - pulse; ctx.beginPath(); ctx.arc(x, y, 4 + pulse * 14, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = 1
-        ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI * 2); ctx.fill()
-        if (tg.primary) {
-          ctx.beginPath(); ctx.moveTo(x - 10, y); ctx.lineTo(x - 4, y); ctx.moveTo(x + 4, y); ctx.lineTo(x + 10, y); ctx.moveTo(x, y - 10); ctx.lineTo(x, y - 4); ctx.moveTo(x, y + 4); ctx.lineTo(x, y + 10); ctx.stroke()
-          ctx.beginPath(); ctx.moveTo(x + 8, y - 8); ctx.lineTo(x + 26, y - 26); ctx.lineTo(x + 150, y - 26); ctx.stroke()
-          ctx.fillStyle = col; ctx.fillText(tg.label, x + 30, y - 30)
-          ctx.fillStyle = 'rgba(191,204,214,0.8)'; ctx.fillText(`${tg.lat.toFixed(2)}N ${tg.lon.toFixed(2)}E · LOCK`, x + 30, y - 18)
-        } else {
-          ctx.fillStyle = 'rgba(191,204,214,0.55)'; ctx.fillText(tg.label, x + 7, y + 3)
-        }
-      }
-
-      // Satelliten: Bahn, Spur, Körper, Scan-Strahl
-      for (const s of SATS) {
-        const orbit = (ang: number): V3 => rotY(rotX(rotZ([Math.cos(ang) * s.r, Math.sin(ang) * s.r, 0], 0), s.inc * DEG), s.node * DEG)
-        ctx.beginPath(); ctx.lineWidth = 0.7
-        for (let a = 0; a <= 360; a += 3) {
-          const [x, y, z] = proj(orbit(a * DEG))
-          const behind = z < 0 && Math.hypot(x - cx, y - cy) < R
-          if (behind) { ctx.stroke(); ctx.beginPath(); continue }
-          if (a === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y)
-        }
-        ctx.strokeStyle = 'rgba(138,155,168,0.22)'; ctx.stroke()
-        const ang = s.phase + t * s.speed
-        // Spur
-        for (let k = 40; k >= 1; k--) {
-          const [x, y, z] = proj(orbit(ang - k * 0.035))
-          if (z < 0 && Math.hypot(x - cx, y - cy) < R) continue
-          ctx.fillStyle = s.hue; ctx.globalAlpha = (1 - k / 40) * 0.6; ctx.fillRect(x - 0.8, y - 0.8, 1.6, 1.6)
-        }
-        ctx.globalAlpha = 1
-        const [x, y, z] = proj(orbit(ang))
-        const hidden = z < 0 && Math.hypot(x - cx, y - cy) < R
-        if (hidden) continue
-        // Scan-Strahl zum Fußpunkt
-        const foot = orbit(ang); const n = Math.hypot(...foot)
-        const [fx, fy, fz] = proj([foot[0] / n, foot[1] / n, foot[2] / n])
-        if (fz > 0) {
-          const g = ctx.createLinearGradient(x, y, fx, fy); g.addColorStop(0, s.hue + 'aa'); g.addColorStop(1, s.hue + '00')
-          ctx.strokeStyle = g; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(fx, fy); ctx.stroke()
-          const sweep = (t * 0.9 + s.phase) % 1
-          ctx.strokeStyle = s.hue; ctx.globalAlpha = 0.5 * (1 - sweep); ctx.beginPath(); ctx.ellipse(fx, fy, 3 + sweep * 12, (3 + sweep * 12) * 0.6, 0, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = 1
-        }
-        ctx.fillStyle = s.hue; ctx.shadowColor = s.hue; ctx.shadowBlur = 10
-        ctx.beginPath(); ctx.arc(x, y, 2.4, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0
-        ctx.strokeStyle = s.hue; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x - 7, y); ctx.lineTo(x - 3, y); ctx.moveTo(x + 3, y); ctx.lineTo(x + 7, y); ctx.stroke()
-      }
-
+      ctx.globalAlpha = 1
+      // Vignette
+      const vg = ctx.createRadialGradient(cx, h * 0.5, h * 0.2, cx, h * 0.5, Math.max(w, h))
+      vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.55)')
+      ctx.fillStyle = vg; ctx.fillRect(0, 0, w, h)
       if (!reduced) raf = requestAnimationFrame(draw)
     }
     raf = requestAnimationFrame(draw)

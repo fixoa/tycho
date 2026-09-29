@@ -98,7 +98,7 @@ export default function Leistungen() {
             { key: 'value', label: 'Umsatz', align: 'right', render: (s) => <span className="text-ink-1">{fmt.eur(s.value)}</span> },
             { key: 'limit', label: 'Limit', render: (s) => s.limit ? (
               <div className="flex items-center gap-2 w-36">
-                <MiniBar value={s.limitUsage ?? 0} max={1} tone={(s.limitUsage ?? 0) > 0.85 ? '#ff7373' : (s.limitUsage ?? 0) > 0.7 ? '#ffb366' : '#3dcc91'} height={5} />
+                <MiniBar value={s.limitUsage ?? 0} max={1} tone={(s.limitUsage ?? 0) > 0.85 ? '#d64545' : (s.limitUsage ?? 0) > 0.7 ? '#b9bb5f' : '#4fb3a8'} height={5} />
                 <span className="text-xs tabular">{s.count}/{s.limit}</span>
               </div>
             ) : <span className="text-ink-3 text-xs inline-flex items-center gap-1"><CheckCircle2 size={11} /> frei</span> },

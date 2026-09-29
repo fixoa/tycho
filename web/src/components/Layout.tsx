@@ -78,7 +78,7 @@ function FacetPanel({ facets, onCollapse }: { facets: Chrome['facets']; onCollap
                     <button key={r.label} onClick={() => setActive(on ? null : key)} className={`w-full grid grid-cols-[1fr_auto_64px] items-center gap-2 py-[3px] px-1 -mx-1 text-left rounded ${on ? 'bg-surface-2 text-ink-1' : 'text-ink-2 hover:bg-white/5'}`}>
                       <span className="truncate text-[12px]">{r.label}</span>
                       <span className="tabular text-[11px] text-ink-3">{fmt.num(r.count)}</span>
-                      <span className="h-2 bg-black/20 rounded-sm overflow-hidden"><span className="block h-full" style={{ width: `${Math.max(3, (r.count / max) * 100)}%`, background: on ? 'var(--accent)' : 'var(--bp-g1)' }} /></span>
+                      <span className="h-2 bg-black/20 rounded-sm overflow-hidden"><span className="block h-full" style={{ width: `${Math.max(3, (r.count / max) * 100)}%`, background: on ? 'var(--ink-1)' : 'var(--bp-g1)' }} /></span>
                     </button>
                   )
                 })}
@@ -109,11 +109,11 @@ export default function Layout() {
     <div className="h-full flex flex-col bg-surface-0">
       {/* Modulleiste */}
       <header className="h-14 shrink-0 bg-bar-0 flex items-center px-2 gap-1 border-b border-black/30">
-        <div className="flex items-center pl-3 pr-4 mr-1 border-r border-white/10 h-9"><span className="font-bold tracking-[0.24em] text-[13px] text-ink-1">TYCHO</span></div>
+        <div className="flex items-center pl-3 pr-4 mr-1 border-r border-white/10 h-9"><span className="font-medium tracking-tight text-[15px] text-ink-1">Tycho</span></div>
         <nav className="flex items-stretch gap-0.5 overflow-x-auto">
           {items.map((n) => (
             <NavLink key={n.to} to={n.to} onClick={() => setTab(0)}
-              className={({ isActive }) => `flex flex-col items-center justify-center w-[58px] h-11 rounded ${isActive ? 'text-accent' : 'text-ink-3 hover:text-ink-1 hover:bg-white/5'}`}>
+              className={({ isActive }) => `flex flex-col items-center justify-center w-[58px] h-11 rounded ${isActive ? 'text-ink-1 bg-white/5' : 'text-ink-3 hover:text-ink-1 hover:bg-white/5'}`}>
               <n.icon size={17} strokeWidth={1.7} />
               <span className="text-[9.5px] mt-1 leading-none whitespace-nowrap">{n.label}</span>
             </NavLink>

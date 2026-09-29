@@ -85,7 +85,7 @@ export function Avatar({ name, hue, size = 32 }: { name: string; hue: number; si
 export function ScoreRing({ score, size = 96, stroke = 8, label, prev }: { score: number; size?: number; stroke?: number; label?: string; prev?: number }) {
   const r = (size - stroke) / 2
   const c = 2 * Math.PI * r
-  const tone = score >= 80 ? '#3dcc91' : score >= 65 ? '#ffb366' : score >= 50 ? '#ff9980' : '#ff7373'
+  const tone = score >= 80 ? '#4fb3a8' : score >= 65 ? '#b9bb5f' : score >= 50 ? '#d9834a' : '#d64545'
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">

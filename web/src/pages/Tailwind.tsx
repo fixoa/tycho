@@ -69,7 +69,7 @@ export default function Tailwind() {
                 {s.byKind.map((k) => (
                   <div key={k.kind}>
                     <div className="flex justify-between text-xs mb-0.5"><span className="text-ink-1">{k.kind}</span><span className="tabular text-ink-3">{fmt.pct(k.quote)} bezahlt · {fmt.eur(k.open)} offen</span></div>
-                    <MiniBar value={k.quote} tone={k.quote >= 0.85 ? '#3dcc91' : k.quote >= 0.7 ? '#ffb366' : '#ff9980'} height={5} />
+                    <MiniBar value={k.quote} tone={k.quote >= 0.85 ? '#4fb3a8' : k.quote >= 0.7 ? '#b9bb5f' : '#d9834a'} height={5} />
                   </div>
                 ))}
               </div>

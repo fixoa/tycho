@@ -52,7 +52,7 @@ export default function MeinScore() {
               return (
                 <div key={c.key}>
                   <div className="flex justify-between text-xs mb-1"><span className="text-ink-1 inline-flex items-center gap-1" title={c.hint}>{c.label} <Info size={10} className="text-ink-3" /></span><span className="text-ink-3 tabular">{show(c.value)} / {c.invert ? '≤ ' : ''}{show(c.target)} · <span className="text-ink-1">{pct} %</span></span></div>
-                  <MiniBar value={pct} max={100} tone={pct >= 90 ? '#3dcc91' : pct >= 70 ? '#ffb366' : '#ff9980'} height={5} />
+                  <MiniBar value={pct} max={100} tone={pct >= 90 ? '#4fb3a8' : pct >= 70 ? '#b9bb5f' : '#d9834a'} height={5} />
                 </div>
               )
             })}

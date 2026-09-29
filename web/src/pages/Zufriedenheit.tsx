@@ -33,7 +33,7 @@ export default function Zufriedenheit() {
             {NPS.themes.map((t) => (
               <div key={t.theme}>
                 <div className="flex justify-between text-xs mb-0.5"><span className="text-ink-1">{t.theme} <span className="text-ink-3">· {t.n}</span></span><span className="tabular text-ink-3">{fmt.pct(t.sentiment)} <Delta value={t.delta * 100} format={(v) => fmt.num(Math.abs(v))} suffix=" Pp." /></span></div>
-                <MiniBar value={t.sentiment} tone={t.sentiment >= 0.75 ? '#3dcc91' : t.sentiment >= 0.5 ? '#ffb366' : '#ff9980'} height={5} />
+                <MiniBar value={t.sentiment} tone={t.sentiment >= 0.75 ? '#4fb3a8' : t.sentiment >= 0.5 ? '#b9bb5f' : '#d9834a'} height={5} />
               </div>
             ))}
           </div>

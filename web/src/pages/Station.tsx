@@ -121,7 +121,7 @@ export default function Station() {
 
       {/* KPI-Leiste */}
       <div className="card px-5 py-4">
-        <div className="grid gap-x-3 gap-y-4" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(98px, 1fr))' }}>
+        <div className="grid gap-x-3 gap-y-4" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))' }}>
           {kpis.map((k) => <Kpi key={k.label} {...k} />)}
         </div>
       </div>
@@ -170,7 +170,7 @@ export default function Station() {
             {roles.map((r) => (
               <div key={r.role}>
                 <div className="flex justify-between text-[11.5px] mb-1"><span className="text-ink-2">{ROLE_LABEL[r.role]} · Score</span><span className="tabular text-ink-1">{r.score} <Delta value={r.score - r.prev} /></span></div>
-                <MiniBar value={r.score} max={100} tone={r.score >= 80 ? '#3dcc91' : r.score >= 65 ? '#ffb366' : '#ff9980'} height={4} />
+                <MiniBar value={r.score} max={100} tone={r.score >= 80 ? '#4fb3a8' : r.score >= 65 ? '#b9bb5f' : '#d9834a'} height={4} />
               </div>
             ))}
           </div>
