@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --surface-0: #0d0d0d;
+  --surface-1: #1a1a19;
+  --surface-2: #222220;
+  --surface-3: #2c2c2a;
+  --ink-1: #ffffff;
+  --ink-2: #c3c2b7;
+  --ink-3: #898781;
+  --line-1: #2c2c2a;
+  --line-2: #383835;
+  --accent: #3987e5;
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
+  --seq-100: #cde2fb; --seq-200: #9ec5f4; --seq-300: #6da7ec; --seq-400: #3987e5;
+  --seq-500: #256abf; --seq-600: #184f95; --seq-700: #0d366b;
+  --div-mid: #383835;
+  --good-text: #0ca30c;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --surface-0: #f9f9f7;
+  --surface-1: #fcfcfb;
+  --surface-2: #f3f3f0;
+  --surface-3: #e9e9e4;
+  --ink-1: #0b0b0b;
+  --ink-2: #52514e;
+  --ink-3: #898781;
+  --line-1: #e1e0d9;
+  --line-2: #c3c2b7;
+  --accent: #2a78d6;
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #008300;
+  --series-7: #4a3aa7;
+  --series-8: #e34948;
+  --div-mid: #f0efec;
+  --good-text: #006300;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  @apply bg-surface-0 text-ink-1 font-sans antialiased;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+}
+
+.card {
+  @apply bg-surface-1 rounded-xl border border-line-1;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.recharts-cartesian-grid line {
+  stroke: var(--line-1);
+}
+.recharts-cartesian-axis line, .recharts-cartesian-axis-line {
+  stroke: var(--line-2);
+}
+.recharts-text {
+  fill: var(--ink-3);
+  font-size: 11px;
+}
+.recharts-tooltip-cursor {
+  stroke: var(--line-2);
+}
+.recharts-default-legend {
+  color: var(--ink-2);
+  font-size: 12px;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
