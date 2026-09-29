@@ -91,16 +91,6 @@ function FacetPanel({ facets, onCollapse }: { facets: Chrome['facets']; onCollap
   )
 }
 
-export function Mark({ size = 26 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 26 26" className="shrink-0" aria-hidden>
-      <circle cx="13" cy="13" r="6.5" fill="none" stroke="var(--accent)" strokeWidth="1.4" />
-      <path d="M13 3v5M13 18v5M3 13h5M18 13h5" stroke="var(--accent)" strokeWidth="1.4" />
-      <circle cx="13" cy="13" r="1.8" fill="var(--accent)" />
-    </svg>
-  )
-}
-
 export default function Layout() {
   const { session, logout, theme, toggleTheme } = useAuth()
   const { config } = useConfig()
@@ -119,7 +109,7 @@ export default function Layout() {
     <div className="h-full flex flex-col bg-surface-0">
       {/* Modulleiste */}
       <header className="h-14 shrink-0 bg-bar-0 flex items-center px-2 gap-1 border-b border-black/30">
-        <div className="flex items-center gap-2 pl-2 pr-3 mr-1 border-r border-white/10 h-9"><Mark size={22} /><span className="font-semibold tracking-[0.18em] text-[12px] text-ink-1">TYCHO</span></div>
+        <div className="flex items-center pl-3 pr-4 mr-1 border-r border-white/10 h-9"><span className="font-bold tracking-[0.24em] text-[13px] text-ink-1">TYCHO</span></div>
         <nav className="flex items-stretch gap-0.5 overflow-x-auto">
           {items.map((n) => (
             <NavLink key={n.to} to={n.to} onClick={() => setTab(0)}
