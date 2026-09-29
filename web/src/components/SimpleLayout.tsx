@@ -14,7 +14,7 @@ import { fmt } from '../lib/format'
 
 const MAIN = [
   { to: '/start', label: 'Start' }, { to: '/patienten', label: 'Patient:innen' }, { to: '/finanzen', label: 'Finanzen' }, { to: '/produktivitaet', label: 'Produktivität' },
-  { to: '/ordicall', label: 'Ordicall', module: 'ordicall' }, { to: '/diktara', label: 'Diktara', module: 'diktara' }, { to: '/tailwind', label: 'Tailwind', module: 'tailwind' }, { to: '/tarife', label: 'Tarife' },
+  { to: '/ordicall', label: 'Ordicall', module: 'ordicall' }, { to: '/diktara', label: 'Diktara', module: 'diktara' }, { to: '/tailwind', label: 'Tailwind', module: 'tailwind' }, { to: '/hr', label: 'HR', module: 'tailwind' }, { to: '/tarife', label: 'Tarife' },
 ]
 const MORE = [
   { to: '/station', label: 'Tycho Station (Cockpit)' }, { to: '/team', label: 'Personal & Effizienz' }, { to: '/prognose', label: 'Prognose' }, { to: '/digest', label: 'Tycho Digest' },

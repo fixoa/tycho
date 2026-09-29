@@ -151,6 +151,10 @@ Audio, Transkripte, Telefonnummern, Namen, Freitext des Anliegens. `intent` ist 
 - Tycho ruft die API einmal täglich nach Betriebsschluss ab, ausschließlich für Konten der eigenen Ordination (Mandant), und speichert die Daten in einem **eigenen verschlüsselten Store** (separater Schlüssel, separates Audit-Log, Aufbewahrung 12 Monate).
 - Sichtbarkeit in Tycho: nur AD-Gruppe `G_Tailwind_HR` (plus Leitung im Pro-Person-Modus). Im Team-Modus nur Gruppensummen und namenlose Frühwarnungen.
 
+### 3.1a Zusätzlicher Scope für die HR-Plattform: `shifts:read`
+
+Tailwind HR misst Effizienz und Kosten je Person bzw. Gruppe. Dafür braucht Tycho zusätzlich zum Ist (Zeiterfassung) das **Soll aus dem Dienstplan**: `shifts[] {date, plannedStart, plannedEnd, role, location, breakMinutes}` je Mitarbeiter:in. Daraus berechnet Tycho Soll-Stunden, Überstunden (Ist − Soll, Zuschlag konfigurierbar), Besetzung je Wochentag × Stunde (gegen Patientenaufkommen aus dem Aufrufsystem) und Personalkostenquote (Kosten aus der Lohnverrechnung, nicht aus Planery). Planery liefert **keine** Gehaltsdaten an Tycho.
+
 ### 3.2 Benötigte Felder je Mitarbeiter:in und Monat
 
 `employeeRef` (muss auf AD-Konto mappbar sein – Planery-Feld für `sAMAccountName` oder E-Mail = UPN), `period`, `targetHours`, `actualHours`, `overtimeBalanceHours`, `overtimeDeltaHours`, `vacationEntitlementDays`, `vacationTakenDays`, `vacationPlannedDays`, `sickDays` (nur Anzahl, keine Diagnose), `absences[] {from, to, type: vacation/training/timeOff/sick/other}`, `shifts[] {date, plannedStart, plannedEnd}` (für Besetzungslücken-Prüfung gegen Terminkalender und AD-Logon).

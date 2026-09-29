@@ -18,6 +18,7 @@ import Prognose from './pages/Prognose'
 import Ordicall from './pages/Ordicall'
 import Diktara from './pages/Diktara'
 import Tailwind from './pages/Tailwind'
+import HRPage from './pages/HR'
 import Digest from './pages/Digest'
 import Sicherheit from './pages/Sicherheit'
 import Einstellungen from './pages/Einstellungen'
@@ -70,6 +71,7 @@ export default function App() {
         <Route path="/ordicall" element={<Ordicall />} />
         <Route path="/diktara" element={<Diktara />} />
         <Route path="/tailwind" element={<Tailwind />} />
+        <Route path="/hr" element={<HRPage />} />
         <Route path="/sicherheit" element={<Sicherheit />} />
         <Route path="/einstellungen" element={<Einstellungen />} />
       </Route>

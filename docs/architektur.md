@@ -85,6 +85,7 @@ Der Modus wirkt global: Team-, Personen-, Tailwind-HR-, Verordnungs- und Digest-
 ## Tailwind (Controlling, Inkasso, HR)
 
 - **Honorarnoten:** aus dem PVS-Honorarnotenmodul (read-only) mit Bankumsatz-Abgleich (CAMT.053-Import, read-only) und WAHonline-Übermittlungsstatus. Tailwind berechnet Aging, DSO, Zahlungswahrscheinlichkeit und eine **KI-Empfehlung je Honorarnote** (Erinnerung, Mahnstufe, Ratenzahlung, Inkasso, Abschreibung, Stornoprüfung) mit Begründung. Es versendet nichts und schreibt nichts – es erzeugt Texte und Übergabelisten für Menschen.
+- **HR-Plattform (Tailwind HR):** Personalkosten (Ist-Stunden × Stundensatz aus Lohnverrechnung + 25 % Überstundenzuschlag), Personalkostenquote je Monat (Richtwert 22–28 %), Ertrag je Personalstunde, Effizienz je Person/Gruppe (Output je Stunde ÷ Rollenziel: Ärzt:innen und DGKP Umsatz/h, Assistenz Kontakte + Anrufe/h), Besetzung laut Dienstplan gegen Patientenaufkommen (Wochentag × Stunde), Krankenstandsquote, Frühwarnungen, Abwesenheiten. Seite `/hr`, Daten in `web/src/data/tailwind.ts` (`hrRows`, `hrGroups`, `hrMonthly`, `STAFFING`).
 - **HR aus Planery:** dedizierter Read-only-Token (Scope Zeiten/Abwesenheiten/Salden), Token im TPM, eigener Verschlüsselungsschlüssel, eigenes Audit-Log, Aufbewahrung 12 Monate, Sichtbarkeit nur `G_Tailwind_HR` (+ Leitung im Pro-Person-Modus). Frühwarnregeln: Überstundensaldo > 60 h, Urlaubsrest > 15 Tage im Q4, 3 Monate steigender Trend, > 5 Krankenstandstage / 8 Wochen, Besetzungslücke (Dienstplan × Terminkalender × AD-Logon).
 
 ## PVS-Adapter (Österreich)

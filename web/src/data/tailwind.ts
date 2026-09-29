@@ -162,3 +162,76 @@ export const HR: HrRecord[] = [
 ]
 
 export const hrById = (id: string) => HR.find((h) => h.staffId === id)
+
+// ---------------------------------------------------------------------------
+// HR-Plattform: Kosten & Effizienz aus Dienstplan-API (Planery) × Zeiterfassung/AD-Logon ×
+// Lohnverrechnung × Ertrag (PVS/Ordicall). Alles read-only.
+// ---------------------------------------------------------------------------
+import { STAFF as _STAFF, ROLE_LABEL as _ROLE_LABEL } from './staff'
+import { demo as _demo } from './mock'
+import type { DayRecord, Role } from './types'
+
+/** Stundensatz (AG-Gesamtkosten) je Person */
+export const hourlyRate = (staffId: string) => { const s = _STAFF.find((x) => x.id === staffId)!; return s.costPerMonth / (s.fte * 173) }
+/** Zielwerte je Rolle: Ertrag bzw. Output je bezahlter Stunde */
+export const HR_TARGETS: Record<Role, { label: string; target: number; unit: string }> = {
+  arzt: { label: 'Umsatz je Stunde', target: 190, unit: '€/h' },
+  dgkp: { label: 'Umsatz je Stunde', target: 38, unit: '€/h' },
+  assistenz: { label: 'Kontakte + Anrufe je Stunde', target: 9, unit: '/h' },
+  management: { label: 'Prozessqualität', target: 1, unit: '' },
+}
+
+export interface HrRow {
+  staffId: string; role: Role; days: number; sollH: number; istH: number; overtimeH: number; cost: number; overtimeCost: number
+  revenue: number; contacts: number; calls: number; outputPerHour: number; target: number; efficiency: number; sickDays: number; ratePerH: number
+}
+/** HR-Kennzahlen je Person für gefilterte Tagesdatensätze (Soll aus Dienstplan = FTE × 8,5 h je Arbeitstag) */
+export function hrRows(recs: DayRecord[]): HrRow[] {
+  const days = new Set(recs.map((r) => r.date)).size
+  return _STAFF.map((s) => {
+    const rs = recs.filter((r) => r.staffId === s.id)
+    const worked = rs.filter((r) => r.presenceMin > 0)
+    const istH = worked.reduce((a, r) => a + r.presenceMin, 0) / 60
+    const sollH = s.fte * 8.5 * worked.length
+    const overtimeH = Math.max(0, istH - sollH)
+    const rate = hourlyRate(s.id)
+    const cost = istH * rate + overtimeH * rate * 0.25
+    const revenue = worked.reduce((a, r) => a + r.servicesValue, 0)
+    const contacts = worked.reduce((a, r) => a + r.patientContacts, 0)
+    const calls = worked.reduce((a, r) => a + r.callsHandled, 0)
+    const output = s.role === 'arzt' || s.role === 'dgkp' ? (istH ? revenue / istH : 0) : s.role === 'assistenz' ? (istH ? (contacts + calls) / istH : 0) : 1
+    const t = HR_TARGETS[s.role].target
+    return { staffId: s.id, role: s.role, days, sollH, istH, overtimeH, cost, overtimeCost: overtimeH * rate * 0.25, revenue, contacts, calls, outputPerHour: output, target: t, efficiency: Math.min(1.25, output / t) / 1.25, sickDays: rs.length - worked.length, ratePerH: rate }
+  }).filter((r) => r.istH > 0)
+}
+
+export function hrGroups(rows: HrRow[]) {
+  return (['arzt', 'dgkp', 'assistenz', 'management'] as Role[]).map((role) => {
+    const g = rows.filter((r) => r.role === role)
+    const sum = (k: keyof HrRow) => g.reduce((a, r) => a + (r[k] as number), 0)
+    return { role, label: _ROLE_LABEL[role], n: g.length, sollH: sum('sollH'), istH: sum('istH'), overtimeH: sum('overtimeH'), cost: sum('cost'), revenue: sum('revenue'), contacts: sum('contacts'), calls: sum('calls'), efficiency: g.length ? sum('efficiency') / g.length : 0, sickDays: sum('sickDays'), outputPerHour: g.length ? sum('outputPerHour') / g.length : 0, target: HR_TARGETS[role].target }
+  }).filter((g) => g.n > 0)
+}
+
+/** Monatliche Personalkosten vs. Umsatz (Personalkostenquote) über die Historie */
+export function hrMonthly() {
+  const map = new Map<string, { month: string; label: string; revenue: number; arzt: number; dgkp: number; assistenz: number; management: number; overtimeH: number; sickDays: number; partial: boolean }>()
+  for (const r of _demo().records) {
+    const key = r.date.slice(0, 7); const d = new Date(r.date)
+    const row = map.get(key) ?? { month: key, label: d.toLocaleDateString('de-AT', { month: 'short', year: d.getMonth() === 0 ? 'numeric' : undefined }), revenue: 0, arzt: 0, dgkp: 0, assistenz: 0, management: 0, overtimeH: 0, sickDays: 0, partial: key === '2026-08' }
+    const s = _STAFF.find((x) => x.id === r.staffId)!
+    row.revenue += r.servicesValue * 1.2
+    const istH = r.presenceMin / 60; const rate = hourlyRate(s.id); const ot = Math.max(0, istH - s.fte * 8.5)
+    row[s.role] += istH * rate + ot * rate * 0.25
+    row.overtimeH += ot; if (r.presenceMin === 0) row.sickDays += 1
+    map.set(key, row)
+  }
+  // Personalkostenquote ohne Ärzt:innen (Gesellschafter:innen der Gruppenpraxis) – Richtwert 22–28 %; inkl. Ärzt:innen als Zweitwert
+  return [...map.values()].sort((a, b) => a.month.localeCompare(b.month)).map((m) => ({ ...m, cost: m.arzt + m.dgkp + m.assistenz + m.management, quote: m.revenue ? (m.dgkp + m.assistenz + m.management) / m.revenue : 0, quoteAll: m.revenue ? (m.arzt + m.dgkp + m.assistenz + m.management) / m.revenue : 0 }))
+}
+
+/** Dienstplan-Template (Planery): eingeplante Assistenz je Wochentag × Stunde */
+export const STAFFING: Record<string, number[]> = {
+  Mo: [2, 3, 3, 3, 3, 2, 2, 3, 3, 3, 2], Di: [2, 3, 3, 3, 2, 2, 2, 3, 3, 2, 2], Mi: [2, 3, 3, 3, 2, 2, 2, 2, 3, 2, 2], Do: [2, 3, 3, 3, 3, 2, 2, 3, 3, 2, 2], Fr: [2, 3, 3, 2, 2, 1, 1, 2, 2, 1, 1], Sa: [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+}
+export const PLANERY = { status: 'ok', endpoint: 'https://api.planery.at/v1', scopes: ['times:read', 'absences:read', 'balances:read', 'shifts:read'], lastSync: '2026-08-24T19:06:30', token: 'im TPM · Rotation alle 90 Tage', mapped: 11, unmapped: 0 }

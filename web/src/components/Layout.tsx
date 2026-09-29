@@ -36,6 +36,7 @@ const MODULES: { to: string; label: string; icon: Icon; leader: boolean; module?
   { to: '/ordicall', label: 'Ordicall', icon: Phone, leader: true, module: 'ordicall' },
   { to: '/diktara', label: 'Diktara', icon: Mic, leader: true, module: 'diktara' },
   { to: '/tailwind', label: 'Tailwind', icon: Wind, leader: true, module: 'tailwind' },
+  { to: '/hr', label: 'HR', icon: Users, leader: true, module: 'tailwind' },
   { to: '/digest', label: 'Digest', icon: Mail, leader: true },
   { to: '/mein-score', label: 'Mein Score', icon: UserCircle, leader: false, module: 'selfservice' },
   { to: '/sicherheit', label: 'Sicherheit', icon: ShieldCheck, leader: true },

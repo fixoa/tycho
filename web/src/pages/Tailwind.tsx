@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Wind, AlertTriangle, Sparkles, Lock, CalendarOff, Clock } from 'lucide-react'
 import { Badge, Card, ChartTooltip, Delta, StatTile, Table, Bar as MiniBar, Avatar } from '../components/ui'
@@ -109,6 +110,7 @@ export default function Tailwind() {
 
       {tab === 'hr' && (
         <>
+          <Link to="/hr" className="card px-4 py-3 flex items-center gap-3 text-[13px] hover:bg-surface-2"><span className="font-medium">Zur HR-Plattform: Kosten, Effizienz, Personalkostenquote, Besetzung vs. Aufkommen</span><span className="ml-auto text-accent">Öffnen →</span></Link>
           <div className="card px-4 py-3 flex items-center gap-3 text-xs text-ink-2">
             <Lock size={14} className="text-status-warning shrink-0" />
             <span><span className="text-ink-1 font-medium">Hochsicherheitskritisch.</span> Planery-Daten werden mit eigenem Schlüssel verschlüsselt, nur für die HR-Rolle (AD-Gruppe G_Tailwind_HR) angezeigt und separat protokolliert. Tycho liest ausschließlich Zeiten, Salden und Abwesenheitsarten – keine Gehälter, keine Krankheitsgründe.</span>
