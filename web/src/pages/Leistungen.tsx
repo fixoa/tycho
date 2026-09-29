@@ -25,8 +25,8 @@ export default function Leistungen() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[17px] font-semibold tracking-tight">Leistungen & Abrechnung</h1>
-        <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">{QUARTER.label} bis {fmt.date(new Date('2026-08-24'))} · Leistungsblatt aus dem PVS · Tarife laut hinterlegter Honorarordnung (Demo-Werte)</p>
+        <h1 className="text-[15px] font-semibold text-ink-1">Leistungen & Abrechnung</h1>
+        <p className="text-[11.5px] text-ink-3 mt-0.5">{QUARTER.label} bis {fmt.date(new Date('2026-08-24'))} · Leistungsblatt aus dem PVS · Tarife laut hinterlegter Honorarordnung (Demo-Werte)</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -98,7 +98,7 @@ export default function Leistungen() {
             { key: 'value', label: 'Umsatz', align: 'right', render: (s) => <span className="text-ink-1">{fmt.eur(s.value)}</span> },
             { key: 'limit', label: 'Limit', render: (s) => s.limit ? (
               <div className="flex items-center gap-2 w-36">
-                <MiniBar value={s.limitUsage ?? 0} max={1} tone={(s.limitUsage ?? 0) > 0.85 ? '#d03b3b' : (s.limitUsage ?? 0) > 0.7 ? '#fab219' : '#0ca30c'} height={5} />
+                <MiniBar value={s.limitUsage ?? 0} max={1} tone={(s.limitUsage ?? 0) > 0.85 ? '#ff7373' : (s.limitUsage ?? 0) > 0.7 ? '#ffb366' : '#3dcc91'} height={5} />
                 <span className="text-xs tabular">{s.count}/{s.limit}</span>
               </div>
             ) : <span className="text-ink-3 text-xs inline-flex items-center gap-1"><CheckCircle2 size={11} /> frei</span> },

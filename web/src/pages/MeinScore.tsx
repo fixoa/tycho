@@ -21,8 +21,8 @@ export default function MeinScore() {
       <div className="flex items-center gap-4">
         <Avatar name={me.name} hue={me.avatarHue} size={56} />
         <div className="flex-1">
-          <h1 className="text-[17px] font-semibold tracking-tight">Mein Score</h1>
-          <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">{me.name} · {me.title} · Self-Service: Diese Ansicht sieht nur {me.name.split(' ').slice(-1)[0]} selbst{isLeader(me) ? ' (und die Leitung, sofern Pro-Person-Modus)' : ''}.</p>
+          <h1 className="text-[15px] font-semibold text-ink-1">Mein Score</h1>
+          <p className="text-[11.5px] text-ink-3 mt-0.5">{me.name} · {me.title} · Self-Service: Diese Ansicht sieht nur {me.name.split(' ').slice(-1)[0]} selbst{isLeader(me) ? ' (und die Leitung, sofern Pro-Person-Modus)' : ''}.</p>
         </div>
         {personMode && consent && <ScoreRing score={s.score} prev={s.prevScore} size={104} stroke={9} label="Score" />}
       </div>
@@ -52,7 +52,7 @@ export default function MeinScore() {
               return (
                 <div key={c.key}>
                   <div className="flex justify-between text-xs mb-1"><span className="text-ink-1 inline-flex items-center gap-1" title={c.hint}>{c.label} <Info size={10} className="text-ink-3" /></span><span className="text-ink-3 tabular">{show(c.value)} / {c.invert ? '≤ ' : ''}{show(c.target)} · <span className="text-ink-1">{pct} %</span></span></div>
-                  <MiniBar value={pct} max={100} tone={pct >= 90 ? '#0ca30c' : pct >= 70 ? '#fab219' : '#ec835a'} height={5} />
+                  <MiniBar value={pct} max={100} tone={pct >= 90 ? '#3dcc91' : pct >= 70 ? '#ffb366' : '#ff9980'} height={5} />
                 </div>
               )
             })}

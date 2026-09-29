@@ -25,8 +25,8 @@ export default function Ordicall() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[17px] font-semibold tracking-tight">Ordicall Station</h1>
-        <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Telefon-KI · Go-Live {fmt.date(GO_LIVE.ordicall)} · Statistik aus signiertem Ordicall-Export (keine Audioaufnahmen in Tycho) · letzte 20 Arbeitstage</p>
+        <h1 className="text-[15px] font-semibold text-ink-1">Ordicall Station</h1>
+        <p className="text-[11.5px] text-ink-3 mt-0.5">Telefon-KI · Go-Live {fmt.date(GO_LIVE.ordicall)} · Statistik aus signiertem Ordicall-Export (keine Audioaufnahmen in Tycho) · letzte 20 Arbeitstage</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -77,7 +77,7 @@ export default function Ordicall() {
           <Table<CallIntent> rows={calls.intents} keyOf={(i) => i.intent} dense cols={[
             { key: 'intent', label: 'Anliegen', render: (i) => <span className="text-ink-1">{i.intent}</span> },
             { key: 'count', label: 'Anrufe', align: 'right', render: (i) => fmt.num(i.count) },
-            { key: 'ai', label: 'KI-Quote', render: (i) => <div className="flex items-center gap-2 w-40"><MiniBar value={i.aiResolvedShare} tone={i.aiResolvedShare >= 0.8 ? '#0ca30c' : i.aiResolvedShare >= 0.6 ? '#fab219' : '#ec835a'} height={5} /><span className="tabular text-xs">{fmt.pct(i.aiResolvedShare)}</span></div> },
+            { key: 'ai', label: 'KI-Quote', render: (i) => <div className="flex items-center gap-2 w-40"><MiniBar value={i.aiResolvedShare} tone={i.aiResolvedShare >= 0.8 ? '#3dcc91' : i.aiResolvedShare >= 0.6 ? '#ffb366' : '#ff9980'} height={5} /><span className="tabular text-xs">{fmt.pct(i.aiResolvedShare)}</span></div> },
             { key: 'dur', label: 'Ø Dauer', align: 'right', render: (i) => `${i.avgDurationSec} s` },
           ]} />
           <p className="text-[11px] text-ink-3 mt-3">Befundauskunft bleibt Empfangs-Thema (37 % KI-Quote) – hier greift die Verschwiegenheitspflicht; die KI verweist auf Rückruf oder Portal.</p>

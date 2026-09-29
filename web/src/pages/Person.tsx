@@ -34,8 +34,8 @@ export default function Person() {
       <div className="flex items-center gap-4 flex-wrap">
         <Avatar name={staff.name} hue={staff.avatarHue} size={56} />
         <div className="flex-1 min-w-0">
-          <h1 className="text-[17px] font-semibold tracking-tight">{staff.name}</h1>
-          <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">{staff.title} · {ROLE_LABEL[staff.role]} · FTE {fmt.pct(staff.fte)} · seit {fmt.date(new Date(staff.since))} · AD: {staff.upn}</p>
+          <h1 className="text-[15px] font-semibold text-ink-1">{staff.name}</h1>
+          <p className="text-[11.5px] text-ink-3 mt-0.5">{staff.title} · {ROLE_LABEL[staff.role]} · FTE {fmt.pct(staff.fte)} · seit {fmt.date(new Date(staff.since))} · AD: {staff.upn}</p>
           <div className="flex gap-1.5 mt-1.5 flex-wrap">{staff.adGroups.map((g) => <Badge key={g}>{g}</Badge>)}</div>
         </div>
         {!restricted && <ScoreRing score={s.score} prev={s.prevScore} size={104} stroke={9} label="Score" />}
@@ -77,7 +77,7 @@ export default function Person() {
                         <span className="text-ink-1 inline-flex items-center gap-1" title={c.hint}>{c.label} <Info size={10} className="text-ink-3" /></span>
                         <span className="text-ink-3 tabular">{show(c.value)} <span className="text-ink-3/60">/ {c.invert ? '≤ ' : ''}{show(c.target)}</span> · <span className="text-ink-1">{pct} %</span> · {Math.round(c.weight * 100)} % Gewicht</span>
                       </div>
-                      <MiniBar value={pct} max={100} tone={pct >= 90 ? '#0ca30c' : pct >= 70 ? '#fab219' : '#ec835a'} height={5} />
+                      <MiniBar value={pct} max={100} tone={pct >= 90 ? '#3dcc91' : pct >= 70 ? '#ffb366' : '#ff9980'} height={5} />
                       <div className="text-[10px] text-ink-3 mt-0.5">{c.hint}</div>
                     </div>
                   )

@@ -24,8 +24,8 @@ export default function Digest() {
     <div className="space-y-6">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-[17px] font-semibold tracking-tight">Tycho Digest</h1>
-          <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Wöchentliche Übersicht · jeden Montag 06:00 · verschlüsselt per S/MIME an die Leitung · Archiv im verschlüsselten Store</p>
+          <h1 className="text-[15px] font-semibold text-ink-1">Tycho Digest</h1>
+          <p className="text-[11.5px] text-ink-3 mt-0.5">Wöchentliche Übersicht · jeden Montag 06:00 · verschlüsselt per S/MIME an die Leitung · Archiv im verschlüsselten Store</p>
         </div>
         <div className="flex gap-2">
           <button className="text-xs px-3 py-1.5 rounded border border-line-2 text-ink-1 hover:bg-surface-2 inline-flex items-center gap-1"><Download size={13} /> PDF</button>

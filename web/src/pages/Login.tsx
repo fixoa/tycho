@@ -35,7 +35,7 @@ export default function Login() {
             <div className="flex items-center gap-3 mb-8">
               <Mark size={40} />
               <div>
-                <div className="text-2xl font-semibold tracking-[0.3em] leading-none">TYCHO</div>
+                <div className="text-2xl font-bold tracking-[0.2em] leading-none">TYCHO</div>
                 <div className="label mt-1.5">Ordinations-Kontrollinstanz · v0.2 Demo</div>
               </div>
             </div>
@@ -45,7 +45,7 @@ export default function Login() {
               und liefert am Folgetag Efficacy Score, Abrechnungslücken und die Prognose bis zum Quartalsende.
             </p>
           </div>
-          <ul className="mt-8 space-y-2 font-mono text-[11px] text-ink-2">
+          <ul className="mt-8 space-y-2 text-[12px] text-ink-2">
             <li className="flex items-center gap-2"><Eye size={14} className="text-accent" /> Nur Leserechte – wie ein Benutzer, der zuschaut</li>
             <li className="flex items-center gap-2"><Lock size={14} className="text-accent" /> AES-256-GCM, Schlüssel im TPM · keine Cloud</li>
             <li className="flex items-center gap-2"><Server size={14} className="text-accent" /> Läuft auf {PRACTICE.server}</li>
@@ -65,15 +65,15 @@ export default function Login() {
             <label className="block label">
               Benutzername
               <input value={account} onChange={(e) => setAccount(e.target.value)} autoComplete="username"
-                className="mt-1 w-full rounded bg-surface-2 border border-line-2 px-3 py-2 text-[13px] text-ink-1 font-mono normal-case tracking-normal focus:outline-none focus:border-accent" />
+                className="bp-input mt-1 w-full normal-case tracking-normal" />
             </label>
             <label className="block label">
               Passwort
               <input type="password" defaultValue="••••••••••" autoComplete="current-password"
-                className="mt-1 w-full rounded bg-surface-2 border border-line-2 px-3 py-2 text-[13px] text-ink-1 font-mono normal-case tracking-normal focus:outline-none focus:border-accent" />
+                className="bp-input mt-1 w-full normal-case tracking-normal" />
             </label>
             {error && <div className="text-xs text-status-critical">{error}</div>}
-            <button className="w-full rounded border border-line-2 py-2 text-sm text-ink-1 hover:bg-surface-2">Anmelden</button>
+            <button className="bp-btn w-full justify-center py-2">Anmelden</button>
           </form>
           <div className="mt-5 text-[11px] text-ink-3 leading-relaxed">
             Demo-Konten: <code className="text-ink-2">a.berger</code> (Ärztliche Leitung, Haupt-Admin), <code className="text-ink-2">k.bauer</code> (Ordinationsmanagement).

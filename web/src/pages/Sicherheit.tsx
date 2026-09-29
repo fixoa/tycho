@@ -19,8 +19,8 @@ export default function Sicherheit() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[17px] font-semibold tracking-tight">Sicherheit & Compliance</h1>
-        <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Tycho ist eine Kontrollinstanz wie ein Benutzer mit Leserechten – nicht mehr. Dieser Bereich beweist es.</p>
+        <h1 className="text-[15px] font-semibold text-ink-1">Sicherheit & Compliance</h1>
+        <p className="text-[11.5px] text-ink-3 mt-0.5">Tycho ist eine Kontrollinstanz wie ein Benutzer mit Leserechten – nicht mehr. Dieser Bereich beweist es.</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

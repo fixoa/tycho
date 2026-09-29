@@ -8,7 +8,7 @@ export default function QMPage() {
   const over = QM.filter((q) => q.status === 'ueberfaellig'), soon = QM.filter((q) => q.status === 'bald')
   return (
     <div className="space-y-6">
-      <div><h1 className="text-[17px] font-semibold tracking-tight">QM & Fristen</h1><p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Geräteprüfungen (MPG/STK), Schulungen, Hygieneplan, Dokumente · Quelle: QM-Liste (CSV/Excel, read-only) und Gerätestamm im PVS</p></div>
+      <div><h1 className="text-[15px] font-semibold text-ink-1">QM & Fristen</h1><p className="text-[11.5px] text-ink-3 mt-0.5">Geräteprüfungen (MPG/STK), Schulungen, Hygieneplan, Dokumente · Quelle: QM-Liste (CSV/Excel, read-only) und Gerätestamm im PVS</p></div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatTile label="Überfällig" value={fmt.num(over.length)} accent="#d03b3b" deltaLabel={over.map((o) => o.item.split(' ')[0]).join(', ')} />
         <StatTile label="Fällig in 30 Tagen" value={fmt.num(soon.length)} accent="#fab219" deltaLabel="im Digest erinnert" />

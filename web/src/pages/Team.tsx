@@ -22,8 +22,8 @@ export default function Team() {
     <div className="space-y-6">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-[17px] font-semibold tracking-tight">Personal & Effizienz</h1>
-          <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Personalstamm aus Active Directory · Anwesenheit aus AD-Logon · Leistung aus PVS, Ordicall, Diktara · Fenster: letzte 4 Wochen</p>
+          <h1 className="text-[15px] font-semibold text-ink-1">Personal & Effizienz</h1>
+          <p className="text-[11.5px] text-ink-3 mt-0.5">Personalstamm aus Active Directory · Anwesenheit aus AD-Logon · Leistung aus PVS, Ordicall, Diktara · Fenster: letzte 4 Wochen</p>
         </div>
         <div className="flex gap-1 text-xs">
           {(['alle', ...ROLES] as const).map((r) => (
@@ -104,7 +104,7 @@ export default function Team() {
               <span className="inline-flex items-center gap-1 text-ink-3 text-xs"><Lock size={12} /> nur aggregiert</span>
             ) : (
               <div className="flex items-center gap-2 justify-end">
-                <div className="w-20"><MiniBar value={s.score} max={100} tone={s.score >= 80 ? '#0ca30c' : s.score >= 65 ? '#fab219' : '#ec835a'} /></div>
+                <div className="w-20"><MiniBar value={s.score} max={100} tone={s.score >= 80 ? '#3dcc91' : s.score >= 65 ? '#ffb366' : '#ff9980'} /></div>
                 <span className="font-medium w-7">{s.score}</span>
                 <Delta value={s.score - s.prevScore} />
               </div>

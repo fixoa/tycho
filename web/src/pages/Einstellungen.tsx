@@ -36,8 +36,8 @@ export default function Einstellungen() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[17px] font-semibold tracking-tight">Einstellungen</h1>
-        <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Konfiguration wird lokal verschlüsselt gespeichert · jede Änderung protokolliert</p>
+        <h1 className="text-[15px] font-semibold text-ink-1">Einstellungen</h1>
+        <p className="text-[11.5px] text-ink-3 mt-0.5">Konfiguration wird lokal verschlüsselt gespeichert · jede Änderung protokolliert</p>
       </div>
 
       <Card title="Analysemodus" subtitle="Festgelegt bei der Erstkonfiguration durch den Haupt-Admin">

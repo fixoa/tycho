@@ -31,8 +31,8 @@ export default function Prognose() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[17px] font-semibold tracking-tight">Prognose {QUARTER.label}</h1>
-        <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Sicherste Berechnung bis zum Quartalsende, täglich neu · Stand {fmt.date(DATA_AS_OF)} · noch {daysLeft} Kalendertage</p>
+        <h1 className="text-[15px] font-semibold text-ink-1">Prognose {QUARTER.label}</h1>
+        <p className="text-[11.5px] text-ink-3 mt-0.5">Sicherste Berechnung bis zum Quartalsende, täglich neu · Stand {fmt.date(DATA_AS_OF)} · noch {daysLeft} Kalendertage</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

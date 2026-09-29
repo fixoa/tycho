@@ -26,8 +26,8 @@ export default function Diktara() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-[17px] font-semibold tracking-tight">Diktara Station</h1>
-        <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">KI-Dokumentation · Go-Live {fmt.date(GO_LIVE.diktara)} · Tycho liest nur Metadaten (Dauer, Akzeptanz, erkannte Leistungen), nie Transkripte oder Audio · letzte 20 Arbeitstage</p>
+        <h1 className="text-[15px] font-semibold text-ink-1">Diktara Station</h1>
+        <p className="text-[11.5px] text-ink-3 mt-0.5">KI-Dokumentation · Go-Live {fmt.date(GO_LIVE.diktara)} · Tycho liest nur Metadaten (Dauer, Akzeptanz, erkannte Leistungen), nie Transkripte oder Audio · letzte 20 Arbeitstage</p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <StatTile label="Aufnahmen" value={fmt.num(s(inCur, 'recordings'))} accent="var(--series-1)" delta={<Delta value={((s(inCur, 'recordings') - s(inPrev, 'recordings')) / s(inPrev, 'recordings')) * 100} format={(v) => fmt.num1(Math.abs(v))} suffix=" %" />} deltaLabel="vs. 20 Tage davor" />
@@ -41,7 +41,7 @@ export default function Diktara() {
         <Card title="Nutzung je Ärzt:in" subtitle="Adoption, Zeitersparnis und Qualität der Zusammenfassungen">
           <Table rows={perDoc} keyOf={(r) => r.doc.id} cols={[
             { key: 'doc', label: 'Ärzt:in', render: (r) => <div className="flex items-center gap-2"><Avatar name={r.doc.name} hue={r.doc.avatarHue} size={26} /><span className="text-ink-1 whitespace-nowrap">{r.doc.name}</span></div> },
-            { key: 'share', label: 'Nutzung', render: (r) => <div className="flex items-center gap-2 w-36"><MiniBar value={r.share} tone={r.share >= 0.7 ? '#0ca30c' : r.share >= 0.4 ? '#fab219' : '#ec835a'} height={5} /><span className="tabular text-xs">{fmt.pct(r.share)}</span></div> },
+            { key: 'share', label: 'Nutzung', render: (r) => <div className="flex items-center gap-2 w-36"><MiniBar value={r.share} tone={r.share >= 0.7 ? '#3dcc91' : r.share >= 0.4 ? '#ffb366' : '#ff9980'} height={5} /><span className="tabular text-xs">{fmt.pct(r.share)}</span></div> },
             { key: 'rec', label: 'Aufnahmen', align: 'right', render: (r) => fmt.num(r.recordings) },
             { key: 'saved', label: 'Gespart', align: 'right', render: (r) => fmt.minutes(r.saved) },
             { key: 'acc', label: 'Akzeptanz', align: 'right', render: (r) => fmt.pct(r.acc) },

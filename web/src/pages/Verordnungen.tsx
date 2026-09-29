@@ -11,7 +11,7 @@ export default function Verordnungen() {
   const saving = PRESCRIBING_OUTLIERS.reduce((a, o) => a + o.saving, 0)
   return (
     <div className="space-y-6">
-      <div><h1 className="text-[17px] font-semibold tracking-tight">Verordnungs-Monitor</h1><p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Verordnungskosten aus e-Medikation/PVS (read-only) gegen ÖKO-Tool-Richtwerte · Quartal bis dato · keine Patientendaten, nur ATC-Gruppen</p></div>
+      <div><h1 className="text-[15px] font-semibold text-ink-1">Verordnungs-Monitor</h1><p className="text-[11.5px] text-ink-3 mt-0.5">Verordnungskosten aus e-Medikation/PVS (read-only) gegen ÖKO-Tool-Richtwerte · Quartal bis dato · keine Patientendaten, nur ATC-Gruppen</p></div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatTile label="Verordnungskosten je Patient:in" value={fmt.eur2(avg)} accent="var(--series-1)" delta={<Delta value={avg - 41.2} format={(v) => fmt.eur2(Math.abs(v))} invert />} deltaLabel="vs. Fachgruppen-Richtwert 41,20 €" />
         <StatTile label="Generika-Quote" value={fmt.pct(gen)} accent="var(--series-3)" delta={<Delta value={(gen - 0.79) * 100} format={(v) => fmt.num1(Math.abs(v))} suffix=" Pp." />} deltaLabel="Richtwert 79 %" />
@@ -24,7 +24,7 @@ export default function Verordnungen() {
             <Table rows={PRESCRIBING} keyOf={(p) => p.staffId} dense cols={[
               { key: 'n', label: 'Ärzt:in', render: (p) => { const s = staffById(p.staffId)!; return <div className="flex items-center gap-2"><Avatar name={s.name} hue={s.avatarHue} size={24} /><span className="text-ink-1 whitespace-nowrap">{s.name}</span></div> } },
               { key: 'c', label: '€ / Patient:in', align: 'right', render: (p) => <span className={p.costPerPatient > p.peer * 1.15 ? 'text-status-warning' : ''}>{fmt.eur2(p.costPerPatient)}</span> },
-              { key: 'g', label: 'Generika', render: (p) => <div className="flex items-center gap-2 w-32"><MiniBar value={p.genericRate} tone={p.genericRate >= 0.79 ? '#0ca30c' : '#fab219'} height={5} /><span className="text-xs tabular">{fmt.pct(p.genericRate)}</span></div> },
+              { key: 'g', label: 'Generika', render: (p) => <div className="flex items-center gap-2 w-32"><MiniBar value={p.genericRate} tone={p.genericRate >= 0.79 ? '#3dcc91' : '#ffb366'} height={5} /><span className="text-xs tabular">{fmt.pct(p.genericRate)}</span></div> },
               { key: 'o', label: 'Ausreißer', align: 'right', render: (p) => p.outliers },
               { key: 'a', label: 'Top-ATC', render: (p) => <span className="text-xs text-ink-2">{p.topAtc}</span> },
             ]} />

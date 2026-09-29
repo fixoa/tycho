@@ -31,7 +31,7 @@ export default function Tailwind() {
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-xl font-semibold flex items-center gap-2"><Wind size={20} className="text-accent" /> Tailwind Station</h1>
-          <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Controlling & Inkasso für Wahlarzt-/Privathonorare, geführt durch Analyse und KI · HR-Frühwarnung aus Planery · alles read-only</p>
+          <p className="text-[11.5px] text-ink-3 mt-0.5">Controlling & Inkasso für Wahlarzt-/Privathonorare, geführt durch Analyse und KI · HR-Frühwarnung aus Planery · alles read-only</p>
         </div>
         <div className="flex gap-1 text-xs">
           {([['inkasso', 'Honorarnoten & Inkasso'], ['hr', 'HR & Überstunden (Planery)']] as const).map(([k, l]) => (
@@ -69,7 +69,7 @@ export default function Tailwind() {
                 {s.byKind.map((k) => (
                   <div key={k.kind}>
                     <div className="flex justify-between text-xs mb-0.5"><span className="text-ink-1">{k.kind}</span><span className="tabular text-ink-3">{fmt.pct(k.quote)} bezahlt · {fmt.eur(k.open)} offen</span></div>
-                    <MiniBar value={k.quote} tone={k.quote >= 0.85 ? '#0ca30c' : k.quote >= 0.7 ? '#fab219' : '#ec835a'} height={5} />
+                    <MiniBar value={k.quote} tone={k.quote >= 0.85 ? '#3dcc91' : k.quote >= 0.7 ? '#ffb366' : '#ff9980'} height={5} />
                   </div>
                 ))}
               </div>

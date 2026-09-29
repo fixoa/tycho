@@ -8,15 +8,15 @@ export function Card({ title, subtitle, action, children, className = '', padded
   return (
     <section className={`card flex flex-col ${className}`}>
       {(title || action) && (
-        <header className="flex items-start justify-between gap-3 px-4 pt-3 pb-2.5 border-b border-line-1">
+        <header className="flex items-start justify-between gap-3 px-4 pt-3.5 pb-1">
           <div className="min-w-0">
-            {title && <h3 className="text-[13px] font-semibold text-ink-1 leading-tight">{title}</h3>}
-            {subtitle && <p className="text-[11px] text-ink-3 mt-0.5 leading-snug">{subtitle}</p>}
+            {title && <h3 className="label text-ink-2 leading-tight">{title}</h3>}
+            {subtitle && <p className="text-[11px] text-ink-3 mt-0.5 leading-snug normal-case">{subtitle}</p>}
           </div>
           {action && <div className="shrink-0">{action}</div>}
         </header>
       )}
-      <div className={`${padded ? 'px-4 pb-4' : ''} ${title ? (padded ? 'pt-3' : '') : padded ? 'pt-4' : ''} flex-1 min-w-0`}>{children}</div>
+      <div className={`${padded ? 'px-4 pb-4' : ''} ${title ? (padded ? 'pt-2.5' : '') : padded ? 'pt-4' : ''} flex-1 min-w-0`}>{children}</div>
     </section>
   )
 }
@@ -40,13 +40,13 @@ export function StatTile({ label, value, delta, deltaLabel, hint, accent, childr
   label: string; value: ReactNode; delta?: ReactNode; deltaLabel?: string; hint?: string; accent?: string; children?: ReactNode
 }) {
   return (
-    <div className="card px-4 py-3 flex flex-col gap-1 min-w-0 relative overflow-hidden">
-      {accent && <span className="absolute left-0 top-0 bottom-0 w-0.5" style={{ background: accent }} />}
-      <div className="flex items-start gap-1 label leading-snug">
+    <div className="card px-4 py-3 flex flex-col gap-0.5 min-w-0 relative overflow-hidden">
+      {accent && <span className="absolute left-0 top-0 bottom-0 w-[3px]" style={{ background: accent }} />}
+      <div className="flex items-start gap-1 text-[11.5px] text-ink-3 leading-snug">
         <span>{label}</span>
         {hint && <span title={hint} className="text-ink-3/70"><Info size={11} /></span>}
       </div>
-      <div className="text-[22px] font-semibold text-ink-1 leading-tight tabular tracking-tight">{value}</div>
+      <div className="text-[26px] font-light text-ink-1 leading-tight tabular">{value}</div>
       {(delta || deltaLabel) && (
         <div className="flex items-center gap-2 text-[11px] text-ink-3">
           {delta}
@@ -67,15 +67,15 @@ export function Badge({ children, tone = 'neutral' }: { children: ReactNode; ton
     critical: 'bg-status-critical/15 text-status-critical',
     info: 'bg-series-1/15 text-series-1',
   }
-  return <span className={`inline-flex items-center gap-1 rounded px-1.5 py-[3px] font-mono uppercase tracking-[0.06em] text-[9.5px] font-medium leading-none ${map[tone]}`}>{children}</span>
+  return <span className={`inline-flex items-center gap-1 rounded px-1.5 py-[3px] text-[10.5px] font-semibold leading-none ${map[tone]}`}>{children}</span>
 }
 
 export function Avatar({ name, hue, size = 32 }: { name: string; hue: number; size?: number }) {
   const initials = name.replace(/^Dr\.\s*/, '').split(' ').map((p) => p[0]).slice(0, 2).join('')
   return (
     <span
-      className="inline-flex items-center justify-center font-mono font-semibold text-white shrink-0"
-      style={{ width: size, height: size, fontSize: size * 0.36, background: `hsl(${hue} 28% 36%)`, borderRadius: 2 }}
+      className="inline-flex items-center justify-center font-semibold text-white shrink-0 rounded-full"
+      style={{ width: size, height: size, fontSize: size * 0.36, background: `hsl(${hue} 32% 40%)` }}
     >
       {initials}
     </span>
@@ -85,7 +85,7 @@ export function Avatar({ name, hue, size = 32 }: { name: string; hue: number; si
 export function ScoreRing({ score, size = 96, stroke = 8, label, prev }: { score: number; size?: number; stroke?: number; label?: string; prev?: number }) {
   const r = (size - stroke) / 2
   const c = 2 * Math.PI * r
-  const tone = score >= 80 ? '#0ca30c' : score >= 65 ? '#fab219' : score >= 50 ? '#ec835a' : '#d03b3b'
+  const tone = score >= 80 ? '#3dcc91' : score >= 65 ? '#ffb366' : score >= 50 ? '#ff9980' : '#ff7373'
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
@@ -125,8 +125,8 @@ export function ChartTooltip({ active, payload, label, formatter }: {
 }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="card px-3 py-2 text-xs shadow-card font-mono">
-      <div className="label mb-1">{label}</div>
+    <div className="card px-3 py-2 text-xs" style={{ background: 'var(--bp-dg2)' }}>
+      <div className="text-ink-3 mb-1">{label}</div>
       {payload.map((p, i) => (
         <div key={i} className="flex items-center gap-2 text-ink-1">
           <span className="w-2 h-2 rounded" style={{ background: p.color }} />
@@ -164,7 +164,7 @@ export function Table<T>({ rows, cols, keyOf, onRowClick, dense }: {
         <thead>
           <tr className="border-b border-line-1">
             {cols.map((c) => (
-              <th key={c.key} className={`label font-medium px-4 py-2 ${c.align === 'right' ? 'text-right' : 'text-left'}`} style={{ width: c.width }}>{c.label}</th>
+              <th key={c.key} className={`label px-4 py-2 ${c.align === 'right' ? 'text-right' : 'text-left'}`} style={{ width: c.width }}>{c.label}</th>
             ))}
           </tr>
         </thead>

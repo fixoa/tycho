@@ -7,7 +7,7 @@ import { fmt } from '../lib/format'
 export default function Zufriedenheit() {
   return (
     <div className="space-y-6">
-      <div><h1 className="text-[17px] font-semibold tracking-tight">Patientenzufriedenheit (NPS)</h1><p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Import Google-Rezensionen (öffentlich) und Ordicall-SMS-Umfrage nach dem Termin · KI-Themenanalyse · keine Namen</p></div>
+      <div><h1 className="text-[15px] font-semibold text-ink-1">Patientenzufriedenheit (NPS)</h1><p className="text-[11.5px] text-ink-3 mt-0.5">Import Google-Rezensionen (öffentlich) und Ordicall-SMS-Umfrage nach dem Termin · KI-Themenanalyse · keine Namen</p></div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatTile label="Net Promoter Score" value={NPS.score} accent="var(--series-1)" delta={<Delta value={NPS.score - NPS.prev} />} deltaLabel="vs. Vorquartal · Branchenschnitt Praxen ≈ 40" />
         <StatTile label="Antworten (Quartal)" value={fmt.num(NPS.responses)} accent="var(--series-3)" deltaLabel={NPS.sources.map((s) => `${s.name.split(' ')[0]} ${s.n}`).join(' · ')} />
@@ -33,7 +33,7 @@ export default function Zufriedenheit() {
             {NPS.themes.map((t) => (
               <div key={t.theme}>
                 <div className="flex justify-between text-xs mb-0.5"><span className="text-ink-1">{t.theme} <span className="text-ink-3">· {t.n}</span></span><span className="tabular text-ink-3">{fmt.pct(t.sentiment)} <Delta value={t.delta * 100} format={(v) => fmt.num(Math.abs(v))} suffix=" Pp." /></span></div>
-                <MiniBar value={t.sentiment} tone={t.sentiment >= 0.75 ? '#0ca30c' : t.sentiment >= 0.5 ? '#fab219' : '#ec835a'} height={5} />
+                <MiniBar value={t.sentiment} tone={t.sentiment >= 0.75 ? '#3dcc91' : t.sentiment >= 0.5 ? '#ffb366' : '#ff9980'} height={5} />
               </div>
             ))}
           </div>

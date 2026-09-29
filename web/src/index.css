@@ -1,61 +1,66 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Palantir/Foundry-inspiriert: Graphit-Skala (kühl), scharfe Kanten, Hairlines, ein Blau. */
+/* Palantir Gotham / Blueprint 3 Dark: Blauschiefer-Skala, flache Panels, 3px Radius. */
 :root {
   color-scheme: dark;
-  --surface-0: #111418;
-  --surface-1: #1c2127;
-  --surface-2: #252a31;
-  --surface-3: #2f343c;
-  --ink-1: #f6f7f9;
-  --ink-2: #abb3bf;
-  --ink-3: #738091;
-  --line-1: #2f343c;
-  --line-2: #404854;
-  --accent: #4c90f0;
-  --accent-strong: #2d72d2;
-  --series-1: #4c90f0;
-  --series-2: #d95926;
-  --series-3: #199e70;
-  --series-4: #c98500;
-  --series-5: #d55181;
-  --series-6: #008300;
-  --series-7: #9085e9;
-  --series-8: #e66767;
+  --bp-dg1: #182026; --bp-dg2: #202b33; --bp-dg3: #293742; --bp-dg4: #30404d; --bp-dg5: #394b59;
+  --bp-g1: #5c7080; --bp-g2: #738694; --bp-g3: #8a9ba8; --bp-g4: #a7b6c2; --bp-g5: #bfccd6;
+  --surface-0: var(--bp-dg3);   /* Seite */
+  --surface-1: var(--bp-dg4);   /* Panel */
+  --surface-2: var(--bp-dg5);   /* Panel-Innen / Hover */
+  --surface-3: #435b70;
+  --bar-0: var(--bp-dg1);       /* Modulleiste */
+  --bar-1: var(--bp-dg2);       /* Sub-Header, Facetten */
+  --ink-1: #f5f8fa;
+  --ink-2: #bfccd6;
+  --ink-3: #8a9ba8;
+  --line-1: var(--bp-dg5);
+  --line-2: var(--bp-g1);
+  --accent: #48aff0;
+  --accent-strong: #2b95d6;
+  --series-1: #4a9edb;
+  --series-2: #e57373;
+  --series-3: #6fbf6a;
+  --series-4: #f2c94c;
+  --series-5: #48c9b0;
+  --series-6: #d4569b;
+  --series-7: #9b8ce3;
+  --series-8: #f0955a;
   --seq-100: #cde2fb; --seq-200: #9ec5f4; --seq-300: #6da7ec; --seq-400: #3987e5;
   --seq-500: #256abf; --seq-600: #184f95; --seq-700: #0d366b;
-  --div-mid: #383835;
-  --good-text: #32a467;
-  --grid: rgba(255, 255, 255, 0.035);
+  --div-mid: #394b59;
+  --good-text: #3dcc91;
+  --grid: transparent;
 }
 
 :root[data-theme='light'] {
   color-scheme: light;
-  --surface-0: #edeff2;
-  --surface-1: #f6f7f9;
-  --surface-2: #ffffff;
-  --surface-3: #e5e8eb;
-  --ink-1: #1c2127;
-  --ink-2: #404854;
-  --ink-3: #5f6b7c;
-  --line-1: #d3d8de;
-  --line-2: #c5cbd3;
-  --accent: #2d72d2;
-  --accent-strong: #215db0;
-  --series-1: #2a78d6;
-  --series-2: #eb6834;
-  --series-3: #1baf7a;
-  --series-4: #eda100;
-  --series-5: #e87ba4;
-  --series-6: #008300;
-  --series-7: #4a3aa7;
-  --series-8: #e34948;
-  --div-mid: #f0efec;
-  --good-text: #1c6e42;
-  --grid: rgba(28, 33, 39, 0.05);
+  --surface-0: #ebf1f5;
+  --surface-1: #ffffff;
+  --surface-2: #f5f8fa;
+  --surface-3: #e1e8ed;
+  --bar-0: #30404d;
+  --bar-1: #394b59;
+  --ink-1: #182026;
+  --ink-2: #394b59;
+  --ink-3: #5c7080;
+  --line-1: #d8e1e8;
+  --line-2: #ced9e0;
+  --accent: #137cbd;
+  --accent-strong: #106ba3;
+  --series-1: #2b95d6;
+  --series-2: #db3737;
+  --series-3: #0f9960;
+  --series-4: #d99e0b;
+  --series-5: #00b3a4;
+  --series-6: #db2c6f;
+  --series-7: #7157d9;
+  --series-8: #d9822b;
+  --div-mid: #ebf1f5;
+  --good-text: #0d8050;
 }
 
 html, body, #root { height: 100%; }
@@ -63,45 +68,60 @@ html, body, #root { height: 100%; }
 body {
   @apply bg-surface-0 text-ink-1 font-sans antialiased;
   font-size: 13px;
-  letter-spacing: -0.005em;
 }
 
 * { scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
 
-/* Blueprint-Raster auf der Seitenebene */
-.plane {
-  background-color: var(--surface-0);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
+.plane { background-color: var(--surface-0); }
 
 .card {
-  @apply bg-surface-1 border border-line-1;
-  border-radius: 2px;
+  @apply bg-surface-1;
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.4), 0 1px 1px rgba(16, 22, 26, 0.2);
 }
+:root[data-theme='light'] .card { box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 1px 1px rgba(16, 22, 26, 0.1); }
 
 .tabular { font-variant-numeric: tabular-nums; }
 
-/* Uppercase-Mikrolabel mit Tracking (Foundry-Stil) */
+/* Gotham-Panelüberschrift: OPS BY STATUS */
 .label {
-  @apply font-mono uppercase text-ink-3;
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  @apply uppercase text-ink-3 font-semibold;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
 }
-
 .mono { @apply font-mono; font-size: 11.5px; }
+
+/* Blueprint-Buttons und Inputs */
+.bp-btn {
+  @apply inline-flex items-center gap-1.5 text-ink-2 hover:text-ink-1;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  padding: 4px 8px;
+  font-size: 12.5px;
+  box-shadow: inset 0 0 0 1px rgba(16, 22, 26, 0.2), inset 0 -1px 0 rgba(16, 22, 26, 0.3);
+}
+.bp-btn:hover { background: rgba(255, 255, 255, 0.1); }
+.bp-btn.active { background: var(--surface-2); color: var(--ink-1); }
+.bp-input {
+  @apply text-ink-1;
+  background: rgba(16, 22, 26, 0.3);
+  border-radius: 3px;
+  box-shadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0), inset 0 0 0 1px rgba(16, 22, 26, 0.3), inset 0 1px 1px rgba(16, 22, 26, 0.4);
+  padding: 5px 8px;
+  font-size: 12.5px;
+}
+.bp-input:focus { outline: none; box-shadow: 0 0 0 1px var(--accent-strong), 0 0 0 3px rgba(19, 124, 189, 0.3), inset 0 0 0 1px rgba(16, 22, 26, 0.3); }
+:root[data-theme='light'] .bp-btn { background: #f5f8fa; color: var(--ink-2); box-shadow: inset 0 0 0 1px rgba(16, 22, 26, 0.2), inset 0 -1px 0 rgba(16, 22, 26, 0.1); }
+:root[data-theme='light'] .bp-input { background: #ffffff; }
 
 input[type='range'] { accent-color: var(--accent); }
 
 .recharts-cartesian-grid line { stroke: var(--line-1); }
 .recharts-cartesian-axis line, .recharts-cartesian-axis-line { stroke: var(--line-2); }
-.recharts-text { fill: var(--ink-3); font-size: 10.5px; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+.recharts-text { fill: var(--ink-3); font-size: 11px; }
 .recharts-tooltip-cursor { stroke: var(--line-2); }
 
 @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .pulse-dot { animation: none; } }
-
 details > summary::-webkit-details-marker { display: none; }
