@@ -87,7 +87,7 @@ function componentsFor(staff: StaffMember, k: ReturnType<typeof kpisFor>): Score
     case 'arzt':
       return [
         { key: 'throughput', label: 'Durchsatz', value: k.contactsPerHour, target: 5.6, weight: 0.22, unit: 'Pat./h', hint: 'Patientenkontakte je Präsenzstunde (AD-Logon bis Logoff).' },
-        { key: 'contribution', label: 'Ertrag / Kosten', value: k.cost ? k.revenue / k.cost : 0, target: 2.2, weight: 0.24, unit: '×', hint: 'Verrechnete Leistungen im Verhältnis zu den Arbeitgeberkosten des Zeitraums.' },
+        { key: 'contribution', label: 'Ertrag / Honorar', value: k.cost ? k.revenue / k.cost : 0, target: 1.4, weight: 0.24, unit: '×', hint: 'Verrechnete Leistungen im Verhältnis zum Honorar (120 € je Stunde); 1,0 = Honorar gedeckt, Ziel 1,4.' },
         { key: 'doc', label: 'Dokumentation', value: k.docCompleteness, target: 0.97, weight: 0.16, unit: '', hint: 'Vollständigkeit von Kartei, ICD-10-Codierung und Leistungsblatt.' },
         { key: 'diktara', label: 'Diktara-Nutzung', value: k.diktaraShare, target: 0.8, weight: 0.1, unit: '', hint: 'Anteil der Konsultationen mit KI-Zusammenfassung.' },
         { key: 'telemed', label: 'Telemedizin', value: k.telemedShare, target: 0.15, weight: 0.12, unit: '', hint: 'Anteil telemedizinischer Konsultationen (Kennzeichnung 8xT, TM-V/TM-T) an allen Kontakten.' },

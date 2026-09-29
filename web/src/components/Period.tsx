@@ -49,7 +49,7 @@ export function LocationPicker() {
   const f = useFilters()
   const [open, setOpen] = useState(false)
   const ref = useOutside(() => setOpen(false))
-  const opts = [{ key: 'alle', label: 'Alle Standorte' }, { key: 'donaufeld', label: 'Ordination Donaufeld (Wien 21)' }]
+  const opts = [{ key: 'alle', label: 'Alle Standorte' }, { key: 'donaufeld', label: 'Primärversorgung Zentrum (Wien)' }]
   return (
     <div ref={ref} className="relative">
       <button onClick={() => setOpen((o) => !o)} className="bp-btn whitespace-nowrap min-w-[190px] justify-between"><span className="inline-flex items-center gap-2"><MapPin size={14} className="text-ink-3" /><span className="bg-surface-2 rounded-md px-1.5 py-0.5 text-[12.5px]">{opts.find((o) => o.key === f.location)?.label}</span></span><ChevronDown size={13} className="text-ink-3" /></button>

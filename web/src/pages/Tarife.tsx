@@ -52,7 +52,7 @@ export default function Tarife() {
       </div>
 
       {tab === 'katalog' && (
-        <Panel icon={<BookOpen size={16} />} title={`Honorarkatalog · ${PRACTICE.location} · Allgemeinmedizin`} hint="Struktur nach ÖGK-Honorarordnung (Kennzeichnungspositionen 8a–8i/8aT–8iT, PERS, Erstkontakt 10, 18EZ, 20, 34, 34a, 39, VU, MKP). Tarife sind Demo-Werte; der Landeskatalog wird importiert.">
+        <Panel icon={<BookOpen size={16} />} title={`Honorarkatalog · ${PRACTICE.name} · Allgemeinmedizin`} hint="Struktur nach ÖGK-Honorarordnung (Kennzeichnungspositionen 8a–8i/8aT–8iT, PERS, Erstkontakt 10, 18EZ, 20, 34, 34a, 39, VU, MKP). Tarife sind Demo-Werte; der Landeskatalog wird importiert.">
           <div className="overflow-x-auto"><table className="w-full text-[13px] min-w-[900px]">
             <thead><tr>{['Pos.', 'Leistung', 'Gruppe', 'Tarif', 'Anzahl', 'Umsatz', 'Regel / Limitierung', 'Träger', 'Rhythmus', 'Erbringung'].map((h, i) => <th key={h} className={`label uppercase tracking-[0.05em] text-[11px] px-3 py-2 ${i >= 3 && i <= 5 ? 'text-right' : 'text-left'}`}>{h}</th>)}</tr></thead>
             <tbody>{rows.map((s) => (

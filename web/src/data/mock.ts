@@ -17,9 +17,11 @@ export const HISTORY_START = new Date('2025-09-01')
 export const GO_LIVE = { diktara: new Date('2026-05-04'), ordicall: new Date('2026-06-01'), tycho: new Date('2026-07-13') }
 
 export const PRACTICE = {
-  name: 'Gesundheitszentrum Donaufeld',
-  type: 'Gruppenpraxis Allgemeinmedizin · 4 Kassenverträge (ÖGK, SVS, BVAEB)',
-  location: 'Wien 21',
+  name: 'Primärversorgung Zentrum',
+  type: 'Primärversorgungseinheit (PVE) · Allgemeinmedizin · ÖGK, SVS, BVAEB',
+  location: 'Wien',
+  /** Honorar der Ärzt:innen in der PVE: 120 € je Stunde – Kostensatz und Effizienz-Richtwert */
+  doctorHourly: 120,
   openingHours: 'Mo–Fr 07:30–18:00',
   domain: 'ordination.local',
   server: 'TS-ORD-01 (Windows Server 2022, Terminalserver)',

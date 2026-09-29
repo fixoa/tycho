@@ -37,9 +37,9 @@ export default function HRPage() {
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        <Kpi icon={<Coins size={15} />} label="Personalkosten" value={fmt.eur(cost)} delta={prevCost ? pctDelta(cost, prevCost) : null} sub="inkl. Überstundenzuschlag 25 %" invert />
+        <Kpi icon={<Coins size={15} />} label="Personalkosten" value={fmt.eur(cost)} delta={prevCost ? pctDelta(cost, prevCost) : null} sub="Ärzt:innen 120 €/h Honorar · sonst Lohnkosten inkl. 25 % Überstundenzuschlag" invert />
         <Kpi icon={<Activity size={15} />} label="Personalkostenquote" value={fmt.pct1(quote)} sub={`ohne Ärzt:innen · inkl. ${fmt.pct1(revenue ? cost / revenue : 0)} · Richtwert 22–28 %`} hint="Personalkosten (DGKP, Assistenz, Management) ÷ Umsatz. Ärzt:innen sind als Gesellschafter:innen nicht Personal im engeren Sinn; der Wert inklusive steht daneben." />
-        <Kpi icon={<Timer size={15} />} label="Ertrag je Personalstunde" value={fmt.eur2(perHour)} sub={`${fmt.num(Math.round(sum('istH')))} Ist-Stunden`} />
+        <Kpi icon={<Timer size={15} />} label="Umsatz je Arztstunde" value={fmt.eur2(rows.filter((r) => r.role === 'arzt').reduce((a, r) => a + r.revenue, 0) / Math.max(1, rows.filter((r) => r.role === 'arzt').reduce((a, r) => a + r.istH, 0)))} delta={null} sub={`Richtwert 120 €/h Honorar · ${fmt.eur2(perHour)} je Personalstunde gesamt`} />
         <Kpi icon={<Users size={15} />} label="Überstunden" value={`${fmt.num(Math.round(sum('overtimeH')))} h`} sub={`${fmt.eur(sum('overtimeCost'))} Zuschläge · Saldo ${fmt.num(HR.reduce((a, h) => a + h.overtimeBalanceH, 0))} h`} invert />
         <Kpi icon={<HeartPulse size={15} />} label="Krankenstandsquote" value={fmt.pct1(sick)} sub={`${sum('sickDays')} Fehltage im Zeitraum`} invert />
         <Kpi icon={<AlertTriangle size={15} />} label="Frühwarnungen" value={warnings.length} sub="Überstunden, Urlaub, Besetzung" />
@@ -78,11 +78,11 @@ export default function HRPage() {
         </Panel>
       </div>
 
-      <Panel icon={<Users size={16} />} title={personMode ? 'Effizienz & Kosten je Mitarbeiter:in' : 'Effizienz & Kosten je Gruppe'} hint="Soll aus Dienstplan (Planery), Ist aus Zeiterfassung/AD-Logon, Kosten aus Lohnverrechnung, Ertrag aus PVS und Ordicall. Effizienz = Output je Stunde ÷ Rollenziel (max. 125 %)">
+      <Panel icon={<Users size={16} />} title={personMode ? 'Effizienz & Kosten je Mitarbeiter:in' : 'Effizienz & Kosten je Gruppe'} hint="Soll aus Dienstplan (Planery), Ist aus Zeiterfassung/AD-Logon, Kosten aus Lohnverrechnung, Ertrag aus PVS und Ordicall. Effizienz = Output je Stunde ÷ Richtwert. Ärzt:innen: Umsatz je Stunde gegen das Honorar von 120 €/h (100 % = Honorar gedeckt), DGKP 38 €/h, Assistenz 9 Kontakte + Anrufe je Stunde">
         {personMode ? (
           <BarTable rows={[...rows].sort((a, b) => b.efficiency - a.efficiency)} keyOf={(r) => r.staffId} cols={[
             { key: 'n', label: 'Person', render: (r) => { const s = staffById(r.staffId)!; return <span className="inline-flex items-center gap-2 font-medium"><Avatar name={s.name} hue={s.avatarHue} size={22} />{s.name} <span className="text-ink-3 text-[12px] font-normal">{ROLE_LABEL[s.role]}</span></span> }, bar: (r) => r.efficiency },
-            { key: 'e', label: 'Effizienz', align: 'right', render: (r) => <span className="inline-flex items-center gap-2 justify-end"><span className="w-16"><MiniBar value={r.efficiency} tone={r.efficiency >= 0.8 ? 'var(--good-text)' : r.efficiency >= 0.6 ? '#e0a100' : 'var(--bad-text)'} height={5} /></span><span className="font-semibold">{fmt.pct(r.efficiency)}</span></span> },
+            { key: 'e', label: 'Effizienz', align: 'right', render: (r) => <span className="inline-flex items-center gap-2 justify-end"><span className="w-16"><MiniBar value={r.efficiency} tone={r.efficiency >= 1 ? 'var(--good-text)' : r.efficiency >= 0.8 ? '#e0a100' : 'var(--bad-text)'} max={1.5} height={5} /></span><span className="font-semibold">{fmt.pct(r.efficiency)}</span></span> },
             { key: 'o', label: 'Output/h', align: 'right', render: (r) => <span className="text-ink-2">{r.role === 'assistenz' ? fmt.num1(r.outputPerHour) : fmt.eur(Math.round(r.outputPerHour))} <span className="text-ink-3">/ {r.role === 'assistenz' ? r.target : fmt.eur(r.target)}</span></span> },
             { key: 's', label: 'Soll / Ist', align: 'right', render: (r) => `${fmt.num(Math.round(r.sollH))} / ${fmt.num(Math.round(r.istH))} h` },
             { key: 'ot', label: 'Überstd.', align: 'right', render: (r) => <span className={r.overtimeH > 10 ? 'text-status-critical' : ''}>{fmt.num1(r.overtimeH)} h</span> },
@@ -93,7 +93,7 @@ export default function HRPage() {
         ) : (
           <BarTable rows={groups} keyOf={(g) => g.role} cols={[
             { key: 'n', label: 'Gruppe', render: (g) => <span className="font-medium">{g.label} <span className="text-ink-3 text-[12px] font-normal">· {g.n} Personen</span></span>, bar: (g) => g.efficiency },
-            { key: 'e', label: 'Effizienz', align: 'right', render: (g) => <span className="font-semibold">{fmt.pct(g.efficiency)}</span> },
+            { key: 'e', label: 'Effizienz', align: 'right', render: (g) => <span className={`font-semibold ${g.efficiency >= 1 ? 'text-status-good' : g.efficiency >= 0.8 ? '' : 'text-status-critical'}`}>{fmt.pct(g.efficiency)}</span> },
             { key: 'o', label: 'Ø Output/h', align: 'right', render: (g) => <span className="text-ink-2">{g.role === 'assistenz' ? fmt.num1(g.outputPerHour) : fmt.eur(Math.round(g.outputPerHour))} <span className="text-ink-3">/ {g.role === 'assistenz' ? g.target : fmt.eur(g.target)} · {HR_TARGETS[g.role].label}</span></span> },
             { key: 's', label: 'Soll / Ist', align: 'right', render: (g) => `${fmt.num(Math.round(g.sollH))} / ${fmt.num(Math.round(g.istH))} h` },
             { key: 'ot', label: 'Überstd.', align: 'right', render: (g) => `${fmt.num1(g.overtimeH)} h` },

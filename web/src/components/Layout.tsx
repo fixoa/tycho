@@ -55,7 +55,7 @@ const STATION_FACETS: Chrome['facets'] = [
     { title: 'Leistungsgruppe', sortable: true, rows: [{ label: 'Grundleistung', count: 7731 }, { label: 'Einzelleistung', count: 3985 }, { label: 'Labor', count: 3114 }, { label: 'Telemedizin', count: 794 }, { label: 'Vorsorge', count: 344 }] },
     { title: 'Terminart', rows: [{ label: 'Akut', count: 1980 }, { label: 'Kontrolle', count: 1420 }, { label: 'Blutabnahme', count: 980 }, { label: 'Video', count: 340 }, { label: 'Vorsorge (VU)', count: 210 }] },
     { title: 'Datum', rows: [{ label: 'August 2026', count: 2019 }, { label: 'Juli 2026', count: 2340 }, { label: 'Juni 2026', count: 2190 }] },
-    { title: 'Standort', rows: [{ label: 'Ordination Donaufeld', count: 5421 }] },
+    { title: 'Standort', rows: [{ label: 'Primärversorgung Zentrum', count: 5421 }] },
   ] },
 ]
 const CHROME: Record<string, Chrome> = {

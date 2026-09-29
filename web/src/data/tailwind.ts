@@ -172,10 +172,11 @@ import { demo as _demo } from './mock'
 import type { DayRecord, Role } from './types'
 
 /** Stundensatz (AG-Gesamtkosten) je Person */
-export const hourlyRate = (staffId: string) => { const s = _STAFF.find((x) => x.id === staffId)!; return s.costPerMonth / (s.fte * 173) }
+export const DOCTOR_HOURLY = 120 // € Honorar je Stunde (PVE-Vertrag)
+export const hourlyRate = (staffId: string) => { const s = _STAFF.find((x) => x.id === staffId)!; return s.role === 'arzt' ? DOCTOR_HOURLY : s.costPerMonth / (s.fte * 173) }
 /** Zielwerte je Rolle: Ertrag bzw. Output je bezahlter Stunde */
 export const HR_TARGETS: Record<Role, { label: string; target: number; unit: string }> = {
-  arzt: { label: 'Umsatz je Stunde', target: 190, unit: '€/h' },
+  arzt: { label: 'Umsatz je Stunde vs. Honorar 120 €/h', target: DOCTOR_HOURLY, unit: '€/h' },
   dgkp: { label: 'Umsatz je Stunde', target: 38, unit: '€/h' },
   assistenz: { label: 'Kontakte + Anrufe je Stunde', target: 9, unit: '/h' },
   management: { label: 'Prozessqualität', target: 1, unit: '' },
@@ -195,13 +196,13 @@ export function hrRows(recs: DayRecord[]): HrRow[] {
     const sollH = s.fte * 8.5 * worked.length
     const overtimeH = Math.max(0, istH - sollH)
     const rate = hourlyRate(s.id)
-    const cost = istH * rate + overtimeH * rate * 0.25
+    const cost = s.role === 'arzt' ? istH * rate : istH * rate + overtimeH * rate * 0.25 // Honorar je Stunde ohne Zuschlag
     const revenue = worked.reduce((a, r) => a + r.servicesValue, 0)
     const contacts = worked.reduce((a, r) => a + r.patientContacts, 0)
     const calls = worked.reduce((a, r) => a + r.callsHandled, 0)
     const output = s.role === 'arzt' || s.role === 'dgkp' ? (istH ? revenue / istH : 0) : s.role === 'assistenz' ? (istH ? (contacts + calls) / istH : 0) : 1
     const t = HR_TARGETS[s.role].target
-    return { staffId: s.id, role: s.role, days, sollH, istH, overtimeH, cost, overtimeCost: overtimeH * rate * 0.25, revenue, contacts, calls, outputPerHour: output, target: t, efficiency: Math.min(1.25, output / t) / 1.25, sickDays: rs.length - worked.length, ratePerH: rate }
+    return { staffId: s.id, role: s.role, days, sollH, istH, overtimeH, cost, overtimeCost: s.role === 'arzt' ? 0 : overtimeH * rate * 0.25, revenue, contacts, calls, outputPerHour: output, target: t, efficiency: t ? output / t : 0, sickDays: rs.length - worked.length, ratePerH: rate }
   }).filter((r) => r.istH > 0)
 }
 
@@ -222,7 +223,7 @@ export function hrMonthly() {
     const s = _STAFF.find((x) => x.id === r.staffId)!
     row.revenue += r.servicesValue * 1.2
     const istH = r.presenceMin / 60; const rate = hourlyRate(s.id); const ot = Math.max(0, istH - s.fte * 8.5)
-    row[s.role] += istH * rate + ot * rate * 0.25
+    row[s.role] += s.role === 'arzt' ? istH * rate : istH * rate + ot * rate * 0.25
     row.overtimeH += ot; if (r.presenceMin === 0) row.sickDays += 1
     map.set(key, row)
   }

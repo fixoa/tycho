@@ -83,7 +83,7 @@ docs/    Architektur, Research (Features, Recht, Sicherheit), offene Entscheidun
 
 ## Demo-Daten
 
-Alle Zahlen sind deterministisch erzeugte Demo-Daten (Seed im Code) für eine fiktive Gruppenpraxis Allgemeinmedizin in Wien (PVS: CGM MedXPert) mit 4 Ärzt:innen, 2 DGKP, 4 Ordinationsassistentinnen und 1 Ordinationsmanager. Positionen und Tarife sind an eine ÖGK-Honorarordnung angelehnt, aber keine echten Tarife. Datenstand ist auf den 24.08.2026 fixiert (Q3 2026, Tag 56 von 92), damit die Prognose sichtbar bleibt.
+Alle Zahlen sind deterministisch erzeugte Demo-Daten (Seed im Code) für eine fiktive Primärversorgungseinheit „Primärversorgung Zentrum“ in Wien (PVS: CGM MedXPert, Ärzt:innen mit 120 €/h Honorar) mit 4 Ärzt:innen, 2 DGKP, 4 Ordinationsassistentinnen und 1 Ordinationsmanager. Positionen und Tarife sind an eine ÖGK-Honorarordnung angelehnt, aber keine echten Tarife. Datenstand ist auf den 24.08.2026 fixiert (Q3 2026, Tag 56 von 92), damit die Prognose sichtbar bleibt.
 
 ## Screenshots
 
