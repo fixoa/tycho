@@ -1,29 +1,40 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import {
   Activity, Phone, Mic, Users, ClipboardList, TrendingUp, Mail, ShieldCheck, Settings, LogOut, Sun, Moon, Lock, CalendarClock,
+  Wind, Share2, Pill, ClipboardCheck, Smile, UserCircle,
 } from 'lucide-react'
-import { useAuth } from '../state/auth'
+import { useAuth, isLeader } from '../state/auth'
+import { useConfig } from '../state/config'
 import { DATA_AS_OF, DEMO_TODAY, PRACTICE, QUARTER } from '../data/mock'
 import { fmt } from '../lib/format'
 import { Avatar } from './ui'
 
 const NAV = [
-  { to: '/station', label: 'Tycho Station', icon: Activity, group: 'Übersicht' },
-  { to: '/prognose', label: 'Prognose', icon: TrendingUp, group: 'Übersicht' },
-  { to: '/digest', label: 'Tycho Digest', icon: Mail, group: 'Übersicht' },
-  { to: '/team', label: 'Personal & Effizienz', icon: Users, group: 'Analyse' },
-  { to: '/leistungen', label: 'Leistungen & Abrechnung', icon: ClipboardList, group: 'Analyse' },
-  { to: '/termine', label: 'Termine & Kapazität', icon: CalendarClock, group: 'Analyse' },
-  { to: '/ordicall', label: 'Ordicall Station', icon: Phone, group: 'Produkte' },
-  { to: '/diktara', label: 'Diktara Station', icon: Mic, group: 'Produkte' },
-  { to: '/sicherheit', label: 'Sicherheit & Compliance', icon: ShieldCheck, group: 'System' },
-  { to: '/einstellungen', label: 'Einstellungen', icon: Settings, group: 'System' },
+  { to: '/station', label: 'Tycho Station', icon: Activity, group: 'Übersicht', leader: true },
+  { to: '/prognose', label: 'Prognose', icon: TrendingUp, group: 'Übersicht', leader: true },
+  { to: '/digest', label: 'Tycho Digest', icon: Mail, group: 'Übersicht', leader: true },
+  { to: '/mein-score', label: 'Mein Score', icon: UserCircle, group: 'Übersicht', leader: false, module: 'selfservice' },
+  { to: '/team', label: 'Personal & Effizienz', icon: Users, group: 'Analyse', leader: true },
+  { to: '/leistungen', label: 'Leistungen & Abrechnung', icon: ClipboardList, group: 'Analyse', leader: true, module: 'billing' },
+  { to: '/termine', label: 'Termine & Kapazität', icon: CalendarClock, group: 'Analyse', leader: true, module: 'capacity' },
+  { to: '/zuweiser', label: 'Zuweiser', icon: Share2, group: 'Analyse', leader: true, module: 'zuweiser' },
+  { to: '/verordnungen', label: 'Verordnungen', icon: Pill, group: 'Analyse', leader: true, module: 'verordnung' },
+  { to: '/zufriedenheit', label: 'Zufriedenheit (NPS)', icon: Smile, group: 'Analyse', leader: true, module: 'nps' },
+  { to: '/qm', label: 'QM & Fristen', icon: ClipboardCheck, group: 'Analyse', leader: true, module: 'qm' },
+  { to: '/ordicall', label: 'Ordicall Station', icon: Phone, group: 'Produkte', leader: true, module: 'ordicall' },
+  { to: '/diktara', label: 'Diktara Station', icon: Mic, group: 'Produkte', leader: true, module: 'diktara' },
+  { to: '/tailwind', label: 'Tailwind Station', icon: Wind, group: 'Produkte', leader: true, module: 'tailwind' },
+  { to: '/sicherheit', label: 'Sicherheit & Compliance', icon: ShieldCheck, group: 'System', leader: true },
+  { to: '/einstellungen', label: 'Einstellungen', icon: Settings, group: 'System', leader: true },
 ]
 
 export default function Layout() {
   const { session, logout, theme, toggleTheme } = useAuth()
+  const { config } = useConfig()
   const nav = useNavigate()
-  const groups = [...new Set(NAV.map((n) => n.group))]
+  const leader = session ? isLeader(session.user) : false
+  const items = NAV.filter((n) => (leader || !n.leader) && (!n.module || (config?.modules?.[n.module] ?? true)))
+  const groups = [...new Set(items.map((n) => n.group))]
   const dayOfQ = Math.round((DATA_AS_OF.getTime() - QUARTER.start.getTime()) / 86400000) + 1
   return (
     <div className="h-full flex bg-surface-0">
@@ -43,7 +54,7 @@ export default function Layout() {
           {groups.map((g) => (
             <div key={g} className="mb-3">
               <div className="px-4 pb-1 text-[10px] uppercase tracking-wider text-ink-3">{g}</div>
-              {NAV.filter((n) => n.group === g).map((n) => (
+              {items.filter((n) => n.group === g).map((n) => (
                 <NavLink key={n.to} to={n.to}
                   className={({ isActive }) => `flex items-center gap-2.5 mx-2 px-2.5 py-1.5 rounded-md text-sm ${isActive ? 'bg-accent/15 text-ink-1 font-medium' : 'text-ink-2 hover:bg-surface-2 hover:text-ink-1'}`}>
                   <n.icon size={16} strokeWidth={1.8} />
@@ -56,6 +67,7 @@ export default function Layout() {
         <div className="px-4 py-3 border-t border-line-1 text-[11px] text-ink-3 space-y-1">
           <div className="flex items-center gap-1.5"><Lock size={11} /> AES-256-GCM · Schlüssel im TPM</div>
           <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-status-good pulse-dot" /> Read-only · 0 Schreibvorgänge</div>
+          {config && <div className="flex items-center gap-1.5"><span className={`w-1.5 h-1.5 rounded-full ${config.analysisMode === 'person' ? 'bg-status-critical' : 'bg-accent'}`} /> Modus: {config.analysisMode === 'person' ? 'Pro Person (NDA)' : 'Team-basiert'}</div>}
           <div>{PRACTICE.server}</div>
         </div>
       </aside>

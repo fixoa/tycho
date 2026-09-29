@@ -6,10 +6,15 @@ import { practiceScore, staffScores } from '../data/score'
 import { compareWindows } from '../data/aggregate'
 import { fmt } from '../lib/format'
 import { ROLE_LABEL } from '../data/staff'
+import { usePersonMode } from '../state/config'
+import { roleAverage } from '../data/score'
+import { tailwindSummary } from '../data/tailwind'
 
 export default function Digest() {
   const { forecast } = demo()
   const ps = practiceScore()
+  const personMode = usePersonMode()
+  const tw = tailwindSummary()
   const { cur, prev } = compareWindows(5)
   const [sent, setSent] = useState(false)
   const top = staffScores().filter((s) => s.staff.role !== 'management').sort((a, b) => (b.score - b.prevScore) - (a.score - a.prevScore))
@@ -73,13 +78,16 @@ export default function Digest() {
               <ul className="list-disc pl-5 text-ink-2 space-y-1">
                 {BILLING_FINDINGS.slice(0, 4).map((f) => <li key={f.id}>{f.title} <span className="text-ink-3">({fmt.eur2(f.valueEur)})</span></li>)}
                 <li>ÖGK-Quartalsabrechnung Q3: Einreichung bis 10. Oktober · BVAEB August bis 10. September.</li>
+                <li>Tailwind: {fmt.eur(tw.overdueSum)} überfällige Privathonorare, {tw.wahonlineMissing} Honorarnoten ohne WAHonline-Übermittlung – Maßnahmenliste liegt bereit.</li>
+                <li>Planery: 4 HR-Frühwarnungen (Überstunden, Urlaubsrest, Besetzungslücke Empfang ab 28.09.).</li>
               </ul>
             </section>
 
             <section>
               <h3 className="font-semibold flex items-center gap-2 mb-2"><TrendingUp size={15} className="text-series-1" /> Team</h3>
               <div className="grid md:grid-cols-2 gap-x-6 gap-y-1 text-ink-2">
-                {top.map((s) => (
+                {!personMode && (['arzt', 'dgkp', 'assistenz'] as const).map((r) => { const a = roleAverage(r); return <div key={r} className="flex justify-between"><span>{ROLE_LABEL[r]}</span><span className="tabular">{a.score} ({fmt.signed(a.score - a.prev)})</span></div> })}
+                {personMode && top.map((s) => (
                   <div key={s.staff.id} className="flex justify-between"><span>{s.staff.name} <span className="text-ink-3">· {ROLE_LABEL[s.staff.role]}</span></span><span className="tabular">{s.staff.consent === 'nur-aggregiert' ? '–' : `${s.score} (${fmt.signed(s.score - s.prevScore)})`}</span></div>
                 ))}
               </div>

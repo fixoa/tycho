@@ -7,9 +7,11 @@ import { ROLE_LABEL } from '../data/staff'
 import { BILLING_FINDINGS, demo } from '../data/mock'
 import { weekly } from '../data/aggregate'
 import { fmt } from '../lib/format'
+import { usePersonMode } from '../state/config'
 
 export default function Person() {
   const { id } = useParams()
+  const personMode = usePersonMode()
   const s = staffScores().find((x) => x.staff.id === id)
   if (!s) return <div className="text-sm text-ink-2">Person nicht gefunden. <Link to="/team" className="text-accent">Zurück</Link></div>
   const { staff, kpis, components } = s
@@ -24,7 +26,7 @@ export default function Person() {
     wait: (() => { const w = rs.filter((r) => r.waitTimeAvgMin > 0); return w.length ? w.reduce((a, r) => a + r.waitTimeAvgMin, 0) / w.length : 0 })(),
   }))
   const findings = BILLING_FINDINGS.filter((f) => f.staffId === staff.id)
-  const restricted = staff.consent !== 'erteilt'
+  const restricted = staff.consent !== 'erteilt' || !personMode
 
   return (
     <div className="space-y-6">
@@ -45,7 +47,7 @@ export default function Person() {
             <Lock size={18} className="text-status-warning shrink-0 mt-0.5" />
             <div>
               <div className="text-ink-1 font-medium">Individuelle Auswertung deaktiviert</div>
-              Für {staff.name} liegt nur die Zustimmung zur aggregierten Auswertung vor (§ 10 AVRAG / § 96 Abs 1 Z 3 ArbVG). Die Werte fließen in Team-Kennzahlen ein (k ≥ 5), ein persönlicher Score wird nicht berechnet oder gespeichert.
+              {!personMode ? <>Die Ordination ist im Team-Modus konfiguriert. Persönliche Scores werden nicht berechnet. {staff.name} sieht die eigenen Rohwerte unter „Mein Score“.</> : <>Für {staff.name} liegt nur die Zustimmung zur aggregierten Auswertung vor (§ 10 AVRAG / § 96 Abs 1 Z 3 ArbVG). Die Werte fließen in Team-Kennzahlen ein (k ≥ 5), ein persönlicher Score wird nicht berechnet oder gespeichert.</>}
             </div>
           </div>
         </Card>

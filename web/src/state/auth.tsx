@@ -6,6 +6,11 @@ import type { StaffMember } from '../data/types'
 // Berechtigung über AD-Gruppe G_Tycho_Leitung. Kein eigenes Passwort in Tycho.
 export type Session = { user: StaffMember; method: 'sso' | 'manual'; loginAt: Date }
 
+export const LEADER_GROUP = 'G_Tycho_Leitung'
+export const ADMIN_GROUP = 'G_Tycho_Admin'
+export const isLeader = (u: StaffMember) => u.adGroups.includes(LEADER_GROUP)
+export const isAdmin = (u: StaffMember) => u.adGroups.includes(ADMIN_GROUP)
+
 interface AuthCtx {
   session: Session | null
   login: (accountOrId: string, method: Session['method']) => boolean
@@ -15,7 +20,6 @@ interface AuthCtx {
 }
 
 const Ctx = createContext<AuthCtx | null>(null)
-const ALLOWED_GROUP = 'G_Tycho_Leitung'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(() => {
@@ -44,8 +48,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const value = useMemo<AuthCtx>(() => ({
     session,
     login: (account, method) => {
+      // Jedes AD-Konto der Ordination darf sich anmelden (Self-Service „Mein Score“);
+      // Leitungsansichten erfordern G_Tycho_Leitung, die Erstkonfiguration G_Tycho_Admin.
       const user = STAFF.find((s) => s.account === account.toLowerCase() || s.upn === account.toLowerCase())
-      if (!user || !user.adGroups.includes(ALLOWED_GROUP)) return false
+      if (!user) return false
       const s: Session = { user, method, loginAt: new Date() }
       setSession(s)
       try { sessionStorage.setItem('tycho.session', JSON.stringify({ id: user.id, method, loginAt: s.loginAt })) } catch { /* ignore */ }

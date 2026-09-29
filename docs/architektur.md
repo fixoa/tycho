@@ -21,11 +21,10 @@
 │  │ Dienstplan   │────────────►│                │    └──────┬──────┘  │
 │  │ CSV          │             └───────┬────────┘           │         │
 │  └──────────────┘                     │ SHA-256-Kette      │         │
-│                                ┌──────▼────────┐    ┌──────▼──────┐  │
-│                                │ Audit-Log     │    │ Digest      │  │
-│                                │ append-only   │    │ S/MIME →    │  │
-│                                └───────────────┘    │ SMTP-Relay  │  │
-│                                                     └─────────────┘  │
+│                                ┌──────▼────────┐    │ SMTP-Relay  │  │
+│                                │ Audit-Log     │    └─────────────┘  │
+│                                │ append-only   │                     │
+│                                └───────────────┘                     │
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -70,19 +69,38 @@
 
 Je Rolle eine feste Komponentenliste (siehe `web/src/data/score.ts`): Istwert, Zielwert, Gewicht. Erreichung = min(Ist/Ziel, 125 %) / 125 %. Score = gewichtetes Mittel × 100. Ordinationsscore = kostengewichtetes Mittel der Personenscores. Zielwerte sind konfigurierbar. Der Score ist eine Empfehlung, es gibt keine automatischen Konsequenzen (Art. 22 DSGVO, AI Act Art. 26 Human Oversight).
 
+## Analysemodus (Erstkonfiguration)
+
+Der Haupt-Admin (AD-Gruppe `G_Tycho_Admin`) entscheidet beim ersten Start per Switch:
+
+| | Team-basiert (links) | Pro Person (rechts) |
+|---|---|---|
+| Auswertung | Ärztegruppe, Pflege-/Laborgruppe, Assistenzgruppe, Verwaltung; k-Anonymität ≥ 5 | Efficacy Score, Kosten/Ertrag, Rangliste, HR-Werte je Person |
+| Voraussetzung | keine Einzelzustimmung, kein AI-Act-Hochrisiko | **NDA**, Einzelzustimmungen (§ 10 AVRAG / § 96 ArbVG), DSFA, Human-Review; „volle Kontrolle auf eigene Gefahr“ |
+| Bestätigung | Klick | NDA-Checkbox + Eingabe `PRO PERSON` |
+| Protokoll | Audit-Log (Konto, Zeit, Modus) | Audit-Log (Konto, Zeit, Modus, NDA) |
+
+Der Modus wirkt global: Team-, Personen-, Tailwind-HR-, Verordnungs- und Digest-Ansichten blenden Einzelwerte im Team-Modus aus. Widerruf einer Zustimmung deaktiviert den Einzelscore der Person auch im Pro-Person-Modus. Jede Person sieht unter „Mein Score“ ihre eigenen Werte (Self-Service), unabhängig vom Modus.
+
+## Tailwind (Controlling, Inkasso, HR)
+
+- **Honorarnoten:** aus dem PVS-Honorarnotenmodul (read-only) mit Bankumsatz-Abgleich (CAMT.053-Import, read-only) und WAHonline-Übermittlungsstatus. Tailwind berechnet Aging, DSO, Zahlungswahrscheinlichkeit und eine **KI-Empfehlung je Honorarnote** (Erinnerung, Mahnstufe, Ratenzahlung, Inkasso, Abschreibung, Stornoprüfung) mit Begründung. Es versendet nichts und schreibt nichts – es erzeugt Texte und Übergabelisten für Menschen.
+- **HR aus Planery:** dedizierter Read-only-Token (Scope Zeiten/Abwesenheiten/Salden), Token im TPM, eigener Verschlüsselungsschlüssel, eigenes Audit-Log, Aufbewahrung 12 Monate, Sichtbarkeit nur `G_Tailwind_HR` (+ Leitung im Pro-Person-Modus). Frühwarnregeln: Überstundensaldo > 60 h, Urlaubsrest > 15 Tage im Q4, 3 Monate steigender Trend, > 5 Krankenstandstage / 8 Wochen, Besetzungslücke (Dienstplan × Terminkalender × AD-Logon).
+
 ## PVS-Adapter (Österreich)
 
 | PVS | Basis | Adapter |
 |---|---|---|
+| **CGM MedXPert** (eigenes Zentrum, erster Adapter) | Client/Server; DB-Basis wird im Onboarding verifiziert | Nächtliche VSS-Kopie + Leselogin; Honorarnoten-, Termin- und Leistungstabellen im Onboarding gemappt |
 | INNOMED NEXT | MS SQL Server | Snapshot + ReadOnly-Intent |
 | MEDSTAR | MS SQL Server | Snapshot + ReadOnly-Intent |
 | Innomed (alt) | Pervasive/Btrieve | VSS-Kopie, Btrieve-Reader |
 | Latido, Care01 (Cloud) | Web | nur Export/API, kein DB-Zugriff |
 | CGM MedXPert u. a. | je nach Version | Analyse im Onboarding |
 
-## Tech-Stack (Vorschlag Produkt)
+## Tech-Stack (entschieden)
 
-- Collector: .NET 8 Worker Service (Windows-Dienst, gMSA, TPM/DPAPI-NG-APIs nativ verfügbar)
+- Collector: **.NET 8 Worker Service** (Windows-Dienst, gMSA, TPM/DPAPI-NG/Kerberos-APIs nativ, ein Binary, kein Node-Runtime auf dem Server)
 - Store: SQLite verschlüsselt
 - UI: React (dieses Repo) als statische Dateien, ausgeliefert vom Collector über Kestrel auf `127.0.0.1` mit Negotiate-Auth
 - Digest: HTML/PDF-Rendering im Collector, S/MIME, lokaler SMTP-Relay

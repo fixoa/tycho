@@ -7,11 +7,15 @@ import { BILLING_FINDINGS, DATA_AS_OF, PREV_QUARTER, QUARTER, demo, GO_LIVE } fr
 import { practiceScore, roleAverage, staffScores } from '../data/score'
 import { compareWindows, practiceWeekly, quarterToDate } from '../data/aggregate'
 import { ROLE_LABEL } from '../data/staff'
+import { usePersonMode } from '../state/config'
+import { tailwindSummary, HR } from '../data/tailwind'
 
 const severityTone = { critical: 'critical', serious: 'serious', warning: 'warning', info: 'info' } as const
 
 export default function Station() {
   const { forecast } = demo()
+  const personMode = usePersonMode()
+  const tw = tailwindSummary()
   const ps = practiceScore()
   const qtd = quarterToDate()
   const { cur, prev } = compareWindows()
@@ -39,7 +43,7 @@ export default function Station() {
           <p className="text-xs text-ink-3">Nächtliche Analyse vom {fmt.date(DATA_AS_OF)} · {QUARTER.label} · noch {daysLeft} Tage bis Quartalsende</p>
         </div>
         <div className="flex items-center gap-2 text-xs">
-          <Badge tone="good"><CheckCircle2 size={12} /> Alle 7 Datenquellen aktuell</Badge>
+          <Badge tone="good"><CheckCircle2 size={12} /> Alle 9 Datenquellen aktuell</Badge>
           <Badge tone="neutral">Tycho seit {fmt.dateShort(GO_LIVE.tycho)}</Badge>
         </div>
       </div>
@@ -74,8 +78,8 @@ export default function Station() {
             deltaLabel={`${fmt.num(forecast.scheineToDate)} Scheine · Fallwert ${fmt.eur2(forecast.actualToDate / forecast.scheineToDate)}`} />
           <StatTile label="Offene Abrechnungslücken" value={fmt.eur(openFindingsValue)} accent="#d03b3b"
             deltaLabel={`${BILLING_FINDINGS.length} Findings · vor Quartalsabrechnung`} hint="Leistungen, die laut Kartei/Diktara erbracht, im Leistungsblatt aber nicht erfasst sind." />
-          <StatTile label="Patientenkontakte (QTD)" value={fmt.num(qtd.contacts)} accent="var(--series-7)"
-            delta={<Delta value={((cur.contacts - prev.contacts) / prev.contacts) * 100} format={(v) => fmt.num1(Math.abs(v))} suffix=" %" />} deltaLabel="4 Wochen vs. davor" />
+          <StatTile label="Offene Privathonorare (Tailwind)" value={fmt.eur(tw.openSum)} accent="var(--series-7)"
+            deltaLabel={`${fmt.eur(tw.overdueSum)} überfällig · ${fmt.num(qtd.contacts)} Kontakte QTD`} hint="Wahlarzt-, Physio-, TCM- und Impfhonorare aus dem PVS-Honorarnotenmodul, abgeglichen mit Bankumsätzen." />
         </div>
       </div>
 
@@ -123,9 +127,25 @@ export default function Station() {
 
       {/* Team + Findings */}
       <div className="grid grid-cols-1 xl:grid-cols-[1.2fr_1fr] gap-4">
-        <Card title="Team-Effizienz" subtitle="Score je Person · letzte 4 Wochen · klick für Aufschlüsselung"
+        <Card title={personMode ? 'Team-Effizienz' : 'Team-Effizienz (Gruppen)'} subtitle={personMode ? 'Score je Person · letzte 4 Wochen · klick für Aufschlüsselung' : 'Team-Modus: nur Gruppenwerte · letzte 4 Wochen'}
           action={<Link to="/team" className="text-xs text-accent inline-flex items-center gap-1">Alle <ArrowRight size={12} /></Link>}>
-          <div className="space-y-2">
+          {!personMode && (
+            <div className="space-y-3">
+              {roles.map((r) => (
+                <div key={r.role} className="flex items-center gap-3">
+                  <span className="text-sm text-ink-1 w-44">{ROLE_LABEL[r.role]}</span>
+                  <div className="flex-1"><MiniBar value={r.score} max={100} tone="var(--series-1)" height={5} /></div>
+                  <span className="tabular text-sm font-medium w-8 text-right">{r.score}</span>
+                  <span className="w-12 text-right"><Delta value={r.score - r.prev} /></span>
+                </div>
+              ))}
+              <div className="pt-2 border-t border-line-1 text-xs text-ink-2 space-y-1">
+                <div className="flex justify-between"><span>Überstundensaldo Team (Planery)</span><span className="tabular">{fmt.num(HR.reduce((a, h) => a + h.overtimeBalanceH, 0))} h</span></div>
+                <div className="flex justify-between"><span>HR-Frühwarnungen</span><span className="tabular">{HR.filter((h) => h.warning).length}</span></div>
+              </div>
+            </div>
+          )}
+          <div className={personMode ? 'space-y-2' : 'hidden'}>
             {scores.map((s) => (
               <Link key={s.staff.id} to={`/team/${s.staff.id}`} className="flex items-center gap-3 rounded-md px-2 py-1.5 -mx-2 hover:bg-surface-2">
                 <span className="w-2 h-2 rounded-full shrink-0" style={{ background: s.score >= 80 ? '#0ca30c' : s.score >= 65 ? '#fab219' : s.score >= 50 ? '#ec835a' : '#d03b3b' }} />

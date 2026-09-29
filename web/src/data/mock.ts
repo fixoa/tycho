@@ -23,7 +23,7 @@ export const PRACTICE = {
   openingHours: 'Mo–Fr 07:30–18:00',
   domain: 'ordination.local',
   server: 'TS-ORD-01 (Windows Server 2022, Terminalserver)',
-  pvs: 'INNOMED NEXT (MS SQL Server)',
+  pvs: 'CGM MedXPert',
 }
 
 const iso = (d: Date) => d.toISOString().slice(0, 10)
@@ -230,19 +230,22 @@ function buildForecast(records: DayRecord[]): { points: ForecastPoint[]; project
 }
 
 export const DATA_SOURCES: DataSource[] = [
-  { id: 'pvs', name: 'INNOMED NEXT (PVS)', kind: 'PVS', access: 'read-only', method: 'SQL-Login „tycho_ro“ (db_datareader + db_denydatawriter, ApplicationIntent=ReadOnly) auf Datenbank-Snapshot', lastSync: '2026-08-24T19:04:11', status: 'ok', records: 1_284_311, note: 'Kein direkter Zugriff auf die Produktivdatenbank während der Sprechstunde.' },
+  { id: 'pvs', name: 'CGM MedXPert (PVS)', kind: 'PVS', access: 'read-only', method: 'Leselogin „tycho_ro“ (nur SELECT) auf nächtlicher VSS-Kopie der MedXPert-Datenbank; DB-Basis im Onboarding verifiziert', lastSync: '2026-08-24T19:04:11', status: 'ok', records: 1_284_311, note: 'Kein direkter Zugriff auf die Produktivdatenbank während der Sprechstunde.' },
+  { id: 'planery', name: 'Planery (HR / Dienstplan)', kind: 'Planery', access: 'read-only', method: 'Read-only API-Token (Scope: Zeiten, Abwesenheiten, Salden) – Token im TPM, Zugriff nur für Tailwind-HR-Rolle', lastSync: '2026-08-24T19:06:30', status: 'ok', records: 11, note: 'Hochsicherheitskritisch: Personaldaten, eigener Verschlüsselungsschlüssel, separates Audit-Log.' },
+  { id: 'bank', name: 'Bankumsätze (CAMT.053-Import)', kind: 'Bank', access: 'read-only', method: 'Täglicher CAMT-Export der Hausbank, Ordner \\\\TS-ORD-01\\tycho-in\\bank – Zahlungsabgleich Honorarnoten', lastSync: '2026-08-24T19:07:02', status: 'ok', records: 2_940 },
   { id: 'ordicall', name: 'Ordicall', kind: 'Ordicall', access: 'read-only', method: 'Lokaler Export (JSON, signiert) – Anrufstatistik ohne Audio', lastSync: '2026-08-24T19:05:40', status: 'ok', records: 9_810 },
   { id: 'diktara', name: 'Diktara', kind: 'Diktara', access: 'read-only', method: 'Metadaten-API (localhost) – Dauer, Leistungserkennung, Akzeptanz; keine Transkripte', lastSync: '2026-08-24T19:05:52', status: 'ok', records: 6_233 },
   { id: 'ad', name: 'Active Directory (ordination.local)', kind: 'AD', access: 'read-only', method: 'LDAPS-Bind mit Leserechten, Gruppen G_Aerzte / G_Pflege / G_Empfang', lastSync: '2026-08-24T19:06:03', status: 'ok', records: 11 },
   { id: 'calendar', name: 'Terminkalender (PVS-Modul)', kind: 'Terminkalender', access: 'read-only', method: 'Teil des PVS-Snapshots – Slots, No-Shows, Terminarten', lastSync: '2026-08-24T19:04:11', status: 'ok', records: 41_902 },
   { id: 'pbx', name: 'Telefonanlage (Vorher-Baseline)', kind: 'Telefonanlage', access: 'read-only', method: 'CDR-Export der Anlage (bis 31.05.2026)', lastSync: '2026-06-01T02:00:00', status: 'warn', records: 14_120, note: 'Seit Ordicall-Go-Live nur noch als historische Referenz.' },
-  { id: 'dienstplan', name: 'Dienstplan / Lohnverrechnung', kind: 'Dienstplan', access: 'read-only', method: 'CSV-Import (Ordner \\\\TS-ORD-01\\tycho-in, nur lesen)', lastSync: '2026-08-01T07:12:00', status: 'ok', records: 11 },
+  { id: 'lohn', name: 'Lohnverrechnung (Kosten je Person)', kind: 'Dienstplan', access: 'read-only', method: 'CSV-Import monatlich (Ordner \\\\TS-ORD-01\\tycho-in, nur lesen)', lastSync: '2026-08-01T07:12:00', status: 'ok', records: 11 },
 ]
 
 export const AUDIT_LOG: AuditEvent[] = [
   { ts: '2026-08-25T05:41:02', actor: 'svc_tycho', action: 'Analyse-Lauf abgeschlossen', target: 'Snapshot 2026-08-24', result: 'ok' },
   { ts: '2026-08-25T05:40:58', actor: 'svc_tycho', action: 'Verschlüsselter Store geschrieben (AES-256-GCM)', target: 'D:\\Tycho\\store\\2026-08-24.tyc', result: 'ok' },
-  { ts: '2026-08-25T05:12:14', actor: 'svc_tycho', action: 'Leseabfrage PVS (SELECT)', target: 'Leistungen, Termine, e-card', result: 'ok' },
+  { ts: '2026-08-25T05:12:14', actor: 'svc_tycho', action: 'Leseabfrage PVS (SELECT)', target: 'Leistungen, Termine, e-card, Honorarnoten', result: 'ok' },
+  { ts: '2026-08-25T05:12:20', actor: 'svc_tycho', action: 'Planery-API gelesen (Scope: Zeiten, Abwesenheiten)', target: 'api.planery.at (read-only Token)', result: 'ok' },
   { ts: '2026-08-25T05:12:09', actor: 'svc_tycho', action: 'Leseabfrage Diktara-Metadaten', target: 'localhost:7411', result: 'ok' },
   { ts: '2026-08-25T05:12:03', actor: 'svc_tycho', action: 'Leseabfrage Ordicall-Export', target: 'ordicall-stats-2026-08-24.json', result: 'ok' },
   { ts: '2026-08-25T05:11:50', actor: 'svc_tycho', action: 'LDAPS-Abgleich Personalstamm', target: 'DC01.ordination.local', result: 'ok' },

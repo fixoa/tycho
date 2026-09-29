@@ -4,13 +4,16 @@ import { HashRouter } from 'react-router-dom'
 import './index.css'
 import App from './App'
 import { AuthProvider } from './state/auth'
+import { ConfigProvider } from './state/config'
 
 // HashRouter: läuft auch als statische Dateien (file:// oder IIS ohne Rewrite-Regeln) auf dem Terminalserver.
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HashRouter>
       <AuthProvider>
-        <App />
+        <ConfigProvider>
+          <App />
+        </ConfigProvider>
       </AuthProvider>
     </HashRouter>
   </StrictMode>,

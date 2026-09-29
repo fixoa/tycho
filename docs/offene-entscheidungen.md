@@ -1,30 +1,23 @@
 # Offene Entscheidungen
 
-Diese Punkte brauchen eine Entscheidung der Produktverantwortung, bevor aus der Demo ein Produkt wird.
+## Entschieden (29.09.2026)
 
-## Features – was rein soll
+| Thema | Entscheidung |
+|---|---|
+| Tailwind | Neues Produkt/Station: Wahlarzt-/Privathonorare (Physio, TCM, Impfungen …) als Controlling- und Inkasso-Abteilung mit KI-Empfehlungen; plus HR (Überstunden-Frühwarnung, Urlaubsübersicht) aus **Planery**, hochsicherheitskritisch |
+| Zusatzmodule | Zuweiser-Analyse, Verordnungs-Monitor, QM-Fristen, NPS-Import, Self-Service „Mein Score“ – alle rein |
+| Peer-Benchmark | **Nein** (kein Modul, keine ausgehende Verbindung) |
+| Rankings pro Person | Ja, aber nur im Modus **Pro Person**, den der Haupt-Admin bei der Erstkonfiguration per Switch wählt (Team-basiert vs. Pro Person mit NDA-Warnung „volle Kontrolle auf eigene Gefahr“) |
+| Diktara / Ordicall | Liefern die nötigen Metadaten; Anforderung in `docs/dev-anforderung-schnittstellen.md` |
+| PVS | CGM MedXPert (eigenes Zentrum) als erster Adapter |
+| Collector-Stack | .NET 8 Worker Service (Empfehlung übernommen) |
 
-| # | Vorschlag | Empfehlung | Aufwand |
-|---|---|---|---|
-| 1 | **No-Show-Risiko-Score je Termin** mit Ordicall-Erinnerungsanruf als Aktion | Ja, starke Verzahnung Tycho ↔ Ordicall | mittel |
-| 2 | **Wahlarzt-Modus** (offene Honorarnoten, WAHonline, 80 %-Logik) | Ja, wenn Wahlärzt:innen Zielgruppe sind | mittel |
-| 3 | **Team-Auslastung & Überstunden-Frühwarnung** (AD-Logon vs. Aufkommen, Dienstplan) | Ja, aber nur aggregiert per Default | klein |
-| 4 | **Anonymer Peer-Benchmark** zwischen Tycho-Ordinationen | Nur opt-in, weil er die „keine ausgehende Verbindung“-Regel bricht | groß |
-| 5 | **Zuweiser-Analyse** | Für Fachärzt:innen Pflicht, für Allgemeinmedizin optional | klein |
-| 6 | **Verordnungs-/Ökonomie-Monitor** (ÖKO-Tool) | Später | mittel |
-| 7 | **QM-/Hygiene-Fristen, Lagerbestand** | Später; braucht manuelle Pflege, passt nicht zur „nur lesen“-Reinheit | klein |
-| 8 | **Patientenzufriedenheit / NPS-Import** | Später; externe Quelle | klein |
-| 9 | **Self-Service-Ansicht** „mein eigener Score“ für jede:n Mitarbeiter:in | Ja, stärkt Akzeptanz und Rechtssicherheit | klein |
-| 10 | **Digest-Varianten** (Quartalsreport, Steuerberater-Export) | Ja | klein |
+## Noch offen
 
-## Produktentscheidungen
-
-1. **Name:** „Tycho“ (Arbeitstitel). Markenprüfung nötig (es gibt Tycho-Software-Produkte in anderen Branchen).
-2. **Efficacy-Score-Gewichte und Zielwerte:** Demo-Werte in `web/src/data/score.ts`. Sollen Ordinationen sie selbst ändern dürfen, oder liefert Tycho fachgruppenspezifische Presets?
-3. **Kosten je Person:** aus Lohnverrechnung (CSV) oder manuell? Sichtbar für wen?
-4. **Rankings:** Die Demo zeigt eine sortierte Liste. Rechtlich sicherer wäre: keine Rangfolge, nur Einzelwert + Team-Ø.
-5. **Diktara-Schnittstelle:** Liefert Diktara heute schon erkannte Leistungscodes als Metadaten? Wenn nicht, ist das die wichtigste Schnittstellenarbeit (Kreuzprüfung hängt daran).
-6. **Ordicall-Export:** Terminarten (Video/Telefon/vor Ort) müssen im Export stehen, damit die TM01/TM02-Plausibilität funktioniert.
-7. **PVS-Adapter-Reihenfolge:** INNOMED NEXT (SQL Server) zuerst? Welche PVS laufen im eigenen Zentrum und bei den ersten Kund:innen?
-8. **Tech-Stack Collector:** .NET 8 Worker Service (empfohlen, native DPAPI-NG/TPM/Kerberos) vs. Node.
-9. **Lizenzmodell:** Tycho Station als Basis, Ordicall/Diktara Station als Paket-Abhängigkeit (so in der Demo umgesetzt).
+1. **MedXPert-Datenbasis:** Welche Datenbank/Version läuft im Zentrum (SQL Server? Firebird? proprietär)? Bestimmt, ob Snapshot/ReadOnly-Intent oder VSS-Kopie. → Onboarding-Termin mit CGM-Betreuung.
+2. **Planery-API:** Gibt es einen Read-only-Scope für Zeiten/Abwesenheiten/Salden und ein Feld für das AD-Konto? Falls nein: CSV-Export als Zwischenlösung. → Anforderung Abschnitt 3 an Planery senden.
+3. **Bankumsätze:** CAMT.053 der Hausbank verfügbar? Alternativ Kontoauszug-CSV.
+4. **NDA-Text und Zustimmungsformular** für den Pro-Person-Modus: juristisch prüfen lassen (Arbeitsrecht + Datenschutz), Vorlage wird mitgeliefert.
+5. **Namen „Tycho“ / „Tailwind“:** Markenprüfung (Tailwind kollidiert mit dem CSS-Framework „Tailwind CSS“ – im Medizinbereich vermutlich unproblematisch, aber prüfen).
+6. **Zielwerte je Score-Komponente:** Presets je Fachgruppe oder frei konfigurierbar?
+7. **Kosten je Person:** aus Lohnverrechnung (CSV) – wer darf sie sehen (nur Admin? Leitung?).

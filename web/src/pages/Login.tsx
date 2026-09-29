@@ -15,7 +15,7 @@ export default function Login() {
     e.preventDefault()
     setError(null)
     if (login(account, 'manual')) nav('/station')
-    else setError('Konto nicht in der AD-Gruppe G_Tycho_Leitung – Zugriff verweigert (Versuch protokolliert).')
+    else setError('Konto nicht im Active Directory der Ordination gefunden (Versuch protokolliert).')
   }
   const sso = () => {
     setBusy(true)
@@ -50,7 +50,7 @@ export default function Login() {
             <li className="flex items-center gap-2"><Eye size={14} className="text-accent" /> Nur Leserechte – wie ein Benutzer, der zuschaut</li>
             <li className="flex items-center gap-2"><Lock size={14} className="text-accent" /> AES-256-GCM, Schlüssel im TPM · keine Cloud</li>
             <li className="flex items-center gap-2"><Server size={14} className="text-accent" /> Läuft auf {PRACTICE.server}</li>
-            <li className="flex items-center gap-2"><ShieldCheck size={14} className="text-accent" /> Zugriff nur für AD-Gruppe G_Tycho_Leitung · jede Sitzung protokolliert</li>
+            <li className="flex items-center gap-2"><ShieldCheck size={14} className="text-accent" /> Leitungsansichten nur für AD-Gruppe G_Tycho_Leitung · jede Sitzung protokolliert</li>
           </ul>
         </div>
 
@@ -77,8 +77,8 @@ export default function Login() {
             <button className="w-full rounded-md border border-line-2 py-2 text-sm text-ink-1 hover:bg-surface-2">Anmelden</button>
           </form>
           <div className="mt-5 text-[11px] text-ink-3 leading-relaxed">
-            Demo-Konten: <code className="text-ink-2">a.berger</code> (Ärztliche Leitung), <code className="text-ink-2">k.bauer</code> (Ordinationsmanagement).
-            Andere AD-Konten, z. B. <code className="text-ink-2">l.gruber</code>, werden abgewiesen.
+            Demo-Konten: <code className="text-ink-2">a.berger</code> (Ärztliche Leitung, Haupt-Admin), <code className="text-ink-2">k.bauer</code> (Ordinationsmanagement).
+            Alle anderen AD-Konten, z. B. <code className="text-ink-2">l.gruber</code> oder <code className="text-ink-2">m.hofer</code>, sehen nur den Self-Service „Mein Score“.
           </div>
         </div>
       </div>

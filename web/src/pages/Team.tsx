@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Info, Lock } from 'lucide-react'
+import { Info, Lock, Users } from 'lucide-react'
+import { usePersonMode } from '../state/config'
 import { Avatar, Badge, Card, Delta, ScoreRing, Bar as MiniBar, Table } from '../components/ui'
 import { staffScores, componentPct, roleAverage, type StaffScore } from '../data/score'
 import { ROLE_LABEL } from '../data/staff'
@@ -11,6 +12,7 @@ const ROLES: Role[] = ['arzt', 'dgkp', 'assistenz', 'management']
 
 export default function Team() {
   const nav = useNavigate()
+  const personMode = usePersonMode()
   const [role, setRole] = useState<Role | 'alle'>('alle')
   const scores = staffScores().filter((s) => role === 'alle' || s.staff.role === role)
   const totalCost = scores.reduce((a, s) => a + s.kpis.cost, 0)
@@ -54,7 +56,34 @@ export default function Team() {
         </div>
       </div>
 
-      <Card title="Mitarbeiter:innen" subtitle="Klick auf eine Zeile öffnet die vollständige Score-Aufschlüsselung" padded>
+      {!personMode && (
+        <Card title="Team-basierte Analyse" subtitle="Konfiguriert vom Haupt-Admin · Einzelwerte, Rankings und persönliche Scores sind deaktiviert">
+          <div className="flex gap-3 items-start text-sm text-ink-2">
+            <Users size={18} className="text-accent shrink-0 mt-0.5" />
+            <div>
+              Tycho zeigt in diesem Modus nur Gruppenkennzahlen (Ärztegruppe, Pflege-/Laborgruppe, Assistenzgruppe, Verwaltung) mit k-Anonymität. Jede Person sieht die eigenen Rohwerte unter <span className="text-ink-1">Mein Score</span>.
+              Der Modus kann in den Einstellungen vom Haupt-Admin auf „Pro Person“ umgestellt werden – das erfordert NDA, Einzelzustimmungen und DSFA.
+            </div>
+          </div>
+          <div className="grid md:grid-cols-3 gap-4 mt-4 text-xs">
+            {(['arzt', 'dgkp', 'assistenz'] as const).map((r) => {
+              const g = staffScores().filter((x) => x.staff.role === r)
+              const rev = g.reduce((a, x) => a + x.kpis.revenue, 0), cost = g.reduce((a, x) => a + x.kpis.cost, 0)
+              return (
+                <div key={r} className="rounded-md bg-surface-2 p-3 space-y-1">
+                  <div className="text-ink-1 font-medium">{ROLE_LABEL[r]} <span className="text-ink-3">· {g.length} Personen · {fmt.num1(g.reduce((a, x) => a + x.staff.fte, 0))} FTE</span></div>
+                  <div className="flex justify-between"><span className="text-ink-3">Ø Pat./h</span><span className="tabular">{fmt.num1(g.reduce((a, x) => a + x.kpis.contactsPerHour, 0) / g.length)}</span></div>
+                  {rev > 0 && <div className="flex justify-between"><span className="text-ink-3">Verrechnet / Kosten</span><span className="tabular">{fmt.eur(rev)} / {fmt.eur(cost)}</span></div>}
+                  <div className="flex justify-between"><span className="text-ink-3">Ø Dokumentation</span><span className="tabular">{fmt.pct1(g.reduce((a, x) => a + x.kpis.docCompleteness, 0) / g.length)}</span></div>
+                  {g.length < 5 && <div className="text-status-warning">Gruppe &lt; k = 5 – im Digest mit Nachbargruppe zusammengefasst, hier nur für die Leitung sichtbar</div>}
+                </div>
+              )
+            })}
+          </div>
+        </Card>
+      )}
+
+      {personMode && <Card title="Mitarbeiter:innen" subtitle="Rangliste nach Score · Klick auf eine Zeile öffnet die vollständige Aufschlüsselung · Pro-Person-Modus (NDA)" padded>
         <Table<StaffScore>
           rows={scores}
           keyOf={(s) => s.staff.id}
@@ -87,7 +116,7 @@ export default function Team() {
             { key: 'consent', label: 'Auswertung', render: (s) => s.staff.consent === 'erteilt' ? <Badge tone="good">Zustimmung erteilt</Badge> : s.staff.consent === 'nur-aggregiert' ? <Badge tone="neutral">nur aggregiert</Badge> : <Badge tone="warning">ausstehend</Badge> },
           ]}
         />
-      </Card>
+      </Card>}
 
       <Card title="So wird der Score gebildet" subtitle="Keine Blackbox – jede Komponente hat einen Istwert, einen Zielwert und ein Gewicht">
         <div className="grid md:grid-cols-3 gap-4 text-xs text-ink-2">

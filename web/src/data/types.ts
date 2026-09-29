@@ -112,7 +112,7 @@ export interface AuditEvent {
 export interface DataSource {
   id: string
   name: string
-  kind: 'PVS' | 'Ordicall' | 'Diktara' | 'AD' | 'Terminkalender' | 'Telefonanlage' | 'Dienstplan'
+  kind: 'PVS' | 'Ordicall' | 'Diktara' | 'AD' | 'Terminkalender' | 'Telefonanlage' | 'Dienstplan' | 'Planery' | 'Bank'
   access: 'read-only'
   method: string
   lastSync: string
