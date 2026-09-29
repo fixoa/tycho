@@ -18,7 +18,7 @@ export default function Setup() {
   const submit = () => {
     if (!canSave || !session) return
     save({ analysisMode: mode, ndaAccepted: mode === 'person' ? nda : false, configuredBy: session.user.account, configuredAt: new Date().toISOString(), kAnonymity: config?.kAnonymity ?? 5, modules: config?.modules ?? DEFAULT_MODULES })
-    nav('/station')
+    nav('/')
   }
 
   return (

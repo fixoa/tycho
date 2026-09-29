@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Info, Lock, Users } from 'lucide-react'
 import { usePersonMode } from '../state/config'
+import { useFilters } from '../state/filters'
 import { Avatar, Badge, Card, Delta, ScoreRing, Bar as MiniBar, Table } from '../components/ui'
 import { staffScores, componentPct, roleAverage, type StaffScore } from '../data/score'
 import { ROLE_LABEL } from '../data/staff'
@@ -13,8 +14,9 @@ const ROLES: Role[] = ['arzt', 'dgkp', 'assistenz', 'management']
 export default function Team() {
   const nav = useNavigate()
   const personMode = usePersonMode()
+  const fl = useFilters()
   const [role, setRole] = useState<Role | 'alle'>('alle')
-  const scores = staffScores().filter((s) => role === 'alle' || s.staff.role === role)
+  const scores = staffScores(fl.range, fl.compareRange).filter((s) => role === 'alle' || s.staff.role === role)
   const totalCost = scores.reduce((a, s) => a + s.kpis.cost, 0)
   const totalRevenue = scores.reduce((a, s) => a + s.kpis.revenue, 0)
 
@@ -23,7 +25,7 @@ export default function Team() {
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-[15px] font-semibold text-ink-1">Personal & Effizienz</h1>
-          <p className="text-[11.5px] text-ink-3 mt-0.5">Personalstamm aus Active Directory · Anwesenheit aus AD-Logon · Leistung aus PVS, Ordicall, Diktara · Fenster: letzte 4 Wochen</p>
+          <p className="text-[11.5px] text-ink-3 mt-0.5">Personalstamm aus Active Directory · Anwesenheit aus AD-Logon · Leistung aus PVS, Ordicall, Diktara · Zeitraum: {fl.range.label}</p>
         </div>
         <div className="flex gap-1 text-xs">
           {(['alle', ...ROLES] as const).map((r) => (
@@ -37,7 +39,7 @@ export default function Team() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {(['arzt', 'dgkp', 'assistenz'] as const).map((r) => {
-          const a = roleAverage(r)
+          const a = roleAverage(r, fl.range, fl.compareRange)
           return (
             <div key={r} className="card px-5 py-4 flex items-center gap-4">
               <ScoreRing score={a.score} size={64} stroke={6} />

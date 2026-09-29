@@ -6,7 +6,7 @@ import { Badge, Card, ChartTooltip, Delta, Bar as MiniBar } from '../components/
 import { fmt } from '../lib/format'
 import { BILLING_FINDINGS, PREV_QUARTER, demo } from '../data/mock'
 import { practiceScore, roleAverage, staffScores } from '../data/score'
-import { compareWindows, lastNDays } from '../data/aggregate'
+import { lastNDays, useData, pctDelta } from '../data/aggregate'
 import { ROLE_LABEL, STAFF } from '../data/staff'
 import { usePersonMode } from '../state/config'
 import { tailwindSummary, HR } from '../data/tailwind'
@@ -67,23 +67,24 @@ function Donut({ title, data, total }: { title: string; data: { name: string; va
 }
 
 export default function Station() {
-  const { forecast, calls, services } = demo()
+  const { forecast, calls } = demo()
   const personMode = usePersonMode()
   const tw = tailwindSummary()
-  const ps = practiceScore()
-  const { cur, prev } = compareWindows()
-  const scores = staffScores().filter((s) => s.staff.role !== 'management').sort((a, b) => b.score - a.score)
+  const dd = useData()
+  const ps = practiceScore(dd.range, dd.compareRange)
+  const cur = dd.s, prev = dd.p ?? dd.s
+  const scores = staffScores(dd.range, dd.compareRange).filter((s) => s.staff.role !== 'management').sort((a, b) => b.score - a.score)
   const openFindingsValue = BILLING_FINDINGS.filter((f) => f.valueEur > 0).reduce((a, f) => a + f.valueEur, 0)
   const projDelta = (forecast.projected - PREV_QUARTER.revenue) / PREV_QUARTER.revenue
-  const roles = (['arzt', 'dgkp', 'assistenz'] as const).map((r) => ({ role: r, ...roleAverage(r) }))
-  const c20 = calls.days.slice(-20), p20 = calls.days.slice(-40, -20)
+  const roles = (['arzt', 'dgkp', 'assistenz'] as const).map((r) => ({ role: r, ...roleAverage(r, dd.range, dd.compareRange) }))
+  const c20 = dd.calls.length ? dd.calls : calls.days.slice(-20), p20 = dd.callsPrev.length ? dd.callsPrev : calls.days.slice(-40, -20)
   const sumC = (arr: typeof c20, k: 'total' | 'aiResolved' | 'missed' | 'bookings') => arr.reduce((a, d) => a + d[k], 0)
 
   // KPI-Leiste: 12 Kennzahlen, 4 Wochen vs. 4 Wochen davor
   const kpis = [
     { label: 'Efficacy Score', value: `${ps.score}`, delta: ps.score - ps.prev },
     { label: 'Kontakte', value: fmt.num(cur.contacts), delta: cur.contacts - prev.contacts },
-    { label: 'Umsatz (k€)', value: fmt.num1(cur.revenue / 1000), delta: Math.round((cur.revenue - prev.revenue) / 100) / 10, format: (v: number) => fmt.num1(Math.abs(v)) },
+    { label: 'Umsatz (k€)', value: fmt.num1(cur.revenue / 1000), delta: Math.round(pctDelta(cur.revenue, prev.revenue)), format: (v: number) => `${fmt.num(Math.abs(v))} %` },
     { label: 'Telemedizin %', value: fmt.num1(cur.telemedShare * 100), delta: Math.round((cur.telemedShare - prev.telemedShare) * 1000) / 10, format: (v: number) => fmt.num1(Math.abs(v)) },
     { label: 'No-Show %', value: fmt.num1(cur.noShowRate * 100), delta: Math.round((cur.noShowRate - prev.noShowRate) * 1000) / 10, invert: true, format: (v: number) => fmt.num1(Math.abs(v)) },
     { label: 'Ø Wartezeit (min)', value: fmt.num1(cur.wait), delta: Math.round((cur.wait - prev.wait) * 10) / 10, invert: true, format: (v: number) => fmt.num1(Math.abs(v)) },
@@ -96,8 +97,8 @@ export default function Station() {
   ]
 
   // Donuts
-  const byRole = (['arzt', 'dgkp', 'assistenz'] as const).map((r) => ({ name: ROLE_LABEL[r], value: staffScores().filter((s) => s.staff.role === r).reduce((a, s) => a + s.kpis.contacts, 0), delta: r === 'arzt' ? 42 : r === 'dgkp' ? -3 : 12 }))
-  const byCat = ['Grundleistung', 'Einzelleistung', 'Labor', 'Telemedizin', 'Vorsorge', 'Sonstiges'].map((c) => ({ name: c, value: services.filter((s) => s.category === c).reduce((a, s) => a + s.value, 0) }))
+  const byRole = (['arzt', 'dgkp', 'assistenz'] as const).map((r) => ({ name: ROLE_LABEL[r], value: staffScores(dd.range, dd.compareRange).filter((s) => s.staff.role === r).reduce((a, s) => a + s.kpis.contacts, 0), delta: r === 'arzt' ? 42 : r === 'dgkp' ? -3 : 12 }))
+  const byCat = ['Grundleistung', 'Einzelleistung', 'Labor', 'Telemedizin', 'Vorsorge', 'Sonstiges'].map((c) => ({ name: c, value: dd.services.filter((s) => s.category === c).reduce((a, s) => a + s.value, 0) })).filter((x) => x.value > 0)
   const byOutcome = [{ name: 'KI erledigt', value: sumC(c20, 'aiResolved'), delta: 61 }, { name: 'Übergeben', value: sumC(c20, 'total') - sumC(c20, 'aiResolved') - sumC(c20, 'missed'), delta: -34 }, { name: 'Verpasst', value: sumC(c20, 'missed'), delta: -8 }]
   const byPayer = [{ name: 'ÖGK', value: 0.71 }, { name: 'SVS', value: 0.11 }, { name: 'BVAEB', value: 0.09 }, { name: 'Privat / Wahlarzt', value: 0.09 }].map((k) => ({ ...k, value: Math.round(k.value * forecast.projected) }))
 
@@ -114,8 +115,8 @@ export default function Station() {
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-[15px] font-semibold text-ink-1">Ordinations-Übersicht</h1>
         <div className="flex items-center gap-2 text-[12px] text-ink-2">
-          <span>Zeige</span><button className="bp-btn">Letzte 4 Wochen <ChevronDown size={12} /></button>
-          <span>Vergleich</span><button className="bp-btn">4 Wochen davor <ChevronDown size={12} /></button>
+          <span>Zeige</span><span className="bp-btn">{dd.range.label} <ChevronDown size={12} /></span>
+          <span>Vergleich</span><span className="bp-btn">{dd.compareRange?.label ?? 'kein'} <ChevronDown size={12} /></span>
         </div>
       </div>
 

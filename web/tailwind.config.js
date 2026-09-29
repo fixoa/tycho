@@ -33,10 +33,10 @@ export default {
           8: 'var(--series-8)',
         },
         status: {
-          good: '#4fb3a8',
-          warning: '#b9bb5f',
-          serious: '#d9834a',
-          critical: '#d64545',
+          good: 'var(--good-text)',
+          warning: '#e0a100',
+          serious: '#e06a2c',
+          critical: 'var(--bad-text)',
         },
       },
       fontFamily: {
@@ -48,7 +48,7 @@ export default {
         card: '0 0 0 1px var(--line-2)',
       },
       borderRadius: {
-        DEFAULT: '2px',
+        DEFAULT: 'var(--radius)', card: 'var(--radius)', ctl: '10px',
       },
     },
   },

@@ -13,7 +13,7 @@ export const DEMO_TODAY = new Date('2026-08-25T06:00:00')
 export const DATA_AS_OF = new Date('2026-08-24T19:00:00')
 export const QUARTER = { label: 'Q3 2026', start: new Date('2026-07-01'), end: new Date('2026-09-30'), days: 92 }
 export const PREV_QUARTER = { label: 'Q2 2026', start: new Date('2026-04-01'), end: new Date('2026-06-30'), revenue: 412_300, scheine: 6214 }
-export const HISTORY_START = new Date('2026-04-01')
+export const HISTORY_START = new Date('2025-09-01')
 export const GO_LIVE = { diktara: new Date('2026-05-04'), ordicall: new Date('2026-06-01'), tycho: new Date('2026-07-13') }
 
 export const PRACTICE = {
@@ -63,7 +63,7 @@ function buildDayRecords(): DayRecord[] {
     const afterDiktara = d >= GO_LIVE.diktara
     const afterOrdicall = d >= GO_LIVE.ordicall
     // Saisonalität: Sommerloch Juli/August, Montags mehr, Freitags weniger
-    const season = d.getMonth() === 6 || d.getMonth() === 7 ? 0.9 : 1
+    const season = d.getMonth() === 6 || d.getMonth() === 7 ? 0.9 : d.getMonth() === 11 || d.getMonth() === 0 || d.getMonth() === 1 ? 1.08 : 1
     const weekdayF = [0, 1.12, 1.04, 1.0, 0.98, 0.86][d.getDay()]
     for (const s of STAFF) {
       const p = PROFILES[s.id]
@@ -80,7 +80,7 @@ function buildDayRecords(): DayRecord[] {
       const diktaraUse = afterDiktara ? p.diktaraUse * clamp((d.getTime() - GO_LIVE.diktara.getTime()) / (30 * 86400000), 0.4, 1) : 0
       const dictationMin = Math.round(contacts * diktaraUse * rng.range(2.1, 3.4))
       const dictationSavedMin = Math.round(dictationMin * rng.range(1.6, 2.1))
-      const docBase = p.docCompleteness + (afterDiktara ? diktaraUse * 0.04 : -0.03)
+      const docBase = p.docCompleteness + (afterDiktara ? diktaraUse * 0.04 : -0.03) + (d < new Date('2026-07-01') ? -0.02 : 0)
       const calls = s.role === 'assistenz' || s.role === 'management'
         ? Math.round(clamp(rng.normal(afterOrdicall ? p.callsAfter : p.callsBefore, 6), 0, 120) * weekdayF)
         : 0
@@ -102,45 +102,50 @@ function buildDayRecords(): DayRecord[] {
 }
 
 function buildServices(): ServicePosition[] {
-  // Positionen angelehnt an eine ÖGK-Honorarordnung Allgemeinmedizin (Demo-Werte, keine echten Tarife).
+  // Demo-Katalog, angelehnt an die Struktur der ÖGK-Honorarordnung Allgemeinmedizin:
+  // Kennzeichnungspositionen 8a–8i (persönlich) / 8aT–8iT (telemedizinisch), PERS, Erstkontakt (10),
+  // Erstordination nach Spitalsüberweisung (18EZ), Erste Ordination im Monat (20), Koordinierungszuschlag (34),
+  // EKG (34a), VU, MKP. Tarife sind Demo-Werte; der echte Honorarkatalog des Bundeslandes wird importiert.
+  const ALL: ServicePosition['payers'] = ['ÖGK', 'SVS', 'BVAEB']
   const base: Omit<ServicePosition, 'value' | 'limitUsage'>[] = [
-    { code: 'GL01', name: 'Grundleistung (Ordinationspauschale)', category: 'Grundleistung', tarif: 21.5, count: 3880, countPrevQ: 6214 },
-    { code: 'EO02', name: 'Erstordination im Quartal', category: 'Grundleistung', tarif: 12.6, count: 3851, countPrevQ: 6170 },
-    { code: 'TM01', name: 'Telemedizinische Konsultation (Video)', category: 'Telemedizin', tarif: 18.2, count: 318, countPrevQ: 392 },
-    { code: 'TM02', name: 'Telefonische ärztliche Beratung', category: 'Telemedizin', tarif: 9.1, count: 476, countPrevQ: 641 },
-    { code: 'EL21', name: 'Therapeutische Aussprache (≥ 15 min)', category: 'Einzelleistung', tarif: 21.7, count: 364, countPrevQ: 398, limit: 400 },
-    { code: 'EL22', name: 'Beratung chronische Erkrankung', category: 'Einzelleistung', tarif: 16.4, count: 512, countPrevQ: 744 },
-    { code: 'EL10', name: 'EKG mit Befund', category: 'Einzelleistung', tarif: 24.9, count: 231, countPrevQ: 388 },
-    { code: 'EL11', name: 'Spirometrie', category: 'Einzelleistung', tarif: 19.4, count: 88, countPrevQ: 141 },
-    { code: 'EL12', name: 'Injektion i.m. / s.c.', category: 'Einzelleistung', tarif: 4.2, count: 611, countPrevQ: 934 },
-    { code: 'EL13', name: 'Infusion', category: 'Einzelleistung', tarif: 14.8, count: 204, countPrevQ: 322 },
-    { code: 'EL14', name: 'Wundversorgung', category: 'Einzelleistung', tarif: 11.3, count: 176, countPrevQ: 261 },
-    { code: 'EL15', name: 'Blutabnahme', category: 'Labor', tarif: 3.9, count: 1188, countPrevQ: 1790 },
-    { code: 'LB01', name: 'Labor: Harnstreifen', category: 'Labor', tarif: 2.8, count: 402, countPrevQ: 633 },
-    { code: 'LB02', name: 'Labor: Blutzucker', category: 'Labor', tarif: 3.1, count: 356, countPrevQ: 545 },
-    { code: 'EL16', name: 'Impfung (Verabreichung)', category: 'Einzelleistung', tarif: 7.6, count: 142, countPrevQ: 388 },
-    { code: 'VU01', name: 'Vorsorgeuntersuchung', category: 'Vorsorge', tarif: 71.8, count: 168, countPrevQ: 254 },
-    { code: 'VU02', name: 'Mutter-Kind-Pass-Untersuchung', category: 'Vorsorge', tarif: 44.3, count: 47, countPrevQ: 71 },
-    { code: 'EL20', name: 'Hausbesuch', category: 'Einzelleistung', tarif: 39.5, count: 63, countPrevQ: 104 },
-    { code: 'EL23', name: 'Kleine Chirurgie', category: 'Einzelleistung', tarif: 33.2, count: 39, countPrevQ: 58 },
-    { code: 'SO01', name: 'Befundbesprechung / Sonstiges', category: 'Sonstiges', tarif: 8.4, count: 297, countPrevQ: 461 },
+    { code: 'GL', name: 'Grundleistungsvergütung (Fallpauschale)', category: 'Grundleistung', tarif: 21.5, count: 3880, countPrevQ: 6214, rule: '1× je Fall und Quartal, ausgelöst durch erste e-card-Konsultation; Fallzahl-Staffel (Degression ab 1.500 Fällen/Quartal)', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: '10', name: 'Erstkontakt im Quartal (ohne Spitalsüberweisung)', category: 'Grundleistung', tarif: 12.6, count: 3851, countPrevQ: 6170, rule: '1× je Fall und Quartal, nicht neben 18EZ', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: '18EZ', name: 'Erstordination nach Spitalsüberweisung', category: 'Grundleistung', tarif: 14.2, count: 212, countPrevQ: 338, rule: '1× je Fall und Quartal, nur mit Überweisungsschein der Krankenanstalt', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: '20', name: 'Erste Ordination im Monat', category: 'Grundleistung', tarif: 9.4, count: 5120, countPrevQ: 8190, rule: '1× je Fall und Monat, nicht neben B1', payers: ['ÖGK', 'BVAEB'], cycle: 'Monat', by: 'Arzt' },
+    { code: '8a–8i', name: 'Kennzeichnung Ordination 1.–9. Kontakt (persönlich)', category: 'Kennzeichnung', tarif: 0, count: 8940, countPrevQ: 14300, rule: '8a/8b ohne Tarif, aber Pflicht – sonst sind 8c–8i nicht honorierbar', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: '8aT–8iT', name: 'Kennzeichnung Ordination telemedizinisch (Telefon/Video)', category: 'Telemedizin', tarif: 0, count: 1270, countPrevQ: 1650, rule: 'Gleiche Honorierung wie persönlich; Reihung 8a…8i zählt persönlich und telemedizinisch gemeinsam', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: 'PERS', name: 'Kennzeichnung persönlich + telemedizinisch am selben Tag', category: 'Kennzeichnung', tarif: 0, count: 84, countPrevQ: 121, rule: 'Fiktive Position, Pflicht wenn beides am selben Tag erfolgt', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: 'TM-V', name: 'Videokonsultation (Ordination via Video)', category: 'Telemedizin', tarif: 18.2, count: 509, countPrevQ: 627, rule: 'Nur mit ausdrücklicher Patienteneinwilligung (GTelG 2012), Kennzeichnung 8xT', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: 'TM-T', name: 'Telefonische ärztliche Beratung', category: 'Telemedizin', tarif: 9.1, count: 762, countPrevQ: 1026, rule: 'Kennzeichnung 8xT; nicht neben TM-V am selben Tag', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: '34', name: 'Zuschlag Koordinierungstätigkeit (chronisch Kranke)', category: 'Einzelleistung', tarif: 16.4, count: 819, countPrevQ: 1190, rule: '1× je Fall und Quartal, nur bei dokumentierter chronischer Erkrankung mit ICD-10', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: '39', name: 'Therapeutische Aussprache (≥ 20 min)', category: 'Einzelleistung', tarif: 21.7, count: 364, countPrevQ: 398, limit: 400, rule: 'Limitiert: max. 400 je Quartal und Vertragsarzt, danach Degression 50 %', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: '34a', name: 'EKG in Ruhe (12 Ableitungen) mit Befund', category: 'Einzelleistung', tarif: 24.9, count: 370, countPrevQ: 621, rule: 'Max. 2× je Fall und Quartal', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: '44', name: 'Spirometrie', category: 'Einzelleistung', tarif: 19.4, count: 141, countPrevQ: 226, rule: '1× je Fall und Quartal', payers: ALL, cycle: 'Quartal', by: 'Arzt/DGKP' },
+    { code: '12', name: 'Injektion i.m. / s.c.', category: 'Einzelleistung', tarif: 4.2, count: 978, countPrevQ: 1494, rule: 'Nicht neben Infusion am selben Tag', payers: ALL, cycle: 'Quartal', by: 'Arzt/DGKP' },
+    { code: '13', name: 'Infusion', category: 'Einzelleistung', tarif: 14.8, count: 326, countPrevQ: 515, rule: 'Ärztliche Anordnung dokumentieren (Delegation an DGKP)', payers: ALL, cycle: 'Quartal', by: 'Arzt/DGKP' },
+    { code: '17', name: 'Wundversorgung / Verbandwechsel', category: 'Einzelleistung', tarif: 11.3, count: 282, countPrevQ: 418, rule: 'Max. 1× je Tag', payers: ALL, cycle: 'Quartal', by: 'Arzt/DGKP' },
+    { code: '30', name: 'Blutabnahme (venös)', category: 'Labor', tarif: 3.9, count: 1901, countPrevQ: 2864, rule: '1× je Tag', payers: ALL, cycle: 'Quartal', by: 'Arzt/DGKP' },
+    { code: '31', name: 'Harnstreifentest', category: 'Labor', tarif: 2.8, count: 643, countPrevQ: 1013, rule: '', payers: ALL, cycle: 'Quartal', by: 'Arzt/Assistenz' },
+    { code: '32', name: 'Blutzucker (POCT)', category: 'Labor', tarif: 3.1, count: 570, countPrevQ: 872, rule: '', payers: ALL, cycle: 'Quartal', by: 'Arzt/Assistenz' },
+    { code: '60', name: 'Impfung (Verabreichung)', category: 'Einzelleistung', tarif: 7.6, count: 227, countPrevQ: 621, rule: 'Impfstoff über e-Impfpass dokumentieren; Privatimpfungen über Honorarnote', payers: ALL, cycle: 'Quartal', by: 'Arzt/DGKP' },
+    { code: 'VU', name: 'Vorsorgeuntersuchung (bundesweites Programm)', category: 'Vorsorge', tarif: 71.8, count: 269, countPrevQ: 406, rule: '1× je Jahr und Person (ab 18), eigenes VU-Formular, alle Träger', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: 'MKP', name: 'Mutter-Kind-Pass-Untersuchung', category: 'Vorsorge', tarif: 44.3, count: 75, countPrevQ: 114, rule: 'Nach MKP-Schema, Fristen je Untersuchung', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: '21', name: 'Hausbesuch (Visite)', category: 'Einzelleistung', tarif: 39.5, count: 101, countPrevQ: 166, rule: 'Wegzeit-Zuschlag nach Zone; dringende Visite 22', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: '50', name: 'Kleine Chirurgie (Exzision, Naht)', category: 'Einzelleistung', tarif: 33.2, count: 62, countPrevQ: 93, rule: 'Nicht neben 17 am selben Tag', payers: ALL, cycle: 'Quartal', by: 'Arzt' },
+    { code: 'PRIV', name: 'Privatleistungen (Honorarnote, WAHonline)', category: 'Sonstiges', tarif: 0, count: 420, countPrevQ: 610, rule: 'Wahlarzt/Privat: Honorarnote, Kostenerstattung 80 % des Kassentarifs via WAHonline', payers: ['Privat'], cycle: 'Honorarnote', by: 'Arzt' },
   ]
-  const SCALE = 1.6 // Demo-Kalibrierung auf ~6.200 Fälle/Quartal
-  return base.map((raw) => {
-    const b = raw.category === 'Grundleistung' || raw.limit ? raw : { ...raw, count: Math.round(raw.count * SCALE), countPrevQ: Math.round(raw.countPrevQ * SCALE) }
-    return { ...b, value: Math.round(b.count * b.tarif * 100) / 100, limitUsage: b.limit ? b.count / b.limit : undefined }
-  })
+  return base.map((b) => ({ ...b, value: Math.round(b.count * b.tarif * 100) / 100, limitUsage: b.limit ? b.count / b.limit : undefined }))
 }
 
 export const BILLING_FINDINGS: BillingFinding[] = [
-  { id: 'F-1042', severity: 'critical', type: 'nicht-verrechnet', title: '41 e-card-Konsultationen ohne Grundleistung GL01', detail: 'e-card-Steckung im PVS vorhanden, im Leistungsblatt fehlt GL01. Betrifft KW 30–33. Vor Quartalsabrechnung nachtragen.', valueEur: 881.5, source: 'PVS', date: '2026-08-24' },
-  { id: 'F-1039', severity: 'critical', type: 'nicht-verrechnet', title: 'EKG dokumentiert, EL10 nicht verrechnet (14 Fälle)', detail: 'Diktara-Zusammenfassung enthält „EKG durchgeführt, Sinusrhythmus“, PVS-Leistungsblatt ohne EL10.', staffId: 'm.hofer', valueEur: 348.6, source: 'Kreuzprüfung', date: '2026-08-23' },
-  { id: 'F-1037', severity: 'serious', type: 'limit', title: 'Therapeutische Aussprache EL21: Limit zu 91 % ausgeschöpft', detail: '364 von 400 limitierten Positionen bei 37 verbleibenden Quartalstagen. Prognose: Limit am 04.09. erreicht – danach Degression.', staffId: 'a.berger', valueEur: 781.2, source: 'PVS', date: '2026-08-24' },
-  { id: 'F-1035', severity: 'serious', type: 'nicht-verrechnet', title: 'Vorsorgeuntersuchung dokumentiert, VU01 fehlt (6 Fälle)', detail: 'Diktara erkennt vollständiges VU-Protokoll, im PVS nur GL01 verrechnet.', staffId: 's.lindner', valueEur: 430.8, source: 'Kreuzprüfung', date: '2026-08-21' },
-  { id: 'F-1031', severity: 'warning', type: 'plausibilitaet', title: '27 Videokonsultationen als TM02 statt TM01 verrechnet', detail: 'Ordicall-Terminart „Video“ und PVS-Position stimmen nicht überein. Differenz 9,10 € je Fall.', staffId: 't.novak', valueEur: 245.7, source: 'Kreuzprüfung', date: '2026-08-20' },
-  { id: 'F-1028', severity: 'warning', type: 'doppelt', title: 'EL12 doppelt am selben Tag (3 Fälle)', detail: 'Rückforderungsrisiko bei Kassenprüfung. Bitte prüfen, ob zwei Injektionen medizinisch begründet sind.', valueEur: -12.6, source: 'PVS', date: '2026-08-19' },
-  { id: 'F-1026', severity: 'warning', type: 'dokumentation', title: 'Infusion ohne dokumentierte ärztliche Anordnung (4 Fälle)', detail: 'DGKP-Leistung EL13 verrechnet, Anordnung in der Kartei nicht auffindbar.', staffId: 'm.steiner', valueEur: 59.2, source: 'PVS', date: '2026-08-18' },
-  { id: 'F-1021', severity: 'info', type: 'plausibilitaet', title: 'Wiederbestellung ohne Erstordination (5 Scheine)', detail: 'EO02 fehlt bei 5 Patient:innen mit Folgekontakt im Quartal.', valueEur: 63, source: 'PVS', date: '2026-08-14' },
+  { id: 'F-1042', severity: 'critical', type: 'nicht-verrechnet', title: '41 e-card-Konsultationen ohne Grundleistung GL / Erstkontakt 10', detail: 'e-card-Steckung im PVS vorhanden, im Leistungsblatt fehlen GL und Pos. 10. Betrifft KW 30–33. Vor Quartalsabrechnung nachtragen.', valueEur: 881.5, source: 'PVS', date: '2026-08-24' },
+  { id: 'F-1039', severity: 'critical', type: 'nicht-verrechnet', title: 'EKG dokumentiert, Pos. 34a nicht verrechnet (14 Fälle)', detail: 'Diktara-Zusammenfassung enthält „EKG durchgeführt, Sinusrhythmus“, PVS-Leistungsblatt ohne 34a.', staffId: 'm.hofer', valueEur: 348.6, source: 'Kreuzprüfung', date: '2026-08-23' },
+  { id: 'F-1037', severity: 'serious', type: 'limit', title: 'Therapeutische Aussprache Pos. 39: Limit zu 91 % ausgeschöpft', detail: '364 von 400 limitierten Positionen bei 37 verbleibenden Quartalstagen. Prognose: Limit am 04.09. erreicht – danach Degression.', staffId: 'a.berger', valueEur: 781.2, source: 'PVS', date: '2026-08-24' },
+  { id: 'F-1035', severity: 'serious', type: 'nicht-verrechnet', title: 'Vorsorgeuntersuchung dokumentiert, VU fehlt (6 Fälle)', detail: 'Diktara erkennt vollständiges VU-Protokoll, im PVS nur GL/10 verrechnet.', staffId: 's.lindner', valueEur: 430.8, source: 'Kreuzprüfung', date: '2026-08-21' },
+  { id: 'F-1031', severity: 'warning', type: 'plausibilitaet', title: '27 Videokonsultationen als TM-T statt TM-V verrechnet (Kennzeichnung 8xT fehlt)', detail: 'Ordicall-Terminart „Video“ und PVS-Position stimmen nicht überein. Differenz 9,10 € je Fall.', staffId: 't.novak', valueEur: 245.7, source: 'Kreuzprüfung', date: '2026-08-20' },
+  { id: 'F-1028', severity: 'warning', type: 'doppelt', title: 'Pos. 12 doppelt am selben Tag (3 Fälle)', detail: 'Rückforderungsrisiko bei Kassenprüfung. Bitte prüfen, ob zwei Injektionen medizinisch begründet sind.', valueEur: -12.6, source: 'PVS', date: '2026-08-19' },
+  { id: 'F-1026', severity: 'warning', type: 'dokumentation', title: 'Infusion ohne dokumentierte ärztliche Anordnung (4 Fälle)', detail: 'DGKP-Leistung Pos. 13 verrechnet, Anordnung in der Kartei nicht auffindbar.', staffId: 'm.steiner', valueEur: 59.2, source: 'PVS', date: '2026-08-18' },
+  { id: 'F-1021', severity: 'info', type: 'plausibilitaet', title: 'Folgekontakt ohne Erstkontakt Pos. 10 (5 Scheine)', detail: 'Pos. 10 fehlt bei 5 Patient:innen mit Folgekontakt im Quartal; Kennzeichnung 8b ohne 8a.', valueEur: 63, source: 'PVS', date: '2026-08-14' },
 ]
 
 function buildCalls(): { days: CallDay[]; intents: CallIntent[]; hourly: { hour: number; calls: number; aiResolved: number }[] } {
@@ -227,6 +232,16 @@ function buildForecast(records: DayRecord[]): { points: ForecastPoint[]; project
     ? 3880
     : 0
   return { points, projected: last.forecast, lower: last.lower, upper: last.upper, actualToDate: Math.round(cum), scheineToDate, scheineProjected: Math.round(scheineToDate * (qDays.length / doneDays.length) * 0.98) }
+}
+
+// Kostenträger-Mix je Ärzt:in (Anteil am Umsatz) – aus den Scheinen im PVS
+export const PAYER_SHARE: Record<string, { ÖGK: number; SVS: number; BVAEB: number; Privat: number }> = {
+  'a.berger': { ÖGK: 0.66, SVS: 0.1, BVAEB: 0.08, Privat: 0.16 },
+  'm.hofer': { ÖGK: 0.76, SVS: 0.11, BVAEB: 0.09, Privat: 0.04 },
+  's.lindner': { ÖGK: 0.7, SVS: 0.12, BVAEB: 0.1, Privat: 0.08 },
+  't.novak': { ÖGK: 0.62, SVS: 0.12, BVAEB: 0.09, Privat: 0.17 },
+  'm.steiner': { ÖGK: 0.74, SVS: 0.11, BVAEB: 0.1, Privat: 0.05 },
+  'j.pichler': { ÖGK: 0.74, SVS: 0.11, BVAEB: 0.1, Privat: 0.05 },
 }
 
 export const DATA_SOURCES: DataSource[] = [

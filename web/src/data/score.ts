@@ -1,6 +1,7 @@
 import { STAFF } from './staff'
 import { BILLING_FINDINGS, DATA_AS_OF, demo } from './mock'
 import { addDays } from '../lib/format'
+import type { Range } from '../state/filters'
 import type { DayRecord, StaffMember } from './types'
 
 // ---------------------------------------------------------------------------
@@ -89,7 +90,7 @@ function componentsFor(staff: StaffMember, k: ReturnType<typeof kpisFor>): Score
         { key: 'contribution', label: 'Ertrag / Kosten', value: k.cost ? k.revenue / k.cost : 0, target: 2.2, weight: 0.24, unit: '×', hint: 'Verrechnete Leistungen im Verhältnis zu den Arbeitgeberkosten des Zeitraums.' },
         { key: 'doc', label: 'Dokumentation', value: k.docCompleteness, target: 0.97, weight: 0.16, unit: '', hint: 'Vollständigkeit von Kartei, ICD-10-Codierung und Leistungsblatt.' },
         { key: 'diktara', label: 'Diktara-Nutzung', value: k.diktaraShare, target: 0.8, weight: 0.1, unit: '', hint: 'Anteil der Konsultationen mit KI-Zusammenfassung.' },
-        { key: 'telemed', label: 'Telemedizin', value: k.telemedShare, target: 0.15, weight: 0.12, unit: '', hint: 'Anteil telemedizinischer Konsultationen (TM01/TM02) an allen Kontakten.' },
+        { key: 'telemed', label: 'Telemedizin', value: k.telemedShare, target: 0.15, weight: 0.12, unit: '', hint: 'Anteil telemedizinischer Konsultationen (Kennzeichnung 8xT, TM-V/TM-T) an allen Kontakten.' },
         { key: 'noshow', label: 'Terminausfall', value: k.noShowRate, target: 0.04, weight: 0.08, unit: '', invert: true, hint: 'No-Show-Rate der eigenen Termine (kleiner ist besser).' },
         { key: 'billing', label: 'Abrechnungsqualität', value: Math.max(0, 1 - k.findings * 0.25), target: 1, weight: 0.08, unit: '', hint: 'Offene Abrechnungs-Findings (Lücken, Limits, Plausibilität).' },
       ]
@@ -130,21 +131,34 @@ export function periodRecords(days = 28, endExclusive = DATA_AS_OF): { cur: DayR
   return { cur, prev }
 }
 
-let cache: StaffScore[] | null = null
-export function staffScores(): StaffScore[] {
-  if (cache) return cache
-  const { cur, prev } = periodRecords(28)
-  cache = STAFF.map((s) => {
+const cache = new Map<string, StaffScore[]>()
+export function staffScores(range?: Range, compareRange?: Range | null): StaffScore[] {
+  const key = range ? `${range.from.toISOString()}|${range.to.toISOString()}|${compareRange?.from.toISOString() ?? ''}` : 'default'
+  const hit = cache.get(key)
+  if (hit) return hit
+  let cur: DayRecord[], prev: DayRecord[]
+  if (range) {
+    const { records } = demo()
+    const inR = (r: DayRecord, R: Range) => new Date(r.date) >= new Date(R.from.toISOString().slice(0, 10)) && new Date(r.date) <= new Date(R.to.toISOString().slice(0, 10))
+    cur = records.filter((r) => inR(r, range))
+    const days = Math.round((range.to.getTime() - range.from.getTime()) / 86400000) + 1
+    const cmp = compareRange ?? { from: addDays(range.from, -days), to: addDays(range.from, -1), label: '' }
+    prev = records.filter((r) => inR(r, cmp))
+  } else ({ cur, prev } = periodRecords(28))
+  const out = STAFF.map((s) => {
     const k = kpisFor(s, cur.filter((r) => r.staffId === s.id))
     const kPrev = kpisFor(s, prev.filter((r) => r.staffId === s.id))
     const components = componentsFor(s, k)
-    return { staff: s, score: scoreOf(components), prevScore: scoreOf(componentsFor(s, kPrev)), components, kpis: k }
+    const hasPrev = prev.some((r) => r.staffId === s.id && r.presenceMin > 0)
+    const score = scoreOf(components)
+    return { staff: s, score, prevScore: hasPrev ? scoreOf(componentsFor(s, kPrev)) : score, components, kpis: k }
   })
-  return cache
+  cache.set(key, out)
+  return out
 }
 
-export function practiceScore() {
-  const scores = staffScores().filter((s) => s.staff.role !== 'management')
+export function practiceScore(range?: Range, compareRange?: Range | null) {
+  const scores = staffScores(range, compareRange).filter((s) => s.staff.role !== 'management')
   const weights = scores.map((s) => s.staff.costPerMonth)
   const w = sum(weights)
   const score = Math.round(sum(scores.map((s, i) => s.score * weights[i])) / w)
@@ -152,7 +166,7 @@ export function practiceScore() {
   return { score, prev }
 }
 
-export function roleAverage(role: StaffMember['role']) {
-  const s = staffScores().filter((x) => x.staff.role === role)
+export function roleAverage(role: StaffMember['role'], range?: Range, compareRange?: Range | null) {
+  const s = staffScores(range, compareRange).filter((x) => x.staff.role === role)
   return { score: Math.round(avg(s.map((x) => x.score))), prev: Math.round(avg(s.map((x) => x.prevScore))) }
 }

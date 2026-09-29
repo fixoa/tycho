@@ -4,16 +4,40 @@ import { Search, Menu, Compass, Triangle, ChevronRight } from 'lucide-react'
 import { useAuth } from '../state/auth'
 import { PRACTICE } from '../data/mock'
 import Globe from '../components/Globe'
+import { useConfig } from '../state/config'
+
+function SimpleLogin({ account, setAccount, error, busy, sso, submit }: { account: string; setAccount: (v: string) => void; error: string | null; busy: boolean; sso: () => void; submit: (e: FormEvent) => void }) {
+  return (
+    <div className="min-h-full flex items-center justify-center p-6 bg-surface-0">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-8"><div className="text-[28px] font-semibold tracking-tight">Tycho</div><div className="text-[13px] text-ink-2 mt-1">{PRACTICE.name} · Ordinations-Kontrollinstanz</div></div>
+        <div className="card p-6">
+          <button onClick={sso} disabled={busy} className="w-full h-10 rounded-xl bg-accent-strong text-surface-1 text-[14px] font-medium hover:opacity-90 disabled:opacity-60">{busy ? 'Kerberos-Ticket wird geprüft …' : 'Mit Windows-Konto anmelden'}</button>
+          <div className="flex items-center gap-3 my-4 text-[12px] text-ink-3"><span className="flex-1 h-px bg-line-1" />oder<span className="flex-1 h-px bg-line-1" /></div>
+          <form onSubmit={submit} className="space-y-3">
+            <label className="block text-[12.5px] text-ink-2">AD-Konto<input value={account} onChange={(e) => setAccount(e.target.value)} autoComplete="username" className="bp-input mt-1 w-full" /></label>
+            <label className="block text-[12.5px] text-ink-2">Passwort<input type="password" defaultValue="••••••••••" autoComplete="current-password" className="bp-input mt-1 w-full" /></label>
+            {error && <div className="text-[12.5px] text-status-critical">{error}</div>}
+            <button className="bp-btn w-full justify-center h-10">Anmelden</button>
+          </form>
+        </div>
+        <div className="mt-4 text-center text-[12px] text-ink-3 leading-relaxed">Demo: <span className="text-ink-2">a.berger</span> (Leitung, Admin) · <span className="text-ink-2">k.bauer</span> · andere Konten sehen nur „Mein Score“.<br />Domäne {PRACTICE.domain} · Kerberos / LDAPS · read-only · lokal</div>
+      </div>
+    </div>
+  )
+}
 
 export default function Login() {
   const { login } = useAuth()
+  const { ui } = useConfig()
   const nav = useNavigate()
   const [open, setOpen] = useState(true)
   const [account, setAccount] = useState('a.berger')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
-  const submit = (e: FormEvent) => { e.preventDefault(); setError(null); if (login(account, 'manual')) nav('/station'); else setError('Konto nicht im Active Directory gefunden (Versuch protokolliert).') }
-  const sso = () => { setBusy(true); setTimeout(() => { login('a.berger', 'sso'); nav('/station') }, 700) }
+  const submit = (e: FormEvent) => { e.preventDefault(); setError(null); if (login(account, 'manual')) nav('/'); else setError('Konto nicht im Active Directory gefunden (Versuch protokolliert).') }
+  const sso = () => { setBusy(true); setTimeout(() => { login('a.berger', 'sso'); nav('/') }, 700) }
+  if (ui !== 'advanced') return <SimpleLogin account={account} setAccount={setAccount} error={error} busy={busy} sso={sso} submit={submit} />
 
   return (
     <div className="relative h-full overflow-hidden bg-[#070a0d] text-[#e6e8ea] select-none">

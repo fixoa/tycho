@@ -11,6 +11,26 @@
 | **Wie ein Benutzer.** Tycho ist eine Kontrollinstanz mit Benutzerrechten, nicht mehr. | Dienstkonto (gMSA) mit denselben Leserechten wie ein Auswertungs-Benutzer, Anmeldung per Windows-SSO, Berechtigung über AD-Gruppe `G_Tycho_Leitung`. |
 | **100 % verschlüsselt und sicher.** | AES-256-GCM für den lokalen Store, Schlüssel per DPAPI-NG an die Maschine gebunden, Master-Key im TPM 2.0, HTTPS auf `127.0.0.1`, kein Cloud-Upload, keine Telemetrie, SHA-256-verkettetes Audit-Log. |
 
+## Zwei Oberflächen, ein Datenmodell
+
+| | Simple (Standard) | Advanced |
+|---|---|---|
+| Für wen | Ordinationsleitung im Alltag | Analyse, Kontrolle, „Cockpit“ |
+| Aufbau | Textnavigation oben (Start, Patient:innen, Finanzen, Produktivität, Ordicall, Diktara, Tailwind, Tarife, Mehr), Standort- und Zeitraumwahl rechts, **Assistent als Seitenpanel** | Modulleiste mit Icons, Sub-Header mit Ansichts-Tabs und Filtern, **Facetten-Sidebar**, KPI-Leiste, Donuts, Zeitachse (Palantir-Gotham-Stil) |
+| Startseite | Begrüßung + Frage an den Assistenten + Vorschläge + „Ihre Daten sind aktuell“ | Tycho Station |
+| Login | ruhige Karte | animierter Globus |
+| Design | Hell und Dunkel | Dunkel und Hell |
+
+Umschalten in **Einstellungen → Oberfläche**. Beide Modi nutzen dieselben Seiten, Filter und Daten.
+
+## Lokaler Assistent
+
+Rechts (Simple) bzw. als Drawer (Advanced). Beantwortet Fragen zu Umsatz, Leistungen, Patient:innen, Anrufen, Honorarnoten, HR, Score, Prognose, Zuweisern, Verordnungen, NPS, QM und Sicherheit – ausschließlich aus den lokalen Daten des gewählten Zeitraums. In der Demo eine regelbasierte Engine (`web/src/data/agent.ts`); im Produkt ein lokales LLM (llama.cpp, z. B. Llama 3.1 8B) auf dem Ordinationsserver mit Tool-Calling auf genau diese Read-only-Funktionen. Kein Cloud-Aufruf, keine Patientendaten im Prompt.
+
+## Alles klickbar
+
+Zeitraum (Presets, freies Datum, Vergleichszeitraum), Standort, Rolle, Kostenträger, Team, Facetten, Ansichts-Tabs, Suche (`/`), Assistent-Vorschläge und -Chips wirken auf alle Seiten. Die Zahlen werden aus Tagesdatensätzen über 12 Monate (09/2025–08/2026) berechnet.
+
 ## Was in der Demo drin ist
 
 | Bereich | Inhalt |
@@ -19,7 +39,9 @@
 | **Prognose** | Kumulierter Umsatz mit 90 %-Band bis Quartalsende, Scheine/Fallwert, Monatsverlauf, Kostenträger (ÖGK/SVS/BVAEB/Privat), Was-wäre-wenn-Szenarien, Methodik |
 | **Tycho Digest** | Montags-Mail als Vorschau (S/MIME), Versandplan, Archiv |
 | **Personal & Effizienz** | Personalstamm aus AD, Score je Person mit transparenter Aufschlüsselung (Istwert, Ziel, Gewicht), Kosten vs. Ertrag, Deckungsbeitrag, Zustimmungsstatus; Personen mit „nur aggregiert“ werden nicht einzeln bewertet |
-| **Leistungen & Abrechnung** | Positionen mit Tarif, Anzahl, Hochrechnung, Limit-Ampel; **Kreuzprüfung** PVS × Diktara × Ordicall × e-card: nicht verrechnete Leistungen, Limits/Degression, Plausibilität, Doppelverrechnung |
+| **Tarife & Abrechnung** | Honorarkatalog nach ÖGK-Honorarordnungs-Logik (GL, 10, 18EZ, 20, 8a–8i, 8aT–8iT, PERS, TM-V/TM-T, 34, 34a, 39, 12, 13, 17, 30–32, 60, VU, MKP, 21, 50, PRIV) mit Tarif, Regel/Limitierung, Kostenträger, Rhythmus, Erbringer; **Kreuzprüfung** PVS × Diktara × Ordicall × e-card; **Fristenkalender** und geprüfte Abrechnungsregeln |
+| **Patient:innen / Finanzen / Produktivität** | Simple-Ansichten nach Vorlage: Kontakte pro Tag mit Vergleichslinie, Stoßzeiten-Heatmap, Top-Leistungen; Umsatz pro Monat nach Kostenträger, Liegengelassen pro Monat; Umsatz je Ärzt:in, Telefon je Assistenz, Anliegen |
+| **Landschaft** | Interaktive Systemkarte (Quellen → Collector → Store → Agent → Module), Regulatorik-Übersicht (ASVG/Gesamtvertrag, Honorarordnung, Telemedizin, ELGA/ICD-10, DSGVO/ArbVG/AI Act, MPG), Datenmodell, nächste Fristen |
 | **Termine & Kapazität** | Auslastungs-Heatmap Wochentag × Stunde, No-Show nach Terminart, Wartezeit, Recall/Vorsorge-Potenzial, Patientenbindung, Arztbrief-Durchlaufzeit |
 | **Tailwind Station** | Honorarnoten-Controlling & Inkasso für Wahlarzt-/Privathonorare (Physio, TCM, Impfungen, Gutachten, Labor privat): Aging, DSO, Zahlungswahrscheinlichkeit, **KI-Maßnahmenplan** je Honorarnote mit Begründung, WAHonline-Status; **HR aus Planery**: Überstunden-Frühwarnung, Urlaubsübersicht, Abwesenheiten, Krankenstände (hochsicherheitskritisch, eigene Rolle) |
 | **Zuweiser** | ABC-Analyse, Trend, abgesprungene und neue Zuweiser mit Handlungsempfehlung |

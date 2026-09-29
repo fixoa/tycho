@@ -5,6 +5,7 @@ import { Card, Badge } from '../components/ui'
 import { PRACTICE } from '../data/mock'
 import { useConfig, DEFAULT_MODULES } from '../state/config'
 import { useAuth, isAdmin } from '../state/auth'
+import { Sun, Moon, LayoutGrid, Radar } from 'lucide-react'
 import { fmt } from '../lib/format'
 
 const MODULES = [
@@ -25,8 +26,8 @@ const MODULES = [
 ]
 
 export default function Einstellungen() {
-  const { config, save, reset } = useConfig()
-  const { session } = useAuth()
+  const { config, save, reset, ui, setUi } = useConfig()
+  const { session, theme, toggleTheme } = useAuth()
   const admin = session ? isAdmin(session.user) : false
   const mods = config?.modules ?? DEFAULT_MODULES
   const [k, setK] = useState(config?.kAnonymity ?? 5)
@@ -39,6 +40,18 @@ export default function Einstellungen() {
         <h1 className="text-[15px] font-semibold text-ink-1">Einstellungen</h1>
         <p className="text-[11.5px] text-ink-3 mt-0.5">Konfiguration wird lokal verschlüsselt gespeichert · jede Änderung protokolliert</p>
       </div>
+
+      <Card title="Oberfläche" subtitle="Simple: ruhige Übersicht mit Assistent · Advanced: dichtes Cockpit im Gotham-Stil · beide in Hell und Dunkel">
+        <div className="grid md:grid-cols-2 gap-3">
+          {([['simple', 'Simple', 'Große Karten, Assistent rechts, wenige klare Kennzahlen. Für den täglichen Blick.', LayoutGrid], ['advanced', 'Advanced', 'Modulleiste, Facetten, KPI-Leiste, Donuts und Zeitachse. Für Analyse und Kontrolle.', Radar]] as const).map(([k, t, d, I]) => (
+            <button key={k} onClick={() => setUi(k)} className={`text-left rounded-xl border p-4 ${ui === k ? 'border-accent bg-surface-2' : 'border-line-1 hover:bg-surface-2'}`}>
+              <div className="flex items-center gap-2 font-medium text-[14px]"><I size={16} className="text-accent" /> {t} {ui === k && <Badge tone="info">aktiv</Badge>}</div>
+              <div className="text-[12.5px] text-ink-2 mt-1">{d}</div>
+            </button>
+          ))}
+        </div>
+        <div className="mt-3 flex items-center gap-3 text-[13px]"><span className="text-ink-2">Design:</span><button onClick={toggleTheme} className="bp-btn">{theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />} {theme === 'dark' ? 'Hell' : 'Dunkel'}</button><span className="text-[12px] text-ink-3">Folgt sonst der Systemeinstellung.</span></div>
+      </Card>
 
       <Card title="Analysemodus" subtitle="Festgelegt bei der Erstkonfiguration durch den Haupt-Admin">
         <div className="flex items-start gap-4 flex-wrap">

@@ -35,9 +35,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   })
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
     try {
-      return (localStorage.getItem('tycho.theme') as 'dark' | 'light') || 'dark'
+      return (localStorage.getItem('tycho.theme') as 'dark' | 'light') || (localStorage.getItem('tycho.ui') === 'advanced' ? 'dark' : 'light')
     } catch {
-      return 'dark'
+      return 'light'
     }
   })
   useEffect(() => {

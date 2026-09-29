@@ -26,7 +26,7 @@ export function Delta({ value, format = (v: number) => fmt.num(Math.abs(v)), inv
 }) {
   const good = invert ? value < 0 : value > 0
   const neutral = Math.abs(value) < 1e-9
-  const color = neutral ? 'text-ink-3' : good ? 'text-[var(--good-text)]' : 'text-status-critical'
+  const color = neutral ? 'text-ink-3' : good ? 'text-[var(--good-text)]' : 'text-[var(--bad-text)]'
   const Icon = neutral ? Minus : value > 0 ? ArrowUpRight : ArrowDownRight
   return (
     <span className={`inline-flex items-center gap-0.5 text-xs font-medium ${color}`}>

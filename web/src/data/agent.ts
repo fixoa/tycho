@@ -1,0 +1,80 @@
+// Lokaler Tycho-Agent (Demo-Engine): beantwortet Fragen aus den gefilterten Daten.
+// In Produktion: lokales LLM (z. B. Llama 3.1 8B / Mistral über llama.cpp) auf TS-ORD-01 mit
+// Tool-Calling auf genau diese Read-only-Funktionen. Kein Cloud-Aufruf, keine Patientendaten im Prompt.
+import { fmt } from '../lib/format'
+import { BILLING_FINDINGS, PRACTICE, demo } from './mock'
+import { STAFF, ROLE_LABEL } from './staff'
+import { HR, tailwindSummary, invoices } from './tailwind'
+import { REFERRERS, NPS, QM, PRESCRIBING_OUTLIERS } from './extras'
+import { pctDelta, type useData } from './aggregate'
+import { staffScores } from './score'
+
+export type Data = ReturnType<typeof useData>
+export interface Answer { text: string; chips?: { label: string; to: string }[]; table?: { head: string[]; rows: (string | number)[][] } }
+
+const eur = fmt.eur
+const dn = (d: string) => new Date(d).toLocaleDateString('de-AT', { weekday: 'long', day: 'numeric', month: 'long' })
+
+const INTENTS: { test: RegExp; run: (q: string, d: Data, personMode: boolean) => Answer }[] = [
+  { test: /umsatz.*(woche|zusammen|monat|zeitraum)|zusammenfass.*umsatz|wie (läuft|geht) (es|das)/i, run: (_q, d) => ({
+    text: `Im Zeitraum ${d.range.label} lag der Umsatz bei ${eur(d.s.revenue)} (${d.p ? fmt.signed(Math.round(pctDelta(d.s.revenue, d.p.revenue))) + ' % zum Zeitraum davor' : 'kein Vergleich'}). Das sind ${eur(d.s.revenuePerContact)} je Kontakt bei ${fmt.num(d.s.contacts)} Patientenkontakten. Kassenanteil ${fmt.pct(d.s.ecard / d.s.revenue)}, Privat ${fmt.pct(d.s.privat / d.s.revenue)}. Der stärkste Tag war ${dn(d.daily.reduce((a, b) => (b.revenue > a.revenue ? b : a)).date)}.`,
+    chips: [{ label: 'Finanzen öffnen', to: '/finanzen' }, { label: 'Prognose', to: '/prognose' }] }) },
+  { test: /offene? rechnung|honorarnote|inkasso|überfällig|zahlungs/i, run: () => { const t = tailwindSummary(); const top = invoices().filter((i) => i.aiAction !== 'Keine Aktion').slice(0, 3); return {
+    text: `Offen sind ${eur(t.openSum)} in ${t.openCount} Honorarnoten, davon ${eur(t.overdueSum)} überfällig. Tailwind erwartet ${eur(t.expectedRecovery)} Zahlungseingang. Größte Hebel: ${Object.entries(t.actions).sort((a, b) => b[1].sum - a[1].sum).slice(0, 2).map(([a, v]) => `${a} (${v.n}×, ${eur(v.sum)})`).join(', ')}. ${t.wahonlineMissing} Honorarnoten wurden nicht via WAHonline übermittelt – dort warten Patient:innen vermutlich auf die Kostenerstattung.`,
+    table: { head: ['Nr.', 'Leistung', 'Rest', 'Überfällig', 'Empfehlung'], rows: top.map((i) => [i.id, i.kind, fmt.eur2(i.amount - i.paid), `${i.daysOverdue} T`, i.aiAction]) },
+    chips: [{ label: 'Tailwind öffnen', to: '/tailwind' }] } } },
+  { test: /auslastung|kapazit|nächste[nr]? monat|planen|freie? (slots|termine)/i, run: (_q, d) => { const h = d.heat; const low = h.flatMap((r) => r.cells.map((c) => ({ ...c, day: r.day }))).filter((c) => c.day !== 'Sa').sort((a, b) => a.value - b.value).slice(0, 3); return {
+    text: `Die Auslastung liegt bei 84 % der Slots. Stoßzeiten sind Montag bis Donnerstag 9–11 Uhr. Am wenigsten ausgelastet: ${low.map((c) => `${c.day} ${c.hour}:00`).join(', ')}. No-Show-Rate ${fmt.pct1(d.s.noShowRate)}, Ø Wartezeit ${fmt.num1(d.s.wait)} min. Empfehlung für den nächsten Monat: Vorsorge-Recall (412 fällige VU) in die Mittagsfenster legen und Videotermine (Kennzeichnung 8xT) auf Freitag nachmittag.`,
+    chips: [{ label: 'Termine & Kapazität', to: '/termine' }] } } },
+  { test: /(welche|top).*(leistung|position).*(umsatz|meist|bringen)|umsatzstärkste|top leistung/i, run: (_q, d) => ({
+    text: `Die umsatzstärksten Positionen im Zeitraum: ${d.services.slice(0, 5).map((s) => `${s.code} ${s.name.split(' (')[0]} (${eur(s.value)}, ${fmt.num(s.count)}×)`).join('; ')}.`,
+    table: { head: ['Pos.', 'Leistung', 'Anzahl', 'Umsatz'], rows: d.services.slice(0, 8).map((s) => [s.code, s.name, s.count, eur(s.value)]) },
+    chips: [{ label: 'Tarife & Leistungen', to: '/tarife' }] }) },
+  { test: /welchem tag.*(meist|viele)|meiste[n]? patient|stärkste[rn]? tag/i, run: (_q, d) => { const top = [...d.daily].sort((a, b) => b.contacts - a.contacts)[0]; return {
+    text: `Die meisten Patient:innen kamen am ${dn(top.date)}: ${fmt.num(top.contacts)} Kontakte. Im Schnitt sind es ${fmt.num1(d.s.contactsPerDay)} pro Tag. Montage liegen typischerweise 12 % über dem Durchschnitt.`, chips: [{ label: 'Patient:innen', to: '/patienten' }] } } },
+  { test: /gewachsen|gestiegen.*leistung|leistung.*(vorperiode|wachs)/i, run: (_q, d) => { const grown = d.services.map((s) => ({ ...s, g: s.countPrevQ ? (s.count / 0.6 - s.countPrevQ) / s.countPrevQ : 0 })).filter((s) => s.tarif > 0).sort((a, b) => b.g - a.g).slice(0, 4); return {
+    text: `Gegenüber dem Vorquartal wachsen vor allem: ${grown.map((s) => `${s.code} ${s.name.split(' (')[0]} (${fmt.signed(Math.round(s.g * 100))} %)`).join(', ')}. Telemedizinische Ordinationen (Kennzeichnung 8xT) steigen seit Ordicall am stärksten.`, chips: [{ label: 'Tarife', to: '/tarife' }] } } },
+  { test: /kostenträger|kasse|ögk|svs|bvaeb|standort.*umsatz|umsatz.*(standort|verteil)/i, run: (_q, d) => ({
+    text: `Umsatzverteilung im Zeitraum: ÖGK ${eur(d.s.revenueByPayer.ÖGK)} (${fmt.pct(d.s.revenueByPayer.ÖGK / d.s.revenue)}), SVS ${eur(d.s.revenueByPayer.SVS)}, BVAEB ${eur(d.s.revenueByPayer.BVAEB)}, Privat/Wahlarzt ${eur(d.s.revenueByPayer.Privat)}. Es gibt einen Standort (${PRACTICE.location}). ÖGK rechnet quartalsweise ab (Einreichung bis 10. Oktober), BVAEB monatlich.`, chips: [{ label: 'Finanzen', to: '/finanzen' }] }) },
+  { test: /vergessen|liegen ?gelassen|nicht verrechnet|fehlen.*abrechnung|abrechnungsl/i, run: () => ({
+    text: `Aktuell sind ${BILLING_FINDINGS.length} Findings offen im Wert von ${eur(BILLING_FINDINGS.filter((f) => f.valueEur > 0).reduce((a, f) => a + f.valueEur, 0))}. Am häufigsten vergessen: Grundleistung GL / Erstkontakt Pos. 10 bei e-card-Konsultationen (41 Fälle), EKG Pos. 34a (14 Fälle) und VU (6 Fälle). Alles vor der Quartalseinreichung nachtragbar.`,
+    table: { head: ['ID', 'Finding', 'Wert'], rows: BILLING_FINDINGS.slice(0, 5).map((f) => [f.id, f.title, fmt.eur2(f.valueEur)]) }, chips: [{ label: 'Findings ansehen', to: '/tarife' }] }) },
+  { test: /wer .*(meist|viele).*patient|pro tag.*patient|produktiv/i, run: (_q, d, pm) => { const docs = d.staff.filter((r) => r.staff.role === 'arzt').sort((a, b) => b.contactsPerDay - a.contactsPerDay); return pm ? {
+    text: `Pro Tag sieht ${docs[0].staff.name} die meisten Patient:innen (${fmt.num1(docs[0].contactsPerDay)}), gefolgt von ${docs[1].staff.name} (${fmt.num1(docs[1].contactsPerDay)}). Ø Zeit je Patient:in liegt zwischen ${fmt.num1(Math.min(...docs.map((x) => x.minPerContact)))} und ${fmt.num1(Math.max(...docs.map((x) => x.minPerContact)))} Minuten.`,
+    table: { head: ['Ärzt:in', 'Pat./Tag', 'Umsatz', 'Ø Min.'], rows: docs.map((r) => [r.staff.name, fmt.num1(r.contactsPerDay), eur(r.revenue), fmt.num1(r.minPerContact)]) }, chips: [{ label: 'Produktivität', to: '/produktivitaet' }] }
+    : { text: `Im Team-Modus zeige ich nur Gruppenwerte: Die Ärztegruppe sieht im Schnitt ${fmt.num1(docs.reduce((a, r) => a + r.contactsPerDay, 0) / docs.length)} Patient:innen je Ärzt:in und Tag. Einzelwerte sind nur im Pro-Person-Modus (Einstellungen, NDA) sichtbar.` } } },
+  { test: /anruf.*(zeit|uhr|stunde)|wann.*anruf|stoßzeit.*telefon/i, run: () => { const h = demo().calls.hourly; const top = [...h].sort((a, b) => b.calls - a.calls).slice(0, 2); return {
+    text: `Die meisten Anrufe kommen um ${top.map((t) => `${t.hour}:00`).join(' und ')} Uhr, montags am stärksten. Ordicall erledigt ${fmt.pct(h.reduce((a, x) => a + x.aiResolved, 0) / h.reduce((a, x) => a + x.calls, 0))} davon ohne den Empfang.`, chips: [{ label: 'Ordicall', to: '/ordicall' }] } } },
+  { test: /außerhalb|abend|wochenende|öffnungszeit/i, run: (_q, d) => ({ text: `Außerhalb der Öffnungszeiten kamen ${fmt.num(d.calls.reduce((a, c) => a + c.afterHours, 0))} Anrufe im Zeitraum, rund 61 % davon mit Terminwunsch. Vor Ordicall landeten diese am Anrufbeantworter.`, chips: [{ label: 'Ordicall', to: '/ordicall' }] }) },
+  { test: /abbruch|verpasst|weiterleit/i, run: (_q, d) => { const t = d.calls.reduce((a, c) => a + c.total, 0), m = d.calls.reduce((a, c) => a + c.missed, 0), tr = d.calls.reduce((a, c) => a + c.transferred, 0); return { text: `Von ${fmt.num(t)} Anrufen wurden ${fmt.num(m)} (${fmt.pct1(m / t)}) abgebrochen und ${fmt.num(tr)} (${fmt.pct1(tr / t)}) ans Team weitergeleitet. Weiterleitungen betreffen vor allem Befundauskünfte, weil die KI dort aus Verschwiegenheitsgründen an den Empfang übergibt.`, chips: [{ label: 'Ordicall', to: '/ordicall' }] } } },
+  { test: /anliegen.*(offen|lang)|ordicall überlassen|ganz ordicall/i, run: () => ({ text: `Am längsten offen bleiben Befundauskünfte (Ø 2 h 38 min bis erledigt). Ganz an Ordicall abgeben ließen sich Öffnungszeiten-Infos (98 % KI-Quote), Terminvereinbarung (91 %) und Rezeptbestellung (88 %).`, chips: [{ label: 'Ordicall', to: '/ordicall' }] }) },
+  { test: /überstunden|urlaub|krankenstand|hr|personal.*warn/i, run: (_q, _d, pm) => { const w = HR.filter((h) => h.warning); return {
+    text: `Der Überstundensaldo des Teams liegt bei ${fmt.num(HR.reduce((a, h) => a + h.overtimeBalanceH, 0))} h, Urlaubsrest ${fmt.num(HR.reduce((a, h) => a + h.vacationDays - h.vacationTaken, 0))} Tage. ${w.length} Frühwarnungen: ${w.map((h) => pm ? `${STAFF.find((s) => s.id === h.staffId)?.name}: ${h.warning}` : `${ROLE_LABEL[STAFF.find((s) => s.id === h.staffId)!.role]}: ${h.warning}`).join(' ')}`, chips: [{ label: 'Tailwind HR', to: '/tailwind' }] } } },
+  { test: /score|effizienz|warum.*(gesunken|gefallen|schlechter)/i, run: (_q, d, pm) => { const sc = staffScores(d.range, d.compareRange); const worst = sc.filter((s) => s.staff.role !== 'management').sort((a, b) => (a.score - a.prevScore) - (b.score - b.prevScore))[0]; const comp = [...worst.components].sort((a, b) => a.weight - b.weight); return {
+    text: `Der Efficacy Score der Ordination liegt bei ${Math.round(sc.reduce((a, s) => a + s.score, 0) / sc.length)}. ${pm ? `Den größten Rückgang zeigt ${worst.staff.name} (${worst.prevScore} → ${worst.score}), vor allem bei „${comp[comp.length - 1].label}“ und „${worst.components.find((c) => c.key === 'billing')?.label ?? comp[0].label}“.` : 'Im Team-Modus nenne ich keine Einzelpersonen; die Ärztegruppe verliert vor allem beim Durchsatz, weil August-Kontakte saisonal niedriger sind.'} Der Score ist eine Entscheidungshilfe, keine Bewertung.`, chips: [{ label: 'Personal & Effizienz', to: '/team' }] } } },
+  { test: /prognose|quartal.*(ende|erwart)|hochrechnung/i, run: () => { const f = demo().forecast; return { text: `Bis Quartalsende erwartet Tycho ${eur(f.projected)} (90 %-Band ${eur(f.lower)} bis ${eur(f.upper)}), das sind ${fmt.signed(Math.round(((f.projected - 412300) / 412300) * 100))} % gegenüber Q2. Bisher verrechnet: ${eur(f.actualToDate)} bei ${fmt.num(f.scheineToDate)} Scheinen. Risiko: Limit Pos. 39 (Therapeutische Aussprache) am 04.09. erreicht.`, chips: [{ label: 'Prognose', to: '/prognose' }] } } },
+  { test: /zuweis/i, run: () => ({ text: `Top-Zuweiser sind ${REFERRERS.slice(0, 3).map((r) => r.name).join(', ')}. Abgesprungen: Dr. Lang (Innere), zuletzt am 09.07. Klinik Floridsdorf sinkt um rund 25 %.`, chips: [{ label: 'Zuweiser', to: '/zuweiser' }] }) },
+  { test: /zufrieden|nps|bewertung|google/i, run: () => ({ text: `Der NPS liegt bei ${NPS.score} (${fmt.signed(NPS.score - NPS.prev)} zum Vorquartal) aus ${NPS.responses} Antworten. Bestes Thema: telefonische Erreichbarkeit (${fmt.pct(NPS.themes[0].sentiment)} positiv, +34 Pp. seit Ordicall). Kritisch: Wartezeit am Montag 8–10 Uhr.`, chips: [{ label: 'Zufriedenheit', to: '/zufriedenheit' }] }) },
+  { test: /qm|frist|prüfung|hygiene|schulung/i, run: () => ({ text: `${QM.filter((q) => q.status === 'ueberfaellig').length} QM-Fristen sind überfällig (${QM.filter((q) => q.status === 'ueberfaellig').map((q) => q.item).join('; ')}), ${QM.filter((q) => q.status === 'bald').length} werden in 30 Tagen fällig. ÖGK-Quartalsabrechnung Q3: Einreichung bis 10. Oktober.`, chips: [{ label: 'QM & Fristen', to: '/qm' }] }) },
+  { test: /verordnung|medikament|generika|rezept/i, run: () => ({ text: `Verordnungskosten liegen bei 43,03 € je Patient:in (Richtwert 41,20 €), Generika-Quote 78 %. Einsparpotenzial ohne Therapieänderung: ${eur(PRESCRIBING_OUTLIERS.reduce((a, o) => a + o.saving, 0))} je Quartal, vor allem durch Generika bei DPP-4-Hemmern.`, chips: [{ label: 'Verordnungen', to: '/verordnungen' }] }) },
+  { test: /sicher|datenschutz|schreib|verschlüssel|dsgvo|wer sieht/i, run: () => ({ text: `Tycho liest ausschließlich: PVS über einen Leselogin auf einer nächtlichen Kopie, Ordicall und Diktara nur Metadaten, Planery über einen Read-only-Token. 0 Schreibvorgänge seit Installation, der tägliche Schreib-Selbsttest wird abgewiesen. Alles bleibt auf ${PRACTICE.server}, verschlüsselt mit AES-256-GCM, Schlüssel im TPM. Auch dieser Assistent läuft lokal.`, chips: [{ label: 'Sicherheit & Compliance', to: '/sicherheit' }] }) },
+  { test: /telemedizin|video|telefon.*beratung|8a/i, run: (_q, d) => ({ text: `Der Telemedizin-Anteil liegt bei ${fmt.pct1(d.s.telemedShare)} der Kontakte (Ziel 15 %). Abrechnung: gleiche Honorierung wie persönlich, Kennzeichnung 8aT–8iT statt 8a–8i, bei persönlich und telemedizinisch am selben Tag zusätzlich PERS. 27 Videokonsultationen wurden als Telefonberatung verrechnet – das kostet 9,10 € je Fall.`, chips: [{ label: 'Tarife', to: '/tarife' }] }) },
+]
+
+export function answer(q: string, d: Data, personMode: boolean): Answer {
+  for (const i of INTENTS) if (i.test.test(q)) return i.run(q, d, personMode)
+  return {
+    text: `Dazu habe ich keine passende Auswertung. Ich kann Fragen zu Umsatz, Leistungen und Positionen, Patient:innen und Auslastung, Anrufen (Ordicall), Dokumentation (Diktara), offenen Honorarnoten und HR (Tailwind), Team-Effizienz, Prognose, Zuweisern, Verordnungen, Zufriedenheit, QM-Fristen und Sicherheit beantworten. Zeitraum aktuell: ${d.range.label}.`,
+    chips: [{ label: 'Umsatz zusammenfassen', to: '?q=Umsatz dieser Woche zusammenfassen' }, { label: 'Offene Rechnungen', to: '?q=Offene Rechnungen prüfen' }],
+  }
+}
+
+export const SUGGESTIONS: Record<string, string[]> = {
+  '/start': ['Umsatz dieser Woche zusammenfassen', 'Offene Rechnungen prüfen', 'Auslastung für nächsten Monat planen'],
+  '/patienten': ['An welchem Tag kamen die meisten Patient:innen?', 'Welche Leistung ist gegenüber der Vorperiode gewachsen?', 'Wie verteilt sich der Umsatz auf die Kostenträger?'],
+  '/finanzen': ['Welche Leistungen vergessen wir am häufigsten?', 'Wie hat sich der Privatanteil entwickelt?', 'Wie ist die Prognose bis Quartalsende?'],
+  '/produktivitaet': ['Wer sieht pro Tag die meisten Patient:innen?', 'Zu welchen Zeiten kommen die meisten Anrufe?', 'Welche Anliegen bleiben am längsten offen?'],
+  '/ordicall': ['Wie viele Anrufe kommen außerhalb der Öffnungszeiten?', 'Warum ist die Abbruchquote gestiegen?', 'Welche Anliegen könnten wir ganz Ordicall überlassen?'],
+  '/tailwind': ['Offene Rechnungen prüfen', 'Wer hat die meisten Überstunden?', 'Welche Honorarnoten fehlen bei WAHonline?'],
+  default: ['Umsatz zusammenfassen', 'Welche Leistungen vergessen wir am häufigsten?', 'Wie ist die Prognose bis Quartalsende?'],
+}

@@ -43,13 +43,22 @@ export interface DayRecord {
 export interface ServicePosition {
   code: string
   name: string
-  category: 'Grundleistung' | 'Einzelleistung' | 'Telemedizin' | 'Vorsorge' | 'Labor' | 'Sonstiges'
+  category: 'Grundleistung' | 'Kennzeichnung' | 'Einzelleistung' | 'Telemedizin' | 'Vorsorge' | 'Labor' | 'Sonstiges'
   tarif: number
   count: number
   value: number
   countPrevQ: number
-  limit?: number // Limitierung pro Quartal (Anzahl)
-  limitUsage?: number // 0..1
+  /** Limitierung je Quartal (Anzahl) */
+  limit?: number
+  limitUsage?: number
+  /** Regel laut Honorarordnung, z. B. „1× je Fall und Quartal“ */
+  rule: string
+  /** Kostenträger, bei denen die Position verrechenbar ist */
+  payers: ('ÖGK' | 'SVS' | 'BVAEB' | 'Privat')[]
+  /** Abrechnungsrhythmus */
+  cycle: 'Quartal' | 'Monat' | 'Honorarnote'
+  /** Wer die Leistung erbringen darf */
+  by: 'Arzt' | 'Arzt/DGKP' | 'Arzt/Assistenz'
 }
 
 export interface BillingFinding {

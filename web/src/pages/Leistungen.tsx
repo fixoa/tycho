@@ -8,7 +8,7 @@ import { fmt } from '../lib/format'
 import type { BillingFinding, ServicePosition } from '../data/types'
 
 const CATEGORY_COLOR: Record<ServicePosition['category'], string> = {
-  Grundleistung: 'var(--series-1)', Einzelleistung: 'var(--series-2)', Telemedizin: 'var(--series-3)', Vorsorge: 'var(--series-4)', Labor: 'var(--series-5)', Sonstiges: 'var(--series-7)',
+  Grundleistung: 'var(--series-1)', Kennzeichnung: 'var(--series-8)', Einzelleistung: 'var(--series-2)', Telemedizin: 'var(--series-3)', Vorsorge: 'var(--series-4)', Labor: 'var(--series-5)', Sonstiges: 'var(--series-7)',
 }
 
 export default function Leistungen() {

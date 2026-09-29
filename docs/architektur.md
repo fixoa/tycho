@@ -104,3 +104,11 @@ Der Modus wirkt global: Team-, Personen-, Tailwind-HR-, Verordnungs- und Digest-
 - Store: SQLite verschlüsselt
 - UI: React (dieses Repo) als statische Dateien, ausgeliefert vom Collector über Kestrel auf `127.0.0.1` mit Negotiate-Auth
 - Digest: HTML/PDF-Rendering im Collector, S/MIME, lokaler SMTP-Relay
+
+
+## Oberflächen-Modi und Assistent (Stand 29.09.2026)
+
+- **Simple**: helle, ruhige Oberfläche nach Vorlage (Textnavigation, Zeitraum/Standort rechts, KPI-Karten, Assistent-Panel). Standard für die Leitung.
+- **Advanced**: Gotham-Stil (Modulleiste, Facetten, KPI-Leiste, Donuts, Zeitachse). Für Analyse.
+- Beide Modi teilen Routen, Filterzustand (`web/src/state/filters.tsx`) und Datenzugriff (`web/src/data/aggregate.ts` → `useData()`), nur die Shell und die Design-Tokens (`data-ui`, `data-theme`) unterscheiden sich.
+- **Assistent**: `web/src/components/Assistant.tsx` + `web/src/data/agent.ts`. Produktiv: llama.cpp-Server auf TS-ORD-01 (GPU optional), Modell lokal (Llama 3.1 8B Instruct oder Mistral 7B), Tool-Calling auf Read-only-Funktionen (Summaries, Positionen, Honorarnoten, HR, Score, Prognose). System-Prompt ohne Patientendaten; Antworten werden mit den Rohwerten zitiert. Verlauf nur bei „Dauerhaft speichern“ im verschlüsselten Store.
