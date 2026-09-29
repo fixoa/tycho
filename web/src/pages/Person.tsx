@@ -34,8 +34,8 @@ export default function Person() {
       <div className="flex items-center gap-4 flex-wrap">
         <Avatar name={staff.name} hue={staff.avatarHue} size={56} />
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-semibold">{staff.name}</h1>
-          <p className="text-xs text-ink-3">{staff.title} · {ROLE_LABEL[staff.role]} · FTE {fmt.pct(staff.fte)} · seit {fmt.date(new Date(staff.since))} · AD: {staff.upn}</p>
+          <h1 className="text-[17px] font-semibold tracking-tight">{staff.name}</h1>
+          <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">{staff.title} · {ROLE_LABEL[staff.role]} · FTE {fmt.pct(staff.fte)} · seit {fmt.date(new Date(staff.since))} · AD: {staff.upn}</p>
           <div className="flex gap-1.5 mt-1.5 flex-wrap">{staff.adGroups.map((g) => <Badge key={g}>{g}</Badge>)}</div>
         </div>
         {!restricted && <ScoreRing score={s.score} prev={s.prevScore} size={104} stroke={9} label="Score" />}

@@ -30,8 +30,8 @@ export default function Termine() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold">Termine & Kapazität</h1>
-        <p className="text-xs text-ink-3">Terminkalender-Modul des PVS (read-only) · Slot-Auslastung, Terminausfälle, Wartezeiten · letzte 4 Wochen</p>
+        <h1 className="text-[17px] font-semibold tracking-tight">Termine & Kapazität</h1>
+        <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Terminkalender-Modul des PVS (read-only) · Slot-Auslastung, Terminausfälle, Wartezeiten · letzte 4 Wochen</p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatTile label="Slot-Auslastung" value="84,2 %" accent="var(--series-1)" delta={<Delta value={2.6} format={(v) => fmt.num1(v)} suffix=" Pp." />} deltaLabel="belegte ÷ verfügbare Slots" />
@@ -51,7 +51,7 @@ export default function Termine() {
                   <div key={`l${di}`} className="text-xs text-ink-2 flex items-center">{DAYS[di]}</div>
                   {row.map((c) => {
                     const step = c.util > 0.9 ? 'var(--seq-700)' : c.util > 0.8 ? 'var(--seq-600)' : c.util > 0.7 ? 'var(--seq-500)' : c.util > 0.55 ? 'var(--seq-400)' : c.util > 0.4 ? 'var(--seq-300)' : 'var(--seq-200)'
-                    return <div key={`${c.d}${c.h}`} title={`${c.d} ${c.h}:00 – ${fmt.pct(c.util)}`} className="h-8 rounded-[4px] flex items-center justify-center text-[10px] text-white/90" style={{ background: step }}>{Math.round(c.util * 100)}</div>
+                    return <div key={`${c.d}${c.h}`} title={`${c.d} ${c.h}:00 – ${fmt.pct(c.util)}`} className="h-8 rounded flex items-center justify-center text-[10px] text-white/90" style={{ background: step }}>{Math.round(c.util * 100)}</div>
                   })}
                 </>
               ))}

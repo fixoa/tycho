@@ -31,11 +31,11 @@ export default function Tailwind() {
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-xl font-semibold flex items-center gap-2"><Wind size={20} className="text-accent" /> Tailwind Station</h1>
-          <p className="text-xs text-ink-3">Controlling & Inkasso für Wahlarzt-/Privathonorare, geführt durch Analyse und KI · HR-Frühwarnung aus Planery · alles read-only</p>
+          <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Controlling & Inkasso für Wahlarzt-/Privathonorare, geführt durch Analyse und KI · HR-Frühwarnung aus Planery · alles read-only</p>
         </div>
         <div className="flex gap-1 text-xs">
           {([['inkasso', 'Honorarnoten & Inkasso'], ['hr', 'HR & Überstunden (Planery)']] as const).map(([k, l]) => (
-            <button key={k} onClick={() => setTab(k)} className={`px-3 py-1.5 rounded-md border ${tab === k ? 'bg-accent/15 border-accent/40 text-ink-1' : 'border-line-1 text-ink-2 hover:bg-surface-2'}`}>{l}</button>
+            <button key={k} onClick={() => setTab(k)} className={`px-3 py-1.5 rounded border ${tab === k ? 'bg-accent/15 border-accent/40 text-ink-1' : 'border-line-1 text-ink-2 hover:bg-surface-2'}`}>{l}</button>
           ))}
         </div>
       </div>
@@ -90,7 +90,7 @@ export default function Tailwind() {
           </div>
 
           <Card title="Honorarnoten" subtitle="Pseudonymisiert · Restbetrag, Status, KI-Empfehlung mit Begründung"
-            action={<div className="flex gap-1 text-xs">{([['aktion', 'Mit Handlungsbedarf'], ['alle', 'Alle']] as const).map(([k, l]) => <button key={k} onClick={() => setFilter(k)} className={`px-2.5 py-1.5 rounded-md border ${filter === k ? 'bg-accent/15 border-accent/40 text-ink-1' : 'border-line-1 text-ink-2'}`}>{l}</button>)}</div>}>
+            action={<div className="flex gap-1 text-xs">{([['aktion', 'Mit Handlungsbedarf'], ['alle', 'Alle']] as const).map(([k, l]) => <button key={k} onClick={() => setFilter(k)} className={`px-2.5 py-1.5 rounded border ${filter === k ? 'bg-accent/15 border-accent/40 text-ink-1' : 'border-line-1 text-ink-2'}`}>{l}</button>)}</div>}>
             <Table<Invoice> rows={list} keyOf={(i) => i.id} dense cols={[
               { key: 'id', label: 'Nr.', render: (i) => <span className="font-mono text-xs text-ink-2 whitespace-nowrap">{i.id}</span> },
               { key: 'p', label: 'Patient', render: (i) => <span className="font-mono text-xs text-ink-3">{i.patientPseudo}</span> },

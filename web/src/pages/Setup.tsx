@@ -49,7 +49,7 @@ export default function Setup() {
           <button onClick={() => setMode('person')} className={`card text-left p-5 border-2 transition ${mode === 'person' ? 'border-status-critical' : 'border-line-1 hover:border-line-2'}`}>
             <div className="flex items-center gap-2 mb-2"><UserSearch size={18} className="text-status-critical" /><span className="font-semibold">Pro Person</span>{mode === 'person' && <Badge tone="critical">gewählt</Badge>}</div>
             <p className="text-sm text-ink-2 leading-relaxed">Tycho berechnet für jede Mitarbeiterin und jeden Mitarbeiter einen eigenen Efficacy Score mit vollständiger Aufschlüsselung, Kosten, Ertrag, Rangliste und Verlauf.</p>
-            <div className="mt-3 rounded-md border border-status-critical/40 bg-status-critical/10 p-3 text-xs text-ink-1 leading-relaxed">
+            <div className="mt-3 rounded border border-status-critical/40 bg-status-critical/10 p-3 text-xs text-ink-1 leading-relaxed">
               <div className="flex items-center gap-1.5 font-semibold text-status-critical mb-1"><ShieldAlert size={14} /> ACHTUNG</div>
               Erfordert eine unterzeichnete NDA und beabsichtigt die volle Kontrolle über das Personal – auf eigene Gefahr. Sie sind als Ordinationsinhaber:in dafür verantwortlich, dass jede betroffene Person eine freiwillige, widerrufbare Zustimmung erteilt hat (§ 10 AVRAG, § 96 Abs 1 Z 3 ArbVG), eine DSFA vorliegt und kein Betriebsrat übergangen wird. Tycho deaktiviert den Einzelscore automatisch, sobald eine Zustimmung fehlt oder widerrufen wird.
             </div>
@@ -64,14 +64,14 @@ export default function Setup() {
             </label>
             <label className="block text-sm text-ink-2">
               Zur Bestätigung <span className="font-mono text-ink-1">PRO PERSON</span> eingeben
-              <input value={confirm} onChange={(e) => setConfirm(e.target.value)} className="mt-1 w-full max-w-xs rounded-md bg-surface-2 border border-line-2 px-3 py-2 text-sm text-ink-1 focus:outline-none focus:border-status-critical" />
+              <input value={confirm} onChange={(e) => setConfirm(e.target.value)} className="mt-1 w-full max-w-xs rounded bg-surface-2 border border-line-2 px-3 py-2 text-sm text-ink-1 focus:outline-none focus:border-status-critical" />
             </label>
           </div>
         )}
 
         <div className="flex items-center justify-between">
           <div className="text-xs text-ink-3">Angemeldet als {session?.user.name} ({session?.user.account}) {admin ? '· G_Tycho_Admin' : ''}</div>
-          <button onClick={submit} disabled={!canSave} className={`px-4 py-2 rounded-md text-sm font-medium text-white disabled:opacity-40 ${mode === 'person' ? 'bg-status-critical' : 'bg-accent'}`}>
+          <button onClick={submit} disabled={!canSave} className={`px-4 py-2 rounded text-sm font-medium text-white disabled:opacity-40 ${mode === 'person' ? 'bg-status-critical' : 'bg-accent'}`}>
             {mode === 'person' ? 'Pro-Person-Analyse aktivieren' : 'Team-basierte Analyse aktivieren'}
           </button>
         </div>

@@ -25,8 +25,8 @@ export default function Leistungen() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold">Leistungen & Abrechnung</h1>
-        <p className="text-xs text-ink-3">{QUARTER.label} bis {fmt.date(new Date('2026-08-24'))} · Leistungsblatt aus dem PVS · Tarife laut hinterlegter Honorarordnung (Demo-Werte)</p>
+        <h1 className="text-[17px] font-semibold tracking-tight">Leistungen & Abrechnung</h1>
+        <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">{QUARTER.label} bis {fmt.date(new Date('2026-08-24'))} · Leistungsblatt aus dem PVS · Tarife laut hinterlegter Honorarordnung (Demo-Werte)</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -54,7 +54,7 @@ export default function Leistungen() {
         <Card title="Findings der Kreuzprüfung" subtitle="PVS-Leistungsblatt × Diktara-Leistungserkennung × Ordicall-Terminarten × e-card-Konsultationen">
           <div className="space-y-3">
             {BILLING_FINDINGS.map((f: BillingFinding) => (
-              <details key={f.id} className="group rounded-md border border-line-1 px-3 py-2">
+              <details key={f.id} className="group rounded border border-line-1 px-3 py-2">
                 <summary className="flex items-center gap-3 cursor-pointer list-none">
                   <AlertTriangle size={15} className={`shrink-0 ${f.severity === 'critical' ? 'text-status-critical' : f.severity === 'serious' ? 'text-status-serious' : f.severity === 'warning' ? 'text-status-warning' : 'text-series-1'}`} />
                   <span className="text-sm text-ink-1 flex-1">{f.title}</span>
@@ -74,11 +74,11 @@ export default function Leistungen() {
       <Card title="Positionen" subtitle="Anzahl, Tarif, Umsatz und Hochrechnung gegen das Vorquartal"
         action={
           <div className="flex items-center gap-2">
-            <select value={cat} onChange={(e) => setCat(e.target.value as typeof cat)} className="bg-surface-2 border border-line-2 rounded-md text-xs px-2 py-1.5 text-ink-1">
+            <select value={cat} onChange={(e) => setCat(e.target.value as typeof cat)} className="bg-surface-2 border border-line-2 rounded text-xs px-2 py-1.5 text-ink-1">
               <option value="alle">Alle Gruppen</option>
               {Object.keys(CATEGORY_COLOR).map((c) => <option key={c} value={c}>{c}</option>)}
             </select>
-            <label className="flex items-center gap-1 bg-surface-2 border border-line-2 rounded-md px-2 py-1.5 text-xs">
+            <label className="flex items-center gap-1 bg-surface-2 border border-line-2 rounded px-2 py-1.5 text-xs">
               <Search size={12} className="text-ink-3" />
               <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Code oder Name" className="bg-transparent outline-none w-32 text-ink-1" />
             </label>
@@ -91,7 +91,7 @@ export default function Leistungen() {
           cols={[
             { key: 'code', label: 'Code', render: (s) => <span className="font-mono text-xs text-ink-2">{s.code}</span> },
             { key: 'name', label: 'Leistung', render: (s) => <span className="text-ink-1">{s.name}</span> },
-            { key: 'cat', label: 'Gruppe', render: (s) => <span className="inline-flex items-center gap-1.5 text-xs text-ink-2"><span className="w-2 h-2 rounded-sm" style={{ background: CATEGORY_COLOR[s.category] }} />{s.category}</span> },
+            { key: 'cat', label: 'Gruppe', render: (s) => <span className="inline-flex items-center gap-1.5 text-xs text-ink-2"><span className="w-2 h-2 rounded" style={{ background: CATEGORY_COLOR[s.category] }} />{s.category}</span> },
             { key: 'tarif', label: 'Tarif', align: 'right', render: (s) => fmt.eur2(s.tarif) },
             { key: 'count', label: 'Anzahl', align: 'right', render: (s) => fmt.num(s.count) },
             { key: 'trend', label: 'vs. Vorquartal*', align: 'right', render: (s) => <Delta value={((s.count / elapsed - s.countPrevQ) / s.countPrevQ) * 100} format={(v) => fmt.num1(Math.abs(v))} suffix=" %" /> },

@@ -19,8 +19,8 @@ export default function Sicherheit() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold">Sicherheit & Compliance</h1>
-        <p className="text-xs text-ink-3">Tycho ist eine Kontrollinstanz wie ein Benutzer mit Leserechten – nicht mehr. Dieser Bereich beweist es.</p>
+        <h1 className="text-[17px] font-semibold tracking-tight">Sicherheit & Compliance</h1>
+        <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Tycho ist eine Kontrollinstanz wie ein Benutzer mit Leserechten – nicht mehr. Dieser Bereich beweist es.</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -41,7 +41,7 @@ export default function Sicherheit() {
         {GUARANTEES.map((g) => (
           <Card key={g.title}>
             <div className="flex items-start gap-3">
-              <span className="w-8 h-8 rounded-md bg-accent/15 flex items-center justify-center shrink-0"><g.icon size={16} className="text-accent" /></span>
+              <span className="w-8 h-8 rounded bg-accent/15 flex items-center justify-center shrink-0"><g.icon size={16} className="text-accent" /></span>
               <div>
                 <div className="text-sm font-medium text-ink-1">{g.title}</div>
                 <p className="text-xs text-ink-2 mt-1 leading-relaxed">{g.text}</p>
@@ -74,10 +74,10 @@ export default function Sicherheit() {
             ))}
           </div>
           <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
-            <div className="rounded-md bg-surface-2 px-3 py-2"><div className="text-ink-3">DSFA (Art. 35 DSGVO)</div><div className="text-ink-1 flex items-center gap-1"><CheckCircle2 size={12} className="text-status-good" /> abgeschlossen 10.07.2026</div></div>
-            <div className="rounded-md bg-surface-2 px-3 py-2"><div className="text-ink-3">AI Act (Anhang III, Beschäftigung)</div><div className="text-ink-1 flex items-center gap-1"><CheckCircle2 size={12} className="text-status-good" /> Human-Review-Pflicht aktiv</div></div>
-            <div className="rounded-md bg-surface-2 px-3 py-2"><div className="text-ink-3">Verarbeitungsverzeichnis</div><div className="text-ink-1 flex items-center gap-1"><CheckCircle2 size={12} className="text-status-good" /> Eintrag „Tycho Analyse“</div></div>
-            <div className="rounded-md bg-surface-2 px-3 py-2"><div className="text-ink-3">Transparenzbericht</div><div className="text-ink-1 flex items-center gap-1"><CheckCircle2 size={12} className="text-status-good" /> monatlich an jede:n Mitarbeiter:in</div></div>
+            <div className="rounded bg-surface-2 px-3 py-2"><div className="text-ink-3">DSFA (Art. 35 DSGVO)</div><div className="text-ink-1 flex items-center gap-1"><CheckCircle2 size={12} className="text-status-good" /> abgeschlossen 10.07.2026</div></div>
+            <div className="rounded bg-surface-2 px-3 py-2"><div className="text-ink-3">AI Act (Anhang III, Beschäftigung)</div><div className="text-ink-1 flex items-center gap-1"><CheckCircle2 size={12} className="text-status-good" /> Human-Review-Pflicht aktiv</div></div>
+            <div className="rounded bg-surface-2 px-3 py-2"><div className="text-ink-3">Verarbeitungsverzeichnis</div><div className="text-ink-1 flex items-center gap-1"><CheckCircle2 size={12} className="text-status-good" /> Eintrag „Tycho Analyse“</div></div>
+            <div className="rounded bg-surface-2 px-3 py-2"><div className="text-ink-3">Transparenzbericht</div><div className="text-ink-1 flex items-center gap-1"><CheckCircle2 size={12} className="text-status-good" /> monatlich an jede:n Mitarbeiter:in</div></div>
           </div>
         </Card>
 

@@ -20,6 +20,7 @@ export default {
           2: 'var(--line-2)',
         },
         accent: 'var(--accent)',
+        'accent-strong': 'var(--accent-strong)',
         series: {
           1: 'var(--series-1)',
           2: 'var(--series-2)',
@@ -38,11 +39,14 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       boxShadow: {
-        card: '0 1px 0 0 var(--line-1), 0 8px 24px -16px rgba(0,0,0,0.5)',
+        card: '0 0 0 1px var(--line-2)',
+      },
+      borderRadius: {
+        DEFAULT: '2px',
       },
     },
   },

@@ -22,13 +22,13 @@ export default function Team() {
     <div className="space-y-6">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-xl font-semibold">Personal & Effizienz</h1>
-          <p className="text-xs text-ink-3">Personalstamm aus Active Directory · Anwesenheit aus AD-Logon · Leistung aus PVS, Ordicall, Diktara · Fenster: letzte 4 Wochen</p>
+          <h1 className="text-[17px] font-semibold tracking-tight">Personal & Effizienz</h1>
+          <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Personalstamm aus Active Directory · Anwesenheit aus AD-Logon · Leistung aus PVS, Ordicall, Diktara · Fenster: letzte 4 Wochen</p>
         </div>
         <div className="flex gap-1 text-xs">
           {(['alle', ...ROLES] as const).map((r) => (
             <button key={r} onClick={() => setRole(r)}
-              className={`px-2.5 py-1.5 rounded-md border ${role === r ? 'bg-accent/15 border-accent/40 text-ink-1' : 'border-line-1 text-ink-2 hover:bg-surface-2'}`}>
+              className={`px-2.5 py-1.5 rounded border ${role === r ? 'bg-accent/15 border-accent/40 text-ink-1' : 'border-line-1 text-ink-2 hover:bg-surface-2'}`}>
               {r === 'alle' ? 'Alle' : ROLE_LABEL[r]}
             </button>
           ))}
@@ -70,7 +70,7 @@ export default function Team() {
               const g = staffScores().filter((x) => x.staff.role === r)
               const rev = g.reduce((a, x) => a + x.kpis.revenue, 0), cost = g.reduce((a, x) => a + x.kpis.cost, 0)
               return (
-                <div key={r} className="rounded-md bg-surface-2 p-3 space-y-1">
+                <div key={r} className="rounded bg-surface-2 p-3 space-y-1">
                   <div className="text-ink-1 font-medium">{ROLE_LABEL[r]} <span className="text-ink-3">· {g.length} Personen · {fmt.num1(g.reduce((a, x) => a + x.staff.fte, 0))} FTE</span></div>
                   <div className="flex justify-between"><span className="text-ink-3">Ø Pat./h</span><span className="tabular">{fmt.num1(g.reduce((a, x) => a + x.kpis.contactsPerHour, 0) / g.length)}</span></div>
                   {rev > 0 && <div className="flex justify-between"><span className="text-ink-3">Verrechnet / Kosten</span><span className="tabular">{fmt.eur(rev)} / {fmt.eur(cost)}</span></div>}

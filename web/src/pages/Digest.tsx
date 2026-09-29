@@ -24,12 +24,12 @@ export default function Digest() {
     <div className="space-y-6">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-xl font-semibold">Tycho Digest</h1>
-          <p className="text-xs text-ink-3">Wöchentliche Übersicht · jeden Montag 06:00 · verschlüsselt per S/MIME an die Leitung · Archiv im verschlüsselten Store</p>
+          <h1 className="text-[17px] font-semibold tracking-tight">Tycho Digest</h1>
+          <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Wöchentliche Übersicht · jeden Montag 06:00 · verschlüsselt per S/MIME an die Leitung · Archiv im verschlüsselten Store</p>
         </div>
         <div className="flex gap-2">
-          <button className="text-xs px-3 py-1.5 rounded-md border border-line-2 text-ink-1 hover:bg-surface-2 inline-flex items-center gap-1"><Download size={13} /> PDF</button>
-          <button onClick={() => setSent(true)} className="text-xs px-3 py-1.5 rounded-md bg-accent text-white inline-flex items-center gap-1 hover:brightness-110"><Mail size={13} /> {sent ? 'Gesendet ✓' : 'Jetzt senden'}</button>
+          <button className="text-xs px-3 py-1.5 rounded border border-line-2 text-ink-1 hover:bg-surface-2 inline-flex items-center gap-1"><Download size={13} /> PDF</button>
+          <button onClick={() => setSent(true)} className="text-xs px-3 py-1.5 rounded bg-accent text-white inline-flex items-center gap-1 hover:brightness-110"><Mail size={13} /> {sent ? 'Gesendet ✓' : 'Jetzt senden'}</button>
         </div>
       </div>
 
@@ -56,7 +56,7 @@ export default function Digest() {
                 ['Kontakte KW 34', fmt.num(cur.contacts), `${fmt.signed(Math.round(((cur.contacts - prev.contacts) / prev.contacts) * 100))} % zur Vorwoche`],
                 ['Telemedizin', fmt.pct1(cur.telemedShare), 'Ziel 15 %'],
               ].map(([l, v, s]) => (
-                <div key={l} className="rounded-lg bg-surface-2 px-3 py-2.5">
+                <div key={l} className="rounded bg-surface-2 px-3 py-2.5">
                   <div className="text-[11px] text-ink-3">{l}</div>
                   <div className="text-lg font-semibold">{v}</div>
                   <div className="text-[11px] text-ink-3">{s}</div>

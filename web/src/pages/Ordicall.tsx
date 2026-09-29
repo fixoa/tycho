@@ -25,8 +25,8 @@ export default function Ordicall() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold">Ordicall Station</h1>
-        <p className="text-xs text-ink-3">Telefon-KI · Go-Live {fmt.date(GO_LIVE.ordicall)} · Statistik aus signiertem Ordicall-Export (keine Audioaufnahmen in Tycho) · letzte 20 Arbeitstage</p>
+        <h1 className="text-[17px] font-semibold tracking-tight">Ordicall Station</h1>
+        <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Telefon-KI · Go-Live {fmt.date(GO_LIVE.ordicall)} · Statistik aus signiertem Ordicall-Export (keine Audioaufnahmen in Tycho) · letzte 20 Arbeitstage</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">

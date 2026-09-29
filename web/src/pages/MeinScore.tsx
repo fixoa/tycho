@@ -21,8 +21,8 @@ export default function MeinScore() {
       <div className="flex items-center gap-4">
         <Avatar name={me.name} hue={me.avatarHue} size={56} />
         <div className="flex-1">
-          <h1 className="text-xl font-semibold">Mein Score</h1>
-          <p className="text-xs text-ink-3">{me.name} · {me.title} · Self-Service: Diese Ansicht sieht nur {me.name.split(' ').slice(-1)[0]} selbst{isLeader(me) ? ' (und die Leitung, sofern Pro-Person-Modus)' : ''}.</p>
+          <h1 className="text-[17px] font-semibold tracking-tight">Mein Score</h1>
+          <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">{me.name} · {me.title} · Self-Service: Diese Ansicht sieht nur {me.name.split(' ').slice(-1)[0]} selbst{isLeader(me) ? ' (und die Leitung, sofern Pro-Person-Modus)' : ''}.</p>
         </div>
         {personMode && consent && <ScoreRing score={s.score} prev={s.prevScore} size={104} stroke={9} label="Score" />}
       </div>

@@ -28,6 +28,18 @@ const NAV = [
   { to: '/einstellungen', label: 'Einstellungen', icon: Settings, group: 'System', leader: true },
 ]
 
+/** Marke: Fadenkreuz im Quadrat – Kontrollinstanz, nicht Konsumprodukt. */
+export function Mark({ size = 26 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 26 26" className="shrink-0" aria-hidden>
+      <rect x="0.5" y="0.5" width="25" height="25" fill="none" stroke="var(--accent)" strokeOpacity="0.7" />
+      <circle cx="13" cy="13" r="6.5" fill="none" stroke="var(--accent)" strokeWidth="1.2" />
+      <path d="M13 3v5M13 18v5M3 13h5M18 13h5" stroke="var(--accent)" strokeWidth="1.2" />
+      <circle cx="13" cy="13" r="1.8" fill="var(--accent)" />
+    </svg>
+  )
+}
+
 export default function Layout() {
   const { session, logout, theme, toggleTheme } = useAuth()
   const { config } = useConfig()
@@ -38,68 +50,67 @@ export default function Layout() {
   const dayOfQ = Math.round((DATA_AS_OF.getTime() - QUARTER.start.getTime()) / 86400000) + 1
   return (
     <div className="h-full flex bg-surface-0">
-      <aside className="w-60 shrink-0 border-r border-line-1 bg-surface-1 flex flex-col">
-        <div className="px-4 py-4 border-b border-line-1">
-          <div className="flex items-center gap-2">
-            <span className="w-7 h-7 rounded-md bg-accent/20 border border-accent/40 flex items-center justify-center">
-              <span className="w-2.5 h-2.5 rounded-full bg-accent" />
-            </span>
+      <aside className="w-56 shrink-0 border-r border-line-1 bg-surface-1 flex flex-col">
+        <div className="px-4 h-12 border-b border-line-1 flex items-center">
+          <div className="flex items-center gap-2.5">
+            <Mark />
             <div>
-              <div className="font-semibold tracking-wide text-ink-1 leading-none">TYCHO</div>
-              <div className="text-[10px] text-ink-3 mt-0.5">Ordinations-Kontrollinstanz</div>
+              <div className="font-semibold tracking-[0.22em] text-ink-1 leading-none text-[13px]">TYCHO</div>
+              <div className="label mt-1">Kontrollinstanz</div>
             </div>
           </div>
         </div>
-        <nav className="flex-1 overflow-y-auto py-3">
+        <nav className="flex-1 overflow-y-auto py-2">
           {groups.map((g) => (
-            <div key={g} className="mb-3">
-              <div className="px-4 pb-1 text-[10px] uppercase tracking-wider text-ink-3">{g}</div>
+            <div key={g} className="mb-2">
+              <div className="px-4 pt-2 pb-1 label">{g}</div>
               {items.filter((n) => n.group === g).map((n) => (
                 <NavLink key={n.to} to={n.to}
-                  className={({ isActive }) => `flex items-center gap-2.5 mx-2 px-2.5 py-1.5 rounded-md text-sm ${isActive ? 'bg-accent/15 text-ink-1 font-medium' : 'text-ink-2 hover:bg-surface-2 hover:text-ink-1'}`}>
-                  <n.icon size={16} strokeWidth={1.8} />
+                  className={({ isActive }) => `flex items-center gap-2.5 pl-3 pr-3 py-[5px] text-[12.5px] border-l-2 ${isActive ? 'border-accent bg-accent/10 text-ink-1 font-medium' : 'border-transparent text-ink-2 hover:bg-surface-2 hover:text-ink-1'}`}>
+                  <n.icon size={14} strokeWidth={1.8} className={undefined} />
                   {n.label}
                 </NavLink>
               ))}
             </div>
           ))}
         </nav>
-        <div className="px-4 py-3 border-t border-line-1 text-[11px] text-ink-3 space-y-1">
-          <div className="flex items-center gap-1.5"><Lock size={11} /> AES-256-GCM · Schlüssel im TPM</div>
-          <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-status-good pulse-dot" /> Read-only · 0 Schreibvorgänge</div>
-          {config && <div className="flex items-center gap-1.5"><span className={`w-1.5 h-1.5 rounded-full ${config.analysisMode === 'person' ? 'bg-status-critical' : 'bg-accent'}`} /> Modus: {config.analysisMode === 'person' ? 'Pro Person (NDA)' : 'Team-basiert'}</div>}
-          <div>{PRACTICE.server}</div>
+        <div className="px-4 py-3 border-t border-line-1 font-mono text-[10px] text-ink-3 space-y-1.5 uppercase tracking-[0.06em]">
+          <div className="flex items-center gap-1.5"><Lock size={10} /> AES-256-GCM · TPM</div>
+          <div className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-status-good pulse-dot" /> Read-only · 0 Writes</div>
+          {config && <div className="flex items-center gap-1.5"><span className={`w-1.5 h-1.5 ${config.analysisMode === 'person' ? 'bg-status-critical' : 'bg-accent'}`} /> Modus: {config.analysisMode === 'person' ? 'Pro Person' : 'Team'}</div>}
+          <div className="normal-case tracking-normal text-ink-3/80">{PRACTICE.server}</div>
         </div>
       </aside>
 
       <div className="flex-1 min-w-0 flex flex-col">
-        <header className="h-14 shrink-0 border-b border-line-1 bg-surface-1/80 backdrop-blur px-6 flex items-center gap-4">
+        <header className="h-12 shrink-0 border-b border-line-1 bg-surface-1 px-5 flex items-center gap-4">
           <div className="min-w-0">
-            <div className="text-sm font-medium text-ink-1 truncate">{PRACTICE.name}</div>
-            <div className="text-[11px] text-ink-3 truncate">{PRACTICE.type} · {PRACTICE.location}</div>
+            <div className="text-[13px] font-medium text-ink-1 truncate leading-tight">{PRACTICE.name}</div>
+            <div className="label truncate">{PRACTICE.type} · {PRACTICE.location}</div>
           </div>
-          <div className="ml-auto flex items-center gap-4 text-xs text-ink-3">
-            <div className="hidden md:block text-right">
-              <div>Datenstand <span className="text-ink-2">{fmt.date(DATA_AS_OF)}, {fmt.time(DATA_AS_OF)}</span></div>
-              <div>{QUARTER.label} · Tag {dayOfQ}/{QUARTER.days} · Analyse {fmt.dateShort(DEMO_TODAY)} 05:41</div>
+          <div className="ml-auto flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.06em] text-ink-3">
+              <span className="inline-flex items-center gap-1.5 border border-line-2 px-2 py-1 whitespace-nowrap"><span className="w-1.5 h-1.5 bg-status-good pulse-dot" /> Stand {fmt.dateShort(DATA_AS_OF)} {fmt.time(DATA_AS_OF)}</span>
+              <span className="inline-flex items-center gap-1.5 border border-line-2 px-2 py-1 whitespace-nowrap">{QUARTER.label} · T{dayOfQ}/{QUARTER.days}</span>
+              <span className="inline-flex items-center gap-1.5 border border-line-2 px-2 py-1 whitespace-nowrap">Run {fmt.dateShort(DEMO_TODAY)} 05:41</span>
             </div>
-            <button onClick={toggleTheme} className="p-2 rounded-md hover:bg-surface-2 text-ink-2" title="Design wechseln">
-              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            <button onClick={toggleTheme} className="p-1.5 border border-line-2 hover:bg-surface-2 text-ink-2" title="Design wechseln">
+              {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
             </button>
             {session && (
               <div className="flex items-center gap-2 pl-3 border-l border-line-1">
-                <Avatar name={session.user.name} hue={session.user.avatarHue} size={28} />
+                <Avatar name={session.user.name} hue={session.user.avatarHue} size={26} />
                 <div className="hidden sm:block leading-tight">
-                  <div className="text-ink-1 text-xs font-medium">{session.user.name}</div>
-                  <div className="text-[10px] text-ink-3">{session.user.upn} · {session.method === 'sso' ? 'Windows SSO' : 'AD-Login'}</div>
+                  <div className="text-ink-1 text-[12px] font-medium">{session.user.name}</div>
+                  <div className="font-mono text-[10px] text-ink-3">{session.user.account} · {session.method === 'sso' ? 'kerberos' : 'ldaps'}</div>
                 </div>
-                <button onClick={() => { logout(); nav('/login') }} className="p-2 rounded-md hover:bg-surface-2 text-ink-2" title="Abmelden"><LogOut size={16} /></button>
+                <button onClick={() => { logout(); nav('/login') }} className="p-1.5 border border-line-2 hover:bg-surface-2 text-ink-2" title="Abmelden"><LogOut size={14} /></button>
               </div>
             )}
           </div>
         </header>
-        <main className="flex-1 overflow-y-auto">
-          <div className="max-w-[1400px] mx-auto px-6 py-6">
+        <main className="flex-1 overflow-y-auto plane">
+          <div className="max-w-[1440px] mx-auto px-5 py-5">
             <Outlet />
           </div>
         </main>

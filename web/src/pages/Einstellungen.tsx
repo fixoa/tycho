@@ -36,13 +36,13 @@ export default function Einstellungen() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold">Einstellungen</h1>
-        <p className="text-xs text-ink-3">Konfiguration wird lokal verschlüsselt gespeichert · jede Änderung protokolliert</p>
+        <h1 className="text-[17px] font-semibold tracking-tight">Einstellungen</h1>
+        <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Konfiguration wird lokal verschlüsselt gespeichert · jede Änderung protokolliert</p>
       </div>
 
       <Card title="Analysemodus" subtitle="Festgelegt bei der Erstkonfiguration durch den Haupt-Admin">
         <div className="flex items-start gap-4 flex-wrap">
-          <div className={`flex-1 min-w-[260px] rounded-md border p-4 ${config?.analysisMode === 'person' ? 'border-status-critical/50 bg-status-critical/5' : 'border-accent/40 bg-accent/5'}`}>
+          <div className={`flex-1 min-w-[260px] rounded border p-4 ${config?.analysisMode === 'person' ? 'border-status-critical/50 bg-status-critical/5' : 'border-accent/40 bg-accent/5'}`}>
             <div className="flex items-center gap-2 font-medium text-sm">
               {config?.analysisMode === 'person' ? <UserSearch size={16} className="text-status-critical" /> : <Users size={16} className="text-accent" />}
               {config?.analysisMode === 'person' ? 'Pro Person (NDA)' : 'Team-basiert'}
@@ -56,7 +56,7 @@ export default function Einstellungen() {
           </div>
           <div className="text-xs space-y-2">
             {admin ? (
-              <Link to="/setup" className="inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-line-2 hover:bg-surface-2 text-ink-1"><ShieldAlert size={14} /> Modus ändern (erneute Bestätigung)</Link>
+              <Link to="/setup" className="inline-flex items-center gap-1.5 px-3 py-2 rounded border border-line-2 hover:bg-surface-2 text-ink-1"><ShieldAlert size={14} /> Modus ändern (erneute Bestätigung)</Link>
             ) : <Badge>Nur Haupt-Admin (G_Tycho_Admin)</Badge>}
             {admin && <button onClick={reset} className="block text-ink-3 hover:text-ink-1">Erstkonfiguration zurücksetzen (Demo)</button>}
           </div>
@@ -67,7 +67,7 @@ export default function Einstellungen() {
         <Card title="Module" subtitle="Stationen und Analysen aktivieren – nur was gebucht ist, wird angezeigt · Peer-Benchmark zwischen Ordinationen gibt es bewusst nicht">
           <div className="space-y-2">
             {MODULES.map((m) => (
-              <label key={m.id} className={`flex items-start gap-3 rounded-md px-3 py-2 ${m.locked ? 'opacity-80' : 'hover:bg-surface-2 cursor-pointer'}`}>
+              <label key={m.id} className={`flex items-start gap-3 rounded px-3 py-2 ${m.locked ? 'opacity-80' : 'hover:bg-surface-2 cursor-pointer'}`}>
                 <input type="checkbox" checked={m.locked ? true : (mods[m.id] ?? true)} disabled={m.locked || !admin} onChange={() => toggle(m.id)} className="mt-1 accent-[var(--accent)]" />
                 <div className="flex-1">
                   <div className="text-sm text-ink-1 flex items-center gap-2">{m.name} {m.locked && <Badge>Kern</Badge>}</div>

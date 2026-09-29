@@ -26,8 +26,8 @@ export default function Diktara() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-semibold">Diktara Station</h1>
-        <p className="text-xs text-ink-3">KI-Dokumentation · Go-Live {fmt.date(GO_LIVE.diktara)} · Tycho liest nur Metadaten (Dauer, Akzeptanz, erkannte Leistungen), nie Transkripte oder Audio · letzte 20 Arbeitstage</p>
+        <h1 className="text-[17px] font-semibold tracking-tight">Diktara Station</h1>
+        <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">KI-Dokumentation · Go-Live {fmt.date(GO_LIVE.diktara)} · Tycho liest nur Metadaten (Dauer, Akzeptanz, erkannte Leistungen), nie Transkripte oder Audio · letzte 20 Arbeitstage</p>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <StatTile label="Aufnahmen" value={fmt.num(s(inCur, 'recordings'))} accent="var(--series-1)" delta={<Delta value={((s(inCur, 'recordings') - s(inPrev, 'recordings')) / s(inPrev, 'recordings')) * 100} format={(v) => fmt.num1(Math.abs(v))} suffix=" %" />} deltaLabel="vs. 20 Tage davor" />

@@ -9,7 +9,7 @@ export default function Zuweiser() {
   const byType = ['Facharzt', 'Spital', 'PVE', 'Physio', 'Sonstige'].map((t) => ({ type: t, q3: REFERRERS.filter((r) => r.type === t).reduce((a, r) => a + r.q3, 0) }))
   return (
     <div className="space-y-6">
-      <div><h1 className="text-xl font-semibold">Zuweiser-Analyse</h1><p className="text-xs text-ink-3">Überweisungen und Zuweisungen laut PVS (Überweisungsschein, Zuweiser-Feld) · Q3 bis dato vs. Q2 · ABC-Klassifikation nach Volumen</p></div>
+      <div><h1 className="text-[17px] font-semibold tracking-tight">Zuweiser-Analyse</h1><p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Überweisungen und Zuweisungen laut PVS (Überweisungsschein, Zuweiser-Feld) · Q3 bis dato vs. Q2 · ABC-Klassifikation nach Volumen</p></div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatTile label="Zugewiesene Patient:innen (QTD)" value={fmt.num(total)} accent="var(--series-1)" delta={<Delta value={((total / 0.6 - prev) / prev) * 100} format={(v) => fmt.num1(Math.abs(v))} suffix=" %" />} deltaLabel="hochgerechnet vs. Q2" />
         <StatTile label="Aktive Zuweiser" value={fmt.num(REFERRERS.length)} accent="var(--series-3)" deltaLabel="3 A-Zuweiser = 58 % des Volumens · Q3-Werte sind Quartal bis dato" />

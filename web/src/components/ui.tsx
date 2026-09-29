@@ -8,15 +8,15 @@ export function Card({ title, subtitle, action, children, className = '', padded
   return (
     <section className={`card flex flex-col ${className}`}>
       {(title || action) && (
-        <header className="flex items-start justify-between gap-3 px-5 pt-4 pb-2">
-          <div>
-            {title && <h3 className="text-sm font-semibold text-ink-1">{title}</h3>}
-            {subtitle && <p className="text-xs text-ink-3 mt-0.5">{subtitle}</p>}
+        <header className="flex items-start justify-between gap-3 px-4 pt-3 pb-2.5 border-b border-line-1">
+          <div className="min-w-0">
+            {title && <h3 className="text-[13px] font-semibold text-ink-1 leading-tight">{title}</h3>}
+            {subtitle && <p className="text-[11px] text-ink-3 mt-0.5 leading-snug">{subtitle}</p>}
           </div>
           {action && <div className="shrink-0">{action}</div>}
         </header>
       )}
-      <div className={`${padded ? 'px-5 pb-5' : ''} ${title ? '' : padded ? 'pt-5' : ''} flex-1 min-w-0`}>{children}</div>
+      <div className={`${padded ? 'px-4 pb-4' : ''} ${title ? (padded ? 'pt-3' : '') : padded ? 'pt-4' : ''} flex-1 min-w-0`}>{children}</div>
     </section>
   )
 }
@@ -40,15 +40,15 @@ export function StatTile({ label, value, delta, deltaLabel, hint, accent, childr
   label: string; value: ReactNode; delta?: ReactNode; deltaLabel?: string; hint?: string; accent?: string; children?: ReactNode
 }) {
   return (
-    <div className="card px-5 py-4 flex flex-col gap-1 min-w-0 relative overflow-hidden">
-      {accent && <span className="absolute left-0 top-3 bottom-3 w-0.5 rounded-full" style={{ background: accent }} />}
-      <div className="flex items-center gap-1 text-xs text-ink-3">
+    <div className="card px-4 py-3 flex flex-col gap-1 min-w-0 relative overflow-hidden">
+      {accent && <span className="absolute left-0 top-0 bottom-0 w-0.5" style={{ background: accent }} />}
+      <div className="flex items-start gap-1 label leading-snug">
         <span>{label}</span>
-        {hint && <span title={hint} className="text-ink-3/70"><Info size={12} /></span>}
+        {hint && <span title={hint} className="text-ink-3/70"><Info size={11} /></span>}
       </div>
-      <div className="text-2xl font-semibold text-ink-1 leading-tight">{value}</div>
+      <div className="text-[22px] font-semibold text-ink-1 leading-tight tabular tracking-tight">{value}</div>
       {(delta || deltaLabel) && (
-        <div className="flex items-center gap-2 text-xs text-ink-3">
+        <div className="flex items-center gap-2 text-[11px] text-ink-3">
           {delta}
           {deltaLabel && <span>{deltaLabel}</span>}
         </div>
@@ -67,15 +67,15 @@ export function Badge({ children, tone = 'neutral' }: { children: ReactNode; ton
     critical: 'bg-status-critical/15 text-status-critical',
     info: 'bg-series-1/15 text-series-1',
   }
-  return <span className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-medium ${map[tone]}`}>{children}</span>
+  return <span className={`inline-flex items-center gap-1 rounded px-1.5 py-[3px] font-mono uppercase tracking-[0.06em] text-[9.5px] font-medium leading-none ${map[tone]}`}>{children}</span>
 }
 
 export function Avatar({ name, hue, size = 32 }: { name: string; hue: number; size?: number }) {
   const initials = name.replace(/^Dr\.\s*/, '').split(' ').map((p) => p[0]).slice(0, 2).join('')
   return (
     <span
-      className="inline-flex items-center justify-center rounded-full font-semibold text-white shrink-0"
-      style={{ width: size, height: size, fontSize: size * 0.38, background: `hsl(${hue} 45% 42%)` }}
+      className="inline-flex items-center justify-center font-mono font-semibold text-white shrink-0"
+      style={{ width: size, height: size, fontSize: size * 0.36, background: `hsl(${hue} 28% 36%)`, borderRadius: 2 }}
     >
       {initials}
     </span>
@@ -105,8 +105,8 @@ export function ScoreRing({ score, size = 96, stroke = 8, label, prev }: { score
 export function Bar({ value, max = 1, tone = 'var(--series-1)', height = 6 }: { value: number; max?: number; tone?: string; height?: number }) {
   const pct = Math.max(0, Math.min(100, (value / max) * 100))
   return (
-    <div className="w-full rounded-full bg-surface-3 overflow-hidden" style={{ height }}>
-      <div className="h-full rounded-full" style={{ width: `${pct}%`, background: tone }} />
+    <div className="w-full bg-surface-3 overflow-hidden" style={{ height }}>
+      <div className="h-full" style={{ width: `${pct}%`, background: tone }} />
     </div>
   )
 }
@@ -114,7 +114,7 @@ export function Bar({ value, max = 1, tone = 'var(--series-1)', height = 6 }: { 
 export function SectionTitle({ children, sub }: { children: ReactNode; sub?: ReactNode }) {
   return (
     <div className="mb-3">
-      <h2 className="text-base font-semibold text-ink-1">{children}</h2>
+      <h2 className="text-[15px] font-semibold text-ink-1">{children}</h2>
       {sub && <p className="text-xs text-ink-3">{sub}</p>}
     </div>
   )
@@ -125,11 +125,11 @@ export function ChartTooltip({ active, payload, label, formatter }: {
 }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="card px-3 py-2 text-xs shadow-card">
-      <div className="text-ink-3 mb-1">{label}</div>
+    <div className="card px-3 py-2 text-xs shadow-card font-mono">
+      <div className="label mb-1">{label}</div>
       {payload.map((p, i) => (
         <div key={i} className="flex items-center gap-2 text-ink-1">
-          <span className="w-2 h-2 rounded-sm" style={{ background: p.color }} />
+          <span className="w-2 h-2 rounded" style={{ background: p.color }} />
           <span className="text-ink-2">{p.name}</span>
           <span className="ml-auto tabular font-medium">{typeof p.value === 'number' ? (formatter ? formatter(p.value, p.dataKey) : fmt.num(p.value)) : p.value}</span>
         </div>
@@ -143,7 +143,7 @@ export function Legend({ items }: { items: { label: string; color: string }[] })
     <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-2">
       {items.map((i) => (
         <span key={i.label} className="inline-flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-sm" style={{ background: i.color }} />
+          <span className="w-2.5 h-2.5 rounded" style={{ background: i.color }} />
           {i.label}
         </span>
       ))}
@@ -159,12 +159,12 @@ export function Table<T>({ rows, cols, keyOf, onRowClick, dense }: {
   dense?: boolean
 }) {
   return (
-    <div className="overflow-x-auto -mx-5">
-      <table className="w-full text-sm min-w-[560px]">
+    <div className="overflow-x-auto -mx-4">
+      <table className="w-full text-[12.5px] min-w-[560px]">
         <thead>
-          <tr className="text-[11px] uppercase tracking-wide text-ink-3">
+          <tr className="border-b border-line-1">
             {cols.map((c) => (
-              <th key={c.key} className={`font-medium px-5 py-2 ${c.align === 'right' ? 'text-right' : 'text-left'}`} style={{ width: c.width }}>{c.label}</th>
+              <th key={c.key} className={`label font-medium px-4 py-2 ${c.align === 'right' ? 'text-right' : 'text-left'}`} style={{ width: c.width }}>{c.label}</th>
             ))}
           </tr>
         </thead>
@@ -173,7 +173,7 @@ export function Table<T>({ rows, cols, keyOf, onRowClick, dense }: {
             <tr key={keyOf(r)} onClick={onRowClick ? () => onRowClick(r) : undefined}
               className={`border-t border-line-1 ${onRowClick ? 'cursor-pointer hover:bg-surface-2' : ''}`}>
               {cols.map((c) => (
-                <td key={c.key} className={`px-5 ${dense ? 'py-1.5' : 'py-2.5'} ${c.align === 'right' ? 'text-right tabular whitespace-nowrap' : ''}`}>{c.render(r)}</td>
+                <td key={c.key} className={`px-4 ${dense ? 'py-1.5' : 'py-2.5'} ${c.align === 'right' ? 'text-right tabular whitespace-nowrap' : ''}`}>{c.render(r)}</td>
               ))}
             </tr>
           ))}

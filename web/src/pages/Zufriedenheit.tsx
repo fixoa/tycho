@@ -7,7 +7,7 @@ import { fmt } from '../lib/format'
 export default function Zufriedenheit() {
   return (
     <div className="space-y-6">
-      <div><h1 className="text-xl font-semibold">Patientenzufriedenheit (NPS)</h1><p className="text-xs text-ink-3">Import Google-Rezensionen (öffentlich) und Ordicall-SMS-Umfrage nach dem Termin · KI-Themenanalyse · keine Namen</p></div>
+      <div><h1 className="text-[17px] font-semibold tracking-tight">Patientenzufriedenheit (NPS)</h1><p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Import Google-Rezensionen (öffentlich) und Ordicall-SMS-Umfrage nach dem Termin · KI-Themenanalyse · keine Namen</p></div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatTile label="Net Promoter Score" value={NPS.score} accent="var(--series-1)" delta={<Delta value={NPS.score - NPS.prev} />} deltaLabel="vs. Vorquartal · Branchenschnitt Praxen ≈ 40" />
         <StatTile label="Antworten (Quartal)" value={fmt.num(NPS.responses)} accent="var(--series-3)" deltaLabel={NPS.sources.map((s) => `${s.name.split(' ')[0]} ${s.n}`).join(' · ')} />
@@ -43,7 +43,7 @@ export default function Zufriedenheit() {
       <Card title="Stimmen" subtitle="Anonymisierte Beispiele">
         <div className="grid md:grid-cols-3 gap-4">
           {NPS.quotes.map((q, i) => (
-            <div key={i} className="rounded-md bg-surface-2 p-3 text-sm">
+            <div key={i} className="rounded bg-surface-2 p-3 text-sm">
               <div className="flex gap-0.5 mb-1">{Array.from({ length: 5 }, (_, j) => <Star key={j} size={12} className={j < q.rating ? 'text-status-warning fill-status-warning' : 'text-ink-3'} />)}</div>
               <p className="text-ink-2">„{q.text}“</p>
               <div className="text-[11px] text-ink-3 mt-1">{q.source}</div>

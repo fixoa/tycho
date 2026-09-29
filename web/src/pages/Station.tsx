@@ -39,8 +39,8 @@ export default function Station() {
     <div className="space-y-6">
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-xl font-semibold">Tycho Station</h1>
-          <p className="text-xs text-ink-3">Nächtliche Analyse vom {fmt.date(DATA_AS_OF)} · {QUARTER.label} · noch {daysLeft} Tage bis Quartalsende</p>
+          <h1 className="text-[17px] font-semibold tracking-tight">Tycho Station</h1>
+          <p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Nächtliche Analyse vom {fmt.date(DATA_AS_OF)} · {QUARTER.label} · noch {daysLeft} Tage bis Quartalsende</p>
         </div>
         <div className="flex items-center gap-2 text-xs">
           <Badge tone="good"><CheckCircle2 size={12} /> Alle 9 Datenquellen aktuell</Badge>
@@ -49,7 +49,7 @@ export default function Station() {
       </div>
 
       {/* Hero row */}
-      <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-4 items-start">
         <Card title="Efficacy Score" subtitle="Ordination gesamt · kostengewichtet · 4 Wochen">
           <div className="flex items-center gap-5">
             <ScoreRing score={ps.score} prev={ps.prev} size={128} stroke={10} />
@@ -147,7 +147,7 @@ export default function Station() {
           )}
           <div className={personMode ? 'space-y-2' : 'hidden'}>
             {scores.map((s) => (
-              <Link key={s.staff.id} to={`/team/${s.staff.id}`} className="flex items-center gap-3 rounded-md px-2 py-1.5 -mx-2 hover:bg-surface-2">
+              <Link key={s.staff.id} to={`/team/${s.staff.id}`} className="flex items-center gap-3 rounded px-2 py-1.5 -mx-2 hover:bg-surface-2">
                 <span className="w-2 h-2 rounded-full shrink-0" style={{ background: s.score >= 80 ? '#0ca30c' : s.score >= 65 ? '#fab219' : s.score >= 50 ? '#ec835a' : '#d03b3b' }} />
                 <span className="text-sm text-ink-1 w-40 truncate">{s.staff.name}</span>
                 <span className="text-[11px] text-ink-3 w-32 truncate hidden md:inline">{ROLE_LABEL[s.staff.role]}{s.staff.fte < 1 ? ` · ${Math.round(s.staff.fte * 100)} %` : ''}</span>

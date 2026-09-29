@@ -11,7 +11,7 @@ export default function Verordnungen() {
   const saving = PRESCRIBING_OUTLIERS.reduce((a, o) => a + o.saving, 0)
   return (
     <div className="space-y-6">
-      <div><h1 className="text-xl font-semibold">Verordnungs-Monitor</h1><p className="text-xs text-ink-3">Verordnungskosten aus e-Medikation/PVS (read-only) gegen ÖKO-Tool-Richtwerte · Quartal bis dato · keine Patientendaten, nur ATC-Gruppen</p></div>
+      <div><h1 className="text-[17px] font-semibold tracking-tight">Verordnungs-Monitor</h1><p className="label mt-1 normal-case tracking-[0.04em] text-[10.5px]">Verordnungskosten aus e-Medikation/PVS (read-only) gegen ÖKO-Tool-Richtwerte · Quartal bis dato · keine Patientendaten, nur ATC-Gruppen</p></div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatTile label="Verordnungskosten je Patient:in" value={fmt.eur2(avg)} accent="var(--series-1)" delta={<Delta value={avg - 41.2} format={(v) => fmt.eur2(Math.abs(v))} invert />} deltaLabel="vs. Fachgruppen-Richtwert 41,20 €" />
         <StatTile label="Generika-Quote" value={fmt.pct(gen)} accent="var(--series-3)" delta={<Delta value={(gen - 0.79) * 100} format={(v) => fmt.num1(Math.abs(v))} suffix=" Pp." />} deltaLabel="Richtwert 79 %" />

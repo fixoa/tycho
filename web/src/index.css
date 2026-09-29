@@ -1,20 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Palantir/Foundry-inspiriert: Graphit-Skala (kühl), scharfe Kanten, Hairlines, ein Blau. */
 :root {
   color-scheme: dark;
-  --surface-0: #0d0d0d;
-  --surface-1: #1a1a19;
-  --surface-2: #222220;
-  --surface-3: #2c2c2a;
-  --ink-1: #ffffff;
-  --ink-2: #c3c2b7;
-  --ink-3: #898781;
-  --line-1: #2c2c2a;
-  --line-2: #383835;
-  --accent: #3987e5;
-  --series-1: #3987e5;
+  --surface-0: #111418;
+  --surface-1: #1c2127;
+  --surface-2: #252a31;
+  --surface-3: #2f343c;
+  --ink-1: #f6f7f9;
+  --ink-2: #abb3bf;
+  --ink-3: #738091;
+  --line-1: #2f343c;
+  --line-2: #404854;
+  --accent: #4c90f0;
+  --accent-strong: #2d72d2;
+  --series-1: #4c90f0;
   --series-2: #d95926;
   --series-3: #199e70;
   --series-4: #c98500;
@@ -25,21 +28,23 @@
   --seq-100: #cde2fb; --seq-200: #9ec5f4; --seq-300: #6da7ec; --seq-400: #3987e5;
   --seq-500: #256abf; --seq-600: #184f95; --seq-700: #0d366b;
   --div-mid: #383835;
-  --good-text: #0ca30c;
+  --good-text: #32a467;
+  --grid: rgba(255, 255, 255, 0.035);
 }
 
 :root[data-theme='light'] {
   color-scheme: light;
-  --surface-0: #f9f9f7;
-  --surface-1: #fcfcfb;
-  --surface-2: #f3f3f0;
-  --surface-3: #e9e9e4;
-  --ink-1: #0b0b0b;
-  --ink-2: #52514e;
-  --ink-3: #898781;
-  --line-1: #e1e0d9;
-  --line-2: #c3c2b7;
-  --accent: #2a78d6;
+  --surface-0: #edeff2;
+  --surface-1: #f6f7f9;
+  --surface-2: #ffffff;
+  --surface-3: #e5e8eb;
+  --ink-1: #1c2127;
+  --ink-2: #404854;
+  --ink-3: #5f6b7c;
+  --line-1: #d3d8de;
+  --line-2: #c5cbd3;
+  --accent: #2d72d2;
+  --accent-strong: #215db0;
   --series-1: #2a78d6;
   --series-2: #eb6834;
   --series-3: #1baf7a;
@@ -49,50 +54,54 @@
   --series-7: #4a3aa7;
   --series-8: #e34948;
   --div-mid: #f0efec;
-  --good-text: #006300;
+  --good-text: #1c6e42;
+  --grid: rgba(28, 33, 39, 0.05);
 }
 
-html, body, #root {
-  height: 100%;
-}
+html, body, #root { height: 100%; }
 
 body {
   @apply bg-surface-0 text-ink-1 font-sans antialiased;
+  font-size: 13px;
+  letter-spacing: -0.005em;
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--line-2) transparent;
+* { scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+
+/* Blueprint-Raster auf der Seitenebene */
+.plane {
+  background-color: var(--surface-0);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
 
 .card {
-  @apply bg-surface-1 rounded-xl border border-line-1;
+  @apply bg-surface-1 border border-line-1;
+  border-radius: 2px;
 }
 
-.tabular {
-  font-variant-numeric: tabular-nums;
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Uppercase-Mikrolabel mit Tracking (Foundry-Stil) */
+.label {
+  @apply font-mono uppercase text-ink-3;
+  font-size: 10px;
+  letter-spacing: 0.08em;
 }
 
-.recharts-cartesian-grid line {
-  stroke: var(--line-1);
-}
-.recharts-cartesian-axis line, .recharts-cartesian-axis-line {
-  stroke: var(--line-2);
-}
-.recharts-text {
-  fill: var(--ink-3);
-  font-size: 11px;
-}
-.recharts-tooltip-cursor {
-  stroke: var(--line-2);
-}
-.recharts-default-legend {
-  color: var(--ink-2);
-  font-size: 12px;
-}
+.mono { @apply font-mono; font-size: 11.5px; }
 
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
-}
+input[type='range'] { accent-color: var(--accent); }
+
+.recharts-cartesian-grid line { stroke: var(--line-1); }
+.recharts-cartesian-axis line, .recharts-cartesian-axis-line { stroke: var(--line-2); }
+.recharts-text { fill: var(--ink-3); font-size: 10.5px; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+.recharts-tooltip-cursor { stroke: var(--line-2); }
+
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .pulse-dot { animation: none; } }
+
+details > summary::-webkit-details-marker { display: none; }
