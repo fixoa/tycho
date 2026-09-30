@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Map, Scale, Database, ArrowRight } from 'lucide-react'
+import { MapTrifold as Map, Scales as Scale, Database, ArrowRight } from '@phosphor-icons/react'
 import { Panel } from '../components/simple'
 import { Badge } from '../components/ui'
 import { DEADLINES } from './Tarife'
@@ -44,10 +44,10 @@ export default function Landschaft() {
       <Panel icon={<Map size={16} />} title="Systemlandschaft" hint="Alle Datenflüsse sind lesend und laufen auf dem Ordinationsserver; klick auf einen Knoten für Details" action={<div className="flex gap-3 text-[12px] text-ink-2">{[['Quelle', 'src'], ['Tycho-Kern', 'core'], ['Modul', 'mod']].map(([l, k]) => <span key={k} className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-sm" style={{ background: color(k) }} />{l}</span>)}</div>}>
         <div className="overflow-x-auto"><svg viewBox="0 0 780 560" className="w-full min-w-[720px]" role="img" aria-label="Systemlandschaft">
           <defs><marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--line-2)" /></marker></defs>
-          {EDGES.map(([a, b]) => { const A = node(a), B = node(b); const x1 = A.x + A.w, y1 = A.y + 22, x2 = B.x, y2 = B.y + 22; const hl = sel === a || sel === b; return <path key={a + b} d={`M${x1},${y1} C${x1 + 50},${y1} ${x2 - 50},${y2} ${x2},${y2}`} fill="none" stroke={hl ? 'var(--accent)' : 'var(--line-2)'} strokeWidth={hl ? 2 : 1.2} markerEnd="url(#arr)" /> })}
+          {EDGES.map(([a, b]) => { const A = node(a), B = node(b); const x1 = A.x + A.w, y1 = A.y + 22, x2 = B.x, y2 = B.y + 22; const hl = sel === a || sel === b; return <path key={a + b} d={`M${x1},${y1} C${x1 + 50},${y1} ${x2 - 50},${y2} ${x2},${y2}`} fill="none" stroke={hl ? 'var(--accent)' : 'var(--line-2)'} markerEnd="url(#arr)" /> })}
           {NODES.map((n) => (
             <g key={n.id} onClick={() => setSel(sel === n.id ? null : n.id)} className="cursor-pointer">
-              <rect x={n.x} y={n.y} width={n.w} height={44} rx={8} fill="var(--surface-2)" stroke={sel === n.id ? 'var(--accent)' : 'var(--line-2)'} strokeWidth={sel === n.id ? 2 : 1} />
+              <rect x={n.x} y={n.y} width={n.w} height={44} rx={8} fill="var(--surface-2)" stroke={sel === n.id ? 'var(--accent)' : 'var(--line-2)'} />
               <rect x={n.x} y={n.y} width={4} height={44} rx={2} fill={color(n.kind)} />
               <text x={n.x + 12} y={n.y + 18} fontSize="12" fontWeight="600" fill="var(--ink-1)">{n.label}</text>
               <text x={n.x + 12} y={n.y + 33} fontSize="10" fill="var(--ink-3)">{n.sub}</text>

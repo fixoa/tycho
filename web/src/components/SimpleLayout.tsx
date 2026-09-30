@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
-import { Sun, Moon, LogOut, Sparkles, Search, PanelLeft, ChevronsUpDown, X, ChevronRight } from 'lucide-react'
+import { Sun, Moon, SignOut as LogOut, Sparkle as Sparkles, MagnifyingGlass as Search, SidebarSimple as PanelLeft, CaretUpDown as ChevronsUpDown, X, CaretRight as ChevronRight } from '@phosphor-icons/react'
 import { useAuth, isLeader } from '../state/auth'
 import { useConfig } from '../state/config'
 import { useFilters } from '../state/filters'
@@ -12,6 +12,7 @@ import { PeriodPicker, LocationPicker } from './Period'
 import { searchAll } from '../data/search'
 import { fmt } from '../lib/format'
 import { visibleNav, SETTINGS, groupOf, itemOf, type NavGroup } from '../nav'
+import Brand from './Brand'
 
 /*
  * Simple-Oberfläche nach Apple HIG (macOS/iPadOS):
@@ -29,13 +30,13 @@ function Sidebar({ groups, collapsed, onToggle, onNavigate, leader }: { groups: 
   const link = (to: string, label: string, Icon: NavGroup['items'][number]['icon'], hint?: string) => (
     <NavLink key={to} to={to} onClick={onNavigate} title={collapsed ? (hint ?? label) : hint}
       className={({ isActive }) => `flex items-center gap-2.5 h-8 rounded-lg text-[13px] transition-colors ${collapsed ? 'justify-center px-0' : 'px-2'} ${isActive ? 'bg-accent/10 text-accent font-medium' : 'text-ink-2 hover:bg-surface-2 hover:text-ink-1'}`}>
-      <Icon size={16} strokeWidth={1.8} className="shrink-0" />{!collapsed && <span className="truncate">{label}</span>}
+      <Icon size={16} className="shrink-0" />{!collapsed && <span className="truncate">{label}</span>}
     </NavLink>
   )
   return (
     <div className="h-full flex flex-col">
       <div className={`h-14 flex items-center shrink-0 ${collapsed ? 'justify-center' : 'px-4 gap-2'}`}>
-        <span className="font-semibold text-[15px] tracking-tight">{collapsed ? 'T' : 'Tycho'}</span>
+        <Brand size="sm" compact={collapsed} />
         {!collapsed && <span className="text-[11.5px] text-ink-3 truncate" title={PRACTICE.name}>{PRACTICE.name}</span>}
         {!collapsed && <button onClick={onToggle} className="ml-auto p-1 rounded-md text-ink-3 hover:text-ink-1 hover:bg-surface-2 hidden lg:block" title="Seitenleiste einklappen"><PanelLeft size={15} /></button>}
       </div>

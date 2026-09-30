@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Calendar, ChevronDown, MapPin, Check } from 'lucide-react'
+import { Calendar, CaretDown as ChevronDown, MapPin, Check } from '@phosphor-icons/react'
 import { useFilters, PRESETS, COMPARE } from '../state/filters'
 import { fmt } from '../lib/format'
 

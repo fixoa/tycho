@@ -1,5 +1,5 @@
 import { Line, LineChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { Star } from 'lucide-react'
+import { Star } from '@phosphor-icons/react'
 import { Card, ChartTooltip, Delta, StatTile, Bar as MiniBar } from '../components/ui'
 import { NPS } from '../data/extras'
 import { fmt } from '../lib/format'
@@ -23,7 +23,7 @@ export default function Zufriedenheit() {
                 <XAxis dataKey="m" axisLine={false} tickLine={false} />
                 <YAxis domain={[30, 70]} axisLine={false} tickLine={false} />
                 <Tooltip content={<ChartTooltip />} />
-                <Line type="monotone" dataKey="nps" name="NPS" stroke="var(--series-1)" strokeWidth={2} dot={{ r: 4 }} isAnimationActive={false} />
+                <Line type="monotone" dataKey="nps" name="NPS" stroke="var(--series-1)" dot={{ r: 4 }} isAnimationActive={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -33,7 +33,7 @@ export default function Zufriedenheit() {
             {NPS.themes.map((t) => (
               <div key={t.theme}>
                 <div className="flex justify-between text-xs mb-0.5"><span className="text-ink-1">{t.theme} <span className="text-ink-3">· {t.n}</span></span><span className="tabular text-ink-3">{fmt.pct(t.sentiment)} <Delta value={t.delta * 100} format={(v) => fmt.num(Math.abs(v))} suffix=" Pp." /></span></div>
-                <MiniBar value={t.sentiment} tone={t.sentiment >= 0.75 ? '#4fb3a8' : t.sentiment >= 0.5 ? '#b9bb5f' : '#d9834a'} height={5} />
+                <MiniBar value={t.sentiment} tone={t.sentiment >= 0.75 ? 'var(--good)' : t.sentiment >= 0.5 ? 'var(--warn)' : 'var(--bad)'} height={5} />
               </div>
             ))}
           </div>

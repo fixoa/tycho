@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Users, UserSearch, ShieldAlert, CheckCircle2, Lock } from 'lucide-react'
+import { Users, UserFocus as UserSearch, ShieldWarning as ShieldAlert, CheckCircle as CheckCircle2, Lock } from '@phosphor-icons/react'
 import { useAuth, isAdmin } from '../state/auth'
 import { useConfig, DEFAULT_MODULES, type AnalysisMode } from '../state/config'
 import { Badge } from '../components/ui'

@@ -1,4 +1,4 @@
-import { ArrowRight, TrendingUp, ReceiptText, CalendarCheck, Users, Stethoscope, FileText } from 'lucide-react'
+import { ArrowRight, TrendUp as TrendingUp, Receipt as ReceiptText, CalendarCheck, Users, Stethoscope, FileText } from '@phosphor-icons/react'
 import { useAuth } from '../state/auth'
 import { useAssistant } from '../state/assistant'
 import { AssistantPrompt, Orb } from '../components/Assistant'

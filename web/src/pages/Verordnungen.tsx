@@ -24,7 +24,7 @@ export default function Verordnungen() {
             <Table rows={PRESCRIBING} keyOf={(p) => p.staffId} dense cols={[
               { key: 'n', label: 'Ärzt:in', render: (p) => { const s = staffById(p.staffId)!; return <div className="flex items-center gap-2"><Avatar name={s.name} hue={s.avatarHue} size={24} /><span className="text-ink-1 whitespace-nowrap">{s.name}</span></div> } },
               { key: 'c', label: '€ / Patient:in', align: 'right', render: (p) => <span className={p.costPerPatient > p.peer * 1.15 ? 'text-status-warning' : ''}>{fmt.eur2(p.costPerPatient)}</span> },
-              { key: 'g', label: 'Generika', render: (p) => <div className="flex items-center gap-2 w-32"><MiniBar value={p.genericRate} tone={p.genericRate >= 0.79 ? '#4fb3a8' : '#b9bb5f'} height={5} /><span className="text-xs tabular">{fmt.pct(p.genericRate)}</span></div> },
+              { key: 'g', label: 'Generika', render: (p) => <div className="flex items-center gap-2 w-32"><MiniBar value={p.genericRate} tone={p.genericRate >= 0.79 ? 'var(--good)' : 'var(--warn)'} height={5} /><span className="text-xs tabular">{fmt.pct(p.genericRate)}</span></div> },
               { key: 'o', label: 'Ausreißer', align: 'right', render: (p) => p.outliers },
               { key: 'a', label: 'Top-ATC', render: (p) => <span className="text-xs text-ink-2">{p.topAtc}</span> },
             ]} />

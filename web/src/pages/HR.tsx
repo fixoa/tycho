@@ -1,6 +1,6 @@
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell } from 'recharts'
 import { Link } from 'react-router-dom'
-import { Users, Coins, Timer, Activity, HeartPulse, CalendarOff, Plug, AlertTriangle, ArrowRight } from 'lucide-react'
+import { Users, Coins, Timer, Pulse as Activity, Heartbeat as HeartPulse, CalendarX as CalendarOff, Plug, Warning as AlertTriangle, ArrowRight } from '@phosphor-icons/react'
 import { Kpi, Panel, BarTable, Pill } from '../components/simple'
 import { ChartTooltip, Legend, Badge, Bar as MiniBar, Avatar } from '../components/ui'
 import { useData, pctDelta } from '../data/aggregate'
@@ -70,8 +70,8 @@ export default function HRPage() {
                 <Tooltip content={<ChartTooltip formatter={(v) => fmt.pct1(v)} />} />
                 <ReferenceLine y={avgQuote} stroke="var(--ink-3)" strokeDasharray="4 4" label={{ value: `Ø ${fmt.pct1(avgQuote)}`, position: 'right', fill: 'var(--ink-2)', fontSize: 12 }} />
                 <ReferenceLine y={0.28} stroke="var(--bad-text)" strokeDasharray="2 4" label={{ value: 'Richtwert 28 %', position: 'insideTopRight', fill: 'var(--bad-text)', fontSize: 11 }} />
-                <Line type="monotone" dataKey="quoteAll" name="inkl. Ärzt:innen" stroke="var(--series-1)" strokeDasharray="3 3" strokeWidth={1.5} dot={false} isAnimationActive={false} />
-                <Line type="monotone" dataKey="quote" name="ohne Ärzt:innen" stroke="var(--series-1)" strokeWidth={2.2} dot={{ r: 3 }} isAnimationActive={false} />
+                <Line type="monotone" dataKey="quoteAll" name="inkl. Ärzt:innen" stroke="var(--series-1)" strokeDasharray="3 3" dot={false} isAnimationActive={false} />
+                <Line type="monotone" dataKey="quote" name="ohne Ärzt:innen" stroke="var(--series-1)" dot={{ r: 3 }} isAnimationActive={false} />
               </LineChart>
             </ResponsiveContainer>
           </div>

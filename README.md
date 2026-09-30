@@ -15,7 +15,7 @@
 
 | | Simple (Standard) | Advanced |
 |---|---|---|
-| Für wen | Ordinationsleitung im Alltag | Analyse, Kontrolle, „Cockpit“ |
+| Für wen | Ordinationsleitung im Alltag | Analyse, Kontrolle, „Station“ |
 | Aufbau | **Seitenleiste** mit fünf Bereichen (Überblick · Praxis · Finanzen · Team · Systeme), Toolbar mit Ort, Suche, Standort, Zeitraum und **Assistent als Seitenpanel** | Modulleiste mit denselben fünf Bereichen, Sub-Header mit den Seiten des Bereichs, Ansichts-Tabs und Filtern, **Facetten-Sidebar**, KPI-Leiste, Donuts, Zeitachse (Palantir-Gotham-Stil) |
 | Startseite | Begrüßung + Frage an den Assistenten + Vorschläge + „Ihre Daten sind aktuell“ | Tycho Station |
 | Login | ruhige Karte | animierter Globus |

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { Wind, AlertTriangle, Sparkles, Lock, CalendarOff, Clock } from 'lucide-react'
+import { Wind, Warning as AlertTriangle, Sparkle as Sparkles, Lock, CalendarX as CalendarOff, Clock } from '@phosphor-icons/react'
 import { Badge, Card, ChartTooltip, Delta, StatTile, Table, Bar as MiniBar, Avatar } from '../components/ui'
 import { invoices, tailwindSummary, HR, type Invoice } from '../data/tailwind'
 import { STAFF, ROLE_LABEL, staffById } from '../data/staff'
@@ -70,7 +70,7 @@ export default function Tailwind() {
                 {s.byKind.map((k) => (
                   <div key={k.kind}>
                     <div className="flex justify-between text-xs mb-0.5"><span className="text-ink-1">{k.kind}</span><span className="tabular text-ink-3">{fmt.pct(k.quote)} bezahlt · {fmt.eur(k.open)} offen</span></div>
-                    <MiniBar value={k.quote} tone={k.quote >= 0.85 ? '#4fb3a8' : k.quote >= 0.7 ? '#b9bb5f' : '#d9834a'} height={5} />
+                    <MiniBar value={k.quote} tone={k.quote >= 0.85 ? 'var(--good)' : k.quote >= 0.7 ? 'var(--warn)' : 'var(--bad)'} height={5} />
                   </div>
                 ))}
               </div>

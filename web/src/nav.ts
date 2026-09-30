@@ -1,10 +1,7 @@
 import type { ComponentType } from 'react'
-import {
-  Home, Mail, TrendingUp, Users, Stethoscope, CalendarClock, Share2, Pill, ClipboardCheck, Smile, Wallet, ClipboardList, Wind,
-  Gauge, UserCircle, Phone, Mic, Landmark, ShieldCheck, Activity, Settings, Briefcase, Cpu, LayoutGrid,
-} from 'lucide-react'
+import { House as Home, Envelope as Mail, TrendUp as TrendingUp, Users, Stethoscope, CalendarDots as CalendarClock, ShareNetwork as Share2, Pill, ListChecks as ClipboardCheck, Smiley as Smile, Wallet, ClipboardText as ClipboardList, Wind, Gauge, UserCircle, Phone, Microphone as Mic, Bank as Landmark, ShieldCheck, Pulse as Activity, Gear as Settings, Briefcase, Cpu, SquaresFour as LayoutGrid } from '@phosphor-icons/react'
 
-export type Icon = ComponentType<{ size?: number; strokeWidth?: number; className?: string }>
+export type Icon = ComponentType<{ size?: number; className?: string; weight?: 'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone' }>
 export interface NavItem { to: string; label: string; icon: Icon; module?: string; leader?: boolean; hint?: string }
 export interface NavGroup { key: string; label: string; icon: Icon; items: NavItem[] }
 
@@ -18,7 +15,7 @@ export interface NavGroup { key: string; label: string; icon: Icon; items: NavIt
 export const NAV: NavGroup[] = [
   { key: 'ueberblick', label: 'Überblick', icon: Home, items: [
     { to: '/start', label: 'Start', icon: Home, leader: true },
-    { to: '/station', label: 'Cockpit', icon: Activity, leader: true, hint: 'Tycho Station' },
+    { to: '/station', label: 'Station', icon: Activity, leader: true, hint: 'Tycho Station' },
     { to: '/prognose', label: 'Prognose', icon: TrendingUp, leader: true },
     { to: '/digest', label: 'Digest', icon: Mail, leader: true },
   ] },

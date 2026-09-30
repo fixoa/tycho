@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
 // Gotham-Hero: nah gesehene Erdkugel, dunkle Landmassen mit feinen Grenzen, dichter
-// Punktgürtel (oliv/rot/türkis/weiß), statische Tracking-Marker, sehr langsame Drehung.
+// Punktgürtel (teal/hellblau/weiß, wenige Korallpunkte), statische Tracking-Marker, sehr langsame Drehung.
 // Dazu: zwei feine Orbits mit langsam wandernden Satelliten, ein ruhiger Radar-Sweep,
 // minimale Parallaxe zur Maus. Alles lokal im Canvas – keine externen Assets.
 
@@ -43,9 +43,9 @@ const rotX = ([x, y, z]: V3, a: number): V3 => [x, y * Math.cos(a) - z * Math.si
 interface Dot { v: V3; r: number; c: string; s: number; w: number }
 const PALETTE = {
   dark: {
-    body: '#0c1014', land: '#1f262d', coast: 'rgba(96,110,124,0.7)', border: 'rgba(96,110,124,0.5)', rimA: 'rgba(120,150,180,0)', rimB: 'rgba(120,150,180,0.14)', rimC: 'rgba(120,150,180,0.5)',
-    edge: 'rgba(160,190,215,0.35)', marker: 'rgba(200,210,220,0.55)', markerFill: 'rgba(200,210,220,0.8)', text: 'rgba(230,232,234,0.7)', orbit: 'rgba(160,190,215,0.22)', sat: '#e6e8ea', sweep: 'rgba(79,179,168,',
-    belt: ['#b9bb5f', '#b9bb5f', '#b9bb5f', '#b9bb5f', '#c9cb6e', '#d64545', '#d64545', '#4fb3a8', '#e6e8ea', '#e6e8ea'], surface: ['#d64545', '#b9bb5f', '#4fb3a8'], vignette: 'rgba(0,0,0,0.55)',
+    body: '#243342', land: '#3A4D61', coast: 'rgba(96,110,124,0.7)', border: 'rgba(96,110,124,0.5)', rimA: 'rgba(120,150,180,0)', rimB: 'rgba(120,150,180,0.14)', rimC: 'rgba(120,150,180,0.5)',
+    edge: 'rgba(160,190,215,0.35)', marker: 'rgba(200,210,220,0.55)', markerFill: 'rgba(200,210,220,0.8)', text: 'rgba(230,232,234,0.7)', orbit: 'rgba(160,190,215,0.22)', sat: '#ffffff', sweep: 'rgba(45,212,191,',
+    belt: ['var(--warn)', 'var(--warn)', 'var(--warn)', 'var(--warn)', '#c9cb6e', '#F43F5E', '#F43F5E', '#2DD4BF', '#ffffff', '#ffffff'], surface: ['#F43F5E', 'var(--warn)', '#2DD4BF'], vignette: 'rgba(15,25,35,0.6)',
   },
   light: {
     body: '#f1f2f4', land: '#d7dae0', coast: 'rgba(120,128,140,0.55)', border: 'rgba(120,128,140,0.35)', rimA: 'rgba(47,111,228,0)', rimB: 'rgba(47,111,228,0.06)', rimC: 'rgba(47,111,228,0.28)',

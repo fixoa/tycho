@@ -1,9 +1,6 @@
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useState, type ComponentType } from 'react'
-import {
-  Users, LogOut, Sun, Moon, Search, ChevronDown, ChevronsLeft, ChevronsRight, Upload, Download, Bell,
-  LayoutGrid, Table2, BarChart3, Clock, List, SlidersHorizontal,
-} from 'lucide-react'
+import { Users, SignOut as LogOut, Sun, Moon, MagnifyingGlass as Search, CaretDown as ChevronDown, CaretDoubleLeft as ChevronsLeft, CaretDoubleRight as ChevronsRight, UploadSimple as Upload, DownloadSimple as Download, Bell, SquaresFour as LayoutGrid, Table as Table2, ChartBar as BarChart3, Clock, ListBullets as List, Sliders as SlidersHorizontal } from '@phosphor-icons/react'
 import { visibleNav, groupOf, itemOf } from '../nav'
 import { useAuth, isLeader } from '../state/auth'
 import { useConfig } from '../state/config'
@@ -12,12 +9,13 @@ import { useAssistant } from '../state/assistant'
 import Assistant from './Assistant'
 import { PeriodPicker, Choice, ROLE_OPTS, PAYER_OPTS, TEAM_OPTS } from './Period'
 import { searchAll } from '../data/search'
-import { Sparkles } from 'lucide-react'
+import { Sparkle as Sparkles } from '@phosphor-icons/react'
+import Brand from './Brand'
 import { DATA_AS_OF, PRACTICE, QUARTER } from '../data/mock'
 import { fmt } from '../lib/format'
 import { Avatar } from './ui'
 
-type Icon = ComponentType<{ size?: number; strokeWidth?: number; className?: string }>
+type Icon = ComponentType<{ size?: number; className?: string; weight?: 'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone' }>
 
 /*
  * Modulleiste nach Apple HIG: 5 Bereiche (Überblick · Praxis · Finanzen · Team · Systeme)
@@ -117,14 +115,14 @@ export default function Layout() {
     <div className="h-full flex flex-col bg-surface-0">
       {/* Modulleiste */}
       <header className="h-14 shrink-0 bg-bar-0 flex items-center px-2 gap-1 border-b border-line-1">
-        <div className="flex items-center pl-3 pr-4 mr-1 border-r border-line-1 h-9"><span className="font-medium tracking-tight text-[15px] text-ink-1">Tycho</span></div>
+        <div className="flex items-center pl-3 pr-4 mr-1 border-r border-line-1 h-9"><Brand size="sm" /></div>
         <nav className="flex items-stretch gap-0.5 overflow-x-auto">
           {groups.map((g) => {
             const active = group?.key === g.key
             return (
               <button key={g.key} onClick={() => { setTab(0); nav(g.items[0].to) }} title={g.items.map((i) => i.label).join(' · ')}
                 className={`flex flex-col items-center justify-center w-[66px] h-11 rounded ${active ? 'text-ink-1 bg-surface-2' : 'text-ink-3 hover:text-ink-1 hover:bg-surface-2'}`}>
-                <g.icon size={17} strokeWidth={1.7} />
+                <g.icon size={17} />
                 <span className="text-[9.5px] mt-1 leading-none whitespace-nowrap">{g.label}</span>
               </button>
             )

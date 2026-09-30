@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Bar, BarChart, CartesianGrid, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis, Cell } from 'recharts'
-import { Coins, CreditCard, Landmark, AlertTriangle, BarChart3 } from 'lucide-react'
+import { Coins, CreditCard, Bank as Landmark, Warning as AlertTriangle, ChartBar as BarChart3 } from '@phosphor-icons/react'
 import { useData, pctDelta } from '../data/aggregate'
 import { Kpi, Panel } from '../components/simple'
 import { ChartTooltip, Legend } from '../components/ui'

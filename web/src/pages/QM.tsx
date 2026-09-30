@@ -1,4 +1,4 @@
-import { CheckCircle2, AlertTriangle, XCircle } from 'lucide-react'
+import { CheckCircle as CheckCircle2, Warning as AlertTriangle, XCircle } from '@phosphor-icons/react'
 import { Badge, Card, StatTile, Table } from '../components/ui'
 import { QM, type QmItem } from '../data/extras'
 import { staffById } from '../data/staff'

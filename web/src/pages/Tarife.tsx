@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AlertTriangle, BookOpen, Search, CalendarClock, CheckCircle2, ShieldAlert } from 'lucide-react'
+import { Warning as AlertTriangle, BookOpen, MagnifyingGlass as Search, CalendarDots as CalendarClock, CheckCircle as CheckCircle2, ShieldWarning as ShieldAlert } from '@phosphor-icons/react'
 import { Panel, Kpi, Pill } from '../components/simple'
 import { Badge, Bar as MiniBar } from '../components/ui'
 import { useData } from '../data/aggregate'

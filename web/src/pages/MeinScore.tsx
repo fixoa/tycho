@@ -1,4 +1,4 @@
-import { Info, Lock, ShieldCheck } from 'lucide-react'
+import { Info, Lock, ShieldCheck } from '@phosphor-icons/react'
 import { Avatar, Card, ScoreRing, Bar as MiniBar, StatTile, Badge } from '../components/ui'
 import { useAuth, isLeader } from '../state/auth'
 import { usePersonMode } from '../state/config'
@@ -52,7 +52,7 @@ export default function MeinScore() {
               return (
                 <div key={c.key}>
                   <div className="flex justify-between text-xs mb-1"><span className="text-ink-1 inline-flex items-center gap-1" title={c.hint}>{c.label} <Info size={10} className="text-ink-3" /></span><span className="text-ink-3 tabular">{show(c.value)} / {c.invert ? '≤ ' : ''}{show(c.target)} · <span className="text-ink-1">{pct} %</span></span></div>
-                  <MiniBar value={pct} max={100} tone={pct >= 90 ? '#4fb3a8' : pct >= 70 ? '#b9bb5f' : '#d9834a'} height={5} />
+                  <MiniBar value={pct} max={100} tone={pct >= 90 ? 'var(--good)' : pct >= 70 ? 'var(--warn)' : 'var(--bad)'} height={5} />
                 </div>
               )
             })}

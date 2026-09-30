@@ -34,8 +34,8 @@ export default {
         },
         status: {
           good: 'var(--good-text)',
-          warning: '#e0a100',
-          serious: '#e06a2c',
+          warning: 'var(--warn-text)',
+          serious: 'var(--serious-text)',
           critical: 'var(--bad-text)',
         },
       },

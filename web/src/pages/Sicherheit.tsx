@@ -1,4 +1,4 @@
-import { CheckCircle2, ShieldCheck, Lock, Eye, Database, KeyRound, FileCheck2, AlertTriangle, XCircle } from 'lucide-react'
+import { CheckCircle as CheckCircle2, ShieldCheck, Lock, Eye, Database, Key as KeyRound, FileMagnifyingGlass as FileCheck2, Warning as AlertTriangle, XCircle } from '@phosphor-icons/react'
 import { Badge, Card, Table } from '../components/ui'
 import { AUDIT_LOG, DATA_SOURCES, PRACTICE } from '../data/mock'
 import { STAFF } from '../data/staff'

@@ -16,6 +16,8 @@ interface AuthCtx {
   login: (accountOrId: string, method: Session['method']) => boolean
   logout: () => void
   theme: 'dark' | 'light'
+  themeMode: 'dark' | 'light' | 'system'
+  setTheme: (m: 'dark' | 'light' | 'system') => void
   toggleTheme: () => void
 }
 
@@ -33,17 +35,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return null
     }
   })
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    try {
-      return (localStorage.getItem('tycho.theme') as 'dark' | 'light') || (localStorage.getItem('tycho.ui') === 'advanced' ? 'dark' : 'light')
-    } catch {
-      return 'light'
-    }
+  // Design folgt der Systemeinstellung (prefers-color-scheme), solange nichts explizit gewählt wurde
+  const systemTheme = (): 'dark' | 'light' => (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+  const [themeMode, setThemeMode] = useState<'dark' | 'light' | 'system'>(() => {
+    try { const s = localStorage.getItem('tycho.theme'); return s === 'dark' || s === 'light' ? s : 'system' } catch { return 'system' }
   })
+  const [sys, setSys] = useState<'dark' | 'light'>(systemTheme)
+  useEffect(() => {
+    const mq = window.matchMedia?.('(prefers-color-scheme: dark)')
+    if (!mq) return
+    const h = () => setSys(systemTheme())
+    mq.addEventListener('change', h)
+    return () => mq.removeEventListener('change', h)
+  }, [])
+  const theme = themeMode === 'system' ? sys : themeMode
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
-    try { localStorage.setItem('tycho.theme', theme) } catch { /* ignore */ }
-  }, [theme])
+    try { if (themeMode === 'system') localStorage.removeItem('tycho.theme'); else localStorage.setItem('tycho.theme', themeMode) } catch { /* ignore */ }
+  }, [theme, themeMode])
 
   const value = useMemo<AuthCtx>(() => ({
     session,
@@ -62,8 +71,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       try { sessionStorage.removeItem('tycho.session') } catch { /* ignore */ }
     },
     theme,
-    toggleTheme: () => setTheme((t) => (t === 'dark' ? 'light' : 'dark')),
-  }), [session, theme])
+    themeMode,
+    setTheme: setThemeMode,
+    toggleTheme: () => setThemeMode(theme === 'dark' ? 'light' : 'dark'),
+  }), [session, theme, themeMode])
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }

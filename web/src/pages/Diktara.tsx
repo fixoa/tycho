@@ -41,7 +41,7 @@ export default function Diktara() {
         <Card title="Nutzung je Ärzt:in" subtitle="Adoption, Zeitersparnis und Qualität der Zusammenfassungen">
           <Table rows={perDoc} keyOf={(r) => r.doc.id} cols={[
             { key: 'doc', label: 'Ärzt:in', render: (r) => <div className="flex items-center gap-2"><Avatar name={r.doc.name} hue={r.doc.avatarHue} size={26} /><span className="text-ink-1 whitespace-nowrap">{r.doc.name}</span></div> },
-            { key: 'share', label: 'Nutzung', render: (r) => <div className="flex items-center gap-2 w-36"><MiniBar value={r.share} tone={r.share >= 0.7 ? '#4fb3a8' : r.share >= 0.4 ? '#b9bb5f' : '#d9834a'} height={5} /><span className="tabular text-xs">{fmt.pct(r.share)}</span></div> },
+            { key: 'share', label: 'Nutzung', render: (r) => <div className="flex items-center gap-2 w-36"><MiniBar value={r.share} tone={r.share >= 0.7 ? 'var(--good)' : r.share >= 0.4 ? 'var(--warn)' : 'var(--bad)'} height={5} /><span className="tabular text-xs">{fmt.pct(r.share)}</span></div> },
             { key: 'rec', label: 'Aufnahmen', align: 'right', render: (r) => fmt.num(r.recordings) },
             { key: 'saved', label: 'Gespart', align: 'right', render: (r) => fmt.minutes(r.saved) },
             { key: 'acc', label: 'Akzeptanz', align: 'right', render: (r) => fmt.pct(r.acc) },

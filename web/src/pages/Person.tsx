@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { ArrowLeft, Info, Lock } from 'lucide-react'
+import { ArrowLeft, Info, Lock } from '@phosphor-icons/react'
 import { Avatar, Badge, Card, ChartTooltip, ScoreRing, Bar as MiniBar, StatTile } from '../components/ui'
 import { staffScores, componentPct } from '../data/score'
 import { ROLE_LABEL } from '../data/staff'
@@ -77,7 +77,7 @@ export default function Person() {
                         <span className="text-ink-1 inline-flex items-center gap-1" title={c.hint}>{c.label} <Info size={10} className="text-ink-3" /></span>
                         <span className="text-ink-3 tabular">{show(c.value)} <span className="text-ink-3/60">/ {c.invert ? '≤ ' : ''}{show(c.target)}</span> · <span className="text-ink-1">{pct} %</span> · {Math.round(c.weight * 100)} % Gewicht</span>
                       </div>
-                      <MiniBar value={pct} max={100} tone={pct >= 90 ? '#4fb3a8' : pct >= 70 ? '#b9bb5f' : '#d9834a'} height={5} />
+                      <MiniBar value={pct} max={100} tone={pct >= 90 ? 'var(--good)' : pct >= 70 ? 'var(--warn)' : 'var(--bad)'} height={5} />
                       <div className="text-[10px] text-ink-3 mt-0.5">{c.hint}</div>
                     </div>
                   )
@@ -109,7 +109,7 @@ export default function Person() {
                         <XAxis dataKey="label" interval={3} axisLine={false} tickLine={false} />
                         <YAxis axisLine={false} tickLine={false} tickFormatter={(v) => fmt.k(v)} />
                         <Tooltip content={<ChartTooltip formatter={(v) => fmt.eur(v)} />} />
-                        <Area type="monotone" dataKey="revenue" name="Verrechnet" stroke="var(--series-1)" fill="var(--series-1)" fillOpacity={0.15} strokeWidth={2} isAnimationActive={false} />
+                        <Area type="monotone" dataKey="revenue" name="Verrechnet" stroke="var(--series-1)" fill="var(--series-1)" fillOpacity={0.15} isAnimationActive={false} />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>

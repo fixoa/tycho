@@ -1,4 +1,4 @@
-import { Stethoscope, Timer, Headphones, Inbox, PhoneCall, MessageSquare } from 'lucide-react'
+import { Stethoscope, Timer, Headphones, Tray as Inbox, PhoneCall, ChatText as MessageSquare } from '@phosphor-icons/react'
 import { useData, pctDelta } from '../data/aggregate'
 import { Kpi, Panel, BarTable } from '../components/simple'
 import { usePersonMode } from '../state/config'

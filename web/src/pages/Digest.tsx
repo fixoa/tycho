@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Mail, Download, Lock, CalendarDays, CheckCircle2, AlertTriangle, TrendingUp } from 'lucide-react'
+import { Envelope as Mail, DownloadSimple as Download, Lock, CalendarDots as CalendarDays, CheckCircle as CheckCircle2, Warning as AlertTriangle, TrendUp as TrendingUp } from '@phosphor-icons/react'
 import { Badge, Card } from '../components/ui'
 import { BILLING_FINDINGS, PREV_QUARTER, QUARTER, demo } from '../data/mock'
 import { practiceScore, staffScores } from '../data/score'

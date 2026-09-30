@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tycho CI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: schmale Inhaltsspalte (max 1080px), links ein klebendes Inhaltsverzeichnis ab 1100px,
+   Komponenten immer in zwei Rahmen (hell / dunkel) nebeneinander. Die Seite benutzt die CI selbst. */
+:root {
+  color-scheme: light;
+  --bg: #F8FAFC; --bg-1: #FFFFFF; --bg-2: #F1F5F9; --bg-3: #E2E8F0;
+  --fg: #1E293B; --fg-2: #475569; --fg-3: #64748B;
+  --line: #E2E8F0; --line-2: #CBD5E1;
+  --teal: #0F766E; --teal-soft: #CCFBF1;
+  --ai: #0F766E; --ai-fg: #FFFFFF; --user: #F1F5F9; --user-fg: #1E293B;
+  --ok: #10B981; --ok-text: #059669; --ok-bg: #D1FAE5;
+  --warn: #FBBF24; --warn-text: #B45309; --warn-bg: #FEF3C7;
+  --bad: #F43F5E; --bad-text: #E11D48; --bad-bg: #FFE4E6;
+  --radius: 14px; --shadow: 0 1px 2px rgba(30,41,59,.04), 0 8px 24px -12px rgba(30,41,59,.12);
+  --display: "Inter Tight", Inter, system-ui, sans-serif; --sans: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  color-scheme: dark;
+  --bg: #2A3B4C; --bg-1: #34475A; --bg-2: #3E5266; --bg-3: #4A6076;
+  --fg: #FFFFFF; --fg-2: #CBD5E1; --fg-3: #94A3B8;
+  --line: #3C4F63; --line-2: #4E637A;
+  --teal: #2DD4BF; --teal-soft: #1F5257;
+  --ai: #2DD4BF; --ai-fg: #0B1F2B; --user: #475569; --user-fg: #FFFFFF;
+  --ok-text: #34D399; --ok-bg: rgba(16,185,129,.18);
+  --warn-text: #FCD34D; --warn-bg: rgba(251,191,36,.18);
+  --bad-text: #FB7185; --bad-bg: rgba(244,63,94,.18);
+  --shadow: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px -12px rgba(0,0,0,.45);
+} }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #2A3B4C; --bg-1: #34475A; --bg-2: #3E5266; --bg-3: #4A6076;
+  --fg: #FFFFFF; --fg-2: #CBD5E1; --fg-3: #94A3B8;
+  --line: #3C4F63; --line-2: #4E637A;
+  --teal: #2DD4BF; --teal-soft: #1F5257;
+  --ai: #2DD4BF; --ai-fg: #0B1F2B; --user: #475569; --user-fg: #FFFFFF;
+  --ok-text: #34D399; --ok-bg: rgba(16,185,129,.18);
+  --warn-text: #FCD34D; --warn-bg: rgba(251,191,36,.18);
+  --bad-text: #FB7185; --bad-bg: rgba(244,63,94,.18);
+  --shadow: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px -12px rgba(0,0,0,.45);
+}
+/* Rahmen mit festem Modus (für Nebeneinander-Darstellung) */
+.frame-light { color-scheme: light; --bg: #F8FAFC; --bg-1: #FFFFFF; --bg-2: #F1F5F9; --bg-3: #E2E8F0; --fg: #1E293B; --fg-2: #475569; --fg-3: #64748B; --line: #E2E8F0; --line-2: #CBD5E1; --teal: #0F766E; --teal-soft: #CCFBF1; --ai: #0F766E; --ai-fg: #FFFFFF; --user: #F1F5F9; --user-fg: #1E293B; --ok-text: #059669; --ok-bg: #D1FAE5; --warn-text: #B45309; --warn-bg: #FEF3C7; --bad-text: #E11D48; --bad-bg: #FFE4E6; --shadow: 0 1px 2px rgba(30,41,59,.04), 0 8px 24px -12px rgba(30,41,59,.12); }
+.frame-dark { color-scheme: dark; --bg: #2A3B4C; --bg-1: #34475A; --bg-2: #3E5266; --bg-3: #4A6076; --fg: #FFFFFF; --fg-2: #CBD5E1; --fg-3: #94A3B8; --line: #3C4F63; --line-2: #4E637A; --teal: #2DD4BF; --teal-soft: #1F5257; --ai: #2DD4BF; --ai-fg: #0B1F2B; --user: #475569; --user-fg: #FFFFFF; --ok-text: #34D399; --ok-bg: rgba(16,185,129,.18); --warn-text: #FCD34D; --warn-bg: rgba(251,191,36,.18); --bad-text: #FB7185; --bad-bg: rgba(244,63,94,.18); --shadow: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px -12px rgba(0,0,0,.45); }
+.frame-adv { --radius: 2px; --shadow: none; --bg: #2A3B4C; --bg-1: #304254; --bg-2: #384B5F; --bg-3: #42566B; --line: #3A4D61; --line-2: #4C6178; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 24px 80px; padding-inline: 20px; }
+@media (min-width: 1100px) { .wrap { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 48px; } }
+.toc { display: none; }
+@media (min-width: 1100px) { .toc { display: block; position: sticky; top: 24px; align-self: start; font-size: 13px; } }
+.toc a { display: block; color: var(--fg-3); text-decoration: none; padding: 4px 0; border-left: 2px solid transparent; padding-left: 10px; }
+.toc a:hover { color: var(--fg); }
+.toc a.on { color: var(--teal); border-color: var(--teal); }
+main { min-width: 0; }
+header.top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-bottom: 20px; border-bottom: 1px solid var(--line); margin-bottom: 36px; }
+.wordmark { font: 600 22px/1 var(--sans); letter-spacing: -0.02em; }
+.meta { color: var(--fg-3); font-size: 13px; }
+.toggle { margin-left: auto; display: inline-flex; border: 1px solid var(--line-2); border-radius: 10px; overflow: hidden; }
+.toggle button { background: var(--bg-1); color: var(--fg-2); border: 0; padding: 6px 10px; font: 500 12.5px var(--sans); cursor: pointer; }
+.toggle button + button { border-left: 1px solid var(--line-2); }
+.toggle button.on { background: var(--teal); color: #fff; }
+h1 { font: 500 clamp(30px, 4.5vw, 44px)/1.05 var(--display); letter-spacing: -0.03em; margin: 0 0 12px; text-wrap: balance; }
+h2 { font: 500 26px/1.2 var(--display); letter-spacing: -0.02em; margin: 56px 0 8px; text-wrap: balance; }
+h3 { font: 600 15px/1.3 var(--sans); margin: 28px 0 10px; }
+.lead { color: var(--fg-2); font-size: 17px; max-width: 62ch; margin: 0 0 8px; }
+p { max-width: 68ch; margin: 0 0 12px; }
+.eyebrow { font: 500 11px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--fg-3); }
+code, .mono { font-family: var(--mono); font-size: 12.5px; }
+code { background: var(--bg-2); border-radius: 5px; padding: 1px 5px; }
+.rule { color: var(--fg-2); }
+.grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+.grid.wide { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.sw { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg-1); }
+.sw .chip { height: 72px; display: flex; align-items: flex-end; padding: 8px 10px; font: 500 12px var(--mono); }
+.sw .body { padding: 10px 12px; font-size: 13px; }
+.sw .body b { display: block; font-weight: 600; }
+.sw .body span { color: var(--fg-3); font-size: 12px; }
+.sw .hex { font-family: var(--mono); font-size: 12px; color: var(--fg-2); }
+.cr { display: inline-block; font: 500 11px var(--mono); padding: 1px 6px; border-radius: 6px; background: var(--bg-2); color: var(--fg-2); margin-left: 4px; }
+.cr.aa { background: var(--ok-bg); color: var(--ok-text); } .cr.lg { background: var(--warn-bg); color: var(--warn-text); } .cr.no { background: var(--bad-bg); color: var(--bad-text); }
+.frames { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.frame { background: var(--bg); color: var(--fg); border: 1px solid var(--line-2); border-radius: 14px; padding: 16px; }
+.frame .cap { font: 500 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--fg-3); margin-bottom: 12px; }
+.stack { display: grid; gap: 12px; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn { display: inline-flex; align-items: center; gap: 6px; font: 500 13px var(--sans); border-radius: 10px; padding: 7px 12px; border: 1px solid var(--line-2); background: var(--bg-1); color: var(--fg); }
+.btn.primary { background: var(--fg); color: var(--bg-1); border-color: transparent; }
+.btn.teal { background: var(--teal); color: #fff; border-color: transparent; }
+.frame-dark .btn.teal, .frame-adv .btn.teal { color: #0B1F2B; }
+.btn.ghost { background: transparent; }
+.frame-adv .btn { border-radius: var(--radius); background: transparent; font-size: 12.5px; padding: 4px 8px; }
+.input { font: 13px var(--sans); border: 1px solid var(--line-2); background: var(--bg-1); color: var(--fg); border-radius: 10px; padding: 7px 10px; width: 100%; }
+.input.focus { border-color: var(--teal); box-shadow: 0 0 0 3px color-mix(in srgb, var(--teal) 22%, transparent); }
+.card { background: var(--bg-1); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px; }
+.kpi .l { font-size: 12px; color: var(--fg-3); display: flex; gap: 6px; align-items: center; }
+.kpi .v { font: 600 26px/1.1 var(--sans); letter-spacing: -0.02em; margin-top: 6px; font-variant-numeric: tabular-nums; }
+.kpi .s { font-size: 12px; color: var(--fg-3); margin-top: 4px; }
+.pill { display: inline-block; font: 500 12px var(--sans); padding: 2px 8px; border-radius: 999px; }
+.pill.ok { background: var(--ok-bg); color: var(--ok-text); } .pill.warn { background: var(--warn-bg); color: var(--warn-text); } .pill.bad { background: var(--bad-bg); color: var(--bad-text); }
+.frame-adv .pill { border-radius: 2px; text-transform: uppercase; font-size: 10.5px; letter-spacing: .06em; }
+.chat { display: grid; gap: 8px; }
+.b { max-width: 85%; padding: 8px 12px; border-radius: 16px; font-size: 13px; line-height: 1.45; }
+.b.user { background: var(--user); color: var(--user-fg); justify-self: end; }
+.b.ai { background: var(--ai); color: var(--ai-fg); }
+.orb { width: 22px; height: 22px; border-radius: 50%; background: linear-gradient(135deg, var(--teal), #5EEAD4); box-shadow: inset -3px -4px 8px rgba(0,0,0,.15), 0 3px 10px rgba(45,212,191,.35); flex: none; }
+.ai-row { display: flex; gap: 8px; align-items: flex-start; }
+.nav { display: grid; gap: 2px; width: 220px; }
+.nav .h { font: 600 11px var(--sans); color: var(--fg-3); padding: 6px 8px 2px; }
+.nav a { display: flex; gap: 10px; align-items: center; padding: 6px 8px; border-radius: 8px; font-size: 13px; color: var(--fg-2); text-decoration: none; }
+.nav a.on { background: color-mix(in srgb, var(--teal) 12%, transparent); color: var(--teal); font-weight: 500; }
+.tabs { display: inline-flex; gap: 2px; background: var(--bg-2); padding: 3px; border-radius: 10px; }
+.tabs span { font: 500 12.5px var(--sans); padding: 4px 10px; border-radius: 8px; color: var(--fg-2); }
+.tabs span.on { background: var(--bg-1); color: var(--fg); box-shadow: var(--shadow); }
+.frame-adv .tabs, .frame-adv .tabs span { border-radius: 2px; }
+.icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.icon-cell { display: grid; justify-items: center; gap: 6px; padding: 10px 4px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-1); font: 11px var(--mono); color: var(--fg-3); text-align: center; }
+.ic { color: var(--fg); }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; font-size: 12px; color: var(--fg-3); }
+td.num { font-variant-numeric: tabular-nums; }
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-1); }
+.dd { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.dd .card { border-left: 3px solid var(--ok); } .dd .card.no { border-left-color: var(--bad); }
+.dd .card b { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+.dd .card.no b { color: var(--bad-text); } .dd .card:not(.no) b { color: var(--ok-text); }
+.dd ul { margin: 0; padding-left: 18px; } .dd li { margin: 4px 0; }
+.type-sample { display: grid; gap: 12px; }
+.type-sample > div { display: grid; grid-template-columns: 110px 1fr; gap: 12px; align-items: baseline; border-bottom: 1px dashed var(--line); padding-bottom: 8px; }
+.type-sample .n { font: 11px var(--mono); color: var(--fg-3); }
+.logo-box { border: 1px dashed var(--line-2); border-radius: 14px; padding: 24px; display: grid; place-items: center; min-height: 140px; background: var(--bg-1); text-align: center; gap: 8px; }
+.logo-box img { max-height: 64px; width: auto; }
+.logo-box[hidden] { display: none; }
+.series { display: flex; gap: 6px; flex-wrap: wrap; }
+.series span { width: 46px; height: 28px; border-radius: 6px; display: grid; place-items: end; font: 10px var(--mono); color: rgba(255,255,255,.85); padding: 3px; }
+.motion { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.motion .card small { color: var(--fg-3); display: block; margin-top: 4px; }
+.demo-rise { display: inline-block; width: 60px; height: 24px; border-radius: 8px; background: var(--teal); animation: rise 1.6s cubic-bezier(.2,.7,.2,1) infinite alternate; }
+@keyframes rise { from { opacity: .2; transform: translateY(6px) } to { opacity: 1; transform: none } }
+@media (prefers-reduced-motion: reduce) { .demo-rise { animation: none } }
+a { color: var(--teal); }
+.foot { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--fg-3); font-size: 12.5px; }
+:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="toc" aria-label="Inhalt">
+  <a href="#grundsaetze">Grundsätze</a><a href="#logo">Logo</a><a href="#farben">Farben</a><a href="#typo">Typografie</a><a href="#icons">Icons</a><a href="#komponenten">Komponenten</a><a href="#modi">Modi</a><a href="#bewegung">Bewegung</a><a href="#sprache">Sprache</a><a href="#dodont">Do &amp; Don’t</a><a href="#tokens">Tokens</a>
+</nav>
+<main>
+<header class="top">
+  <span class="wordmark" id="brand">Tycho</span>
+  <span class="meta">Corporate-Identity-Übersicht · Version 1.0 · September 2026</span>
+  <div class="toggle" role="group" aria-label="Design"><button id="t-sys" class="on">System</button><button id="t-light">Hell</button><button id="t-dark">Dunkel</button></div>
+</header>
+
+<h1>Tycho Corporate Identity</h1>
+<p class="lead">Ein ruhiges, klinisch klares Erscheinungsbild für eine Kontrollinstanz, die nur liest: dunkles Schieferblau als Basis, Teal für alles, was die KI sagt, und drei sanfte medizinische Signalfarben.</p>
+<p class="meta">Gilt für die Tycho-App (Simple und Advanced, hell und dunkel), Tycho Digest, Dokumente und Präsentationen. Quelle der Wahrheit im Code: <code>web/src/index.css</code>, <code>web/src/nav.ts</code>, <code>web/src/components/Brand.tsx</code>.</p>
+
+<h2 id="grundsaetze">Grundsätze</h2>
+<div class="grid wide">
+  <div class="card"><b>Ruhig und klinisch</b><p class="rule">Viel Fläche, wenige Linien, klare Hierarchie. Farbe nur dort, wo sie Bedeutung trägt.</p></div>
+  <div class="card"><b>Die KI ist erkennbar</b><p class="rule">Alles, was der lokale Assistent sagt, steht in Teal. Nutzer:innen und Patient:innen bleiben neutral grau.</p></div>
+  <div class="card"><b>Lokal und sicher</b><p class="rule">Keine Cloud-Optik, keine externen Ressourcen. Schriften, Icons und Medien werden gebündelt ausgeliefert.</p></div>
+  <div class="card"><b>Zwei Dichten, ein System</b><p class="rule">Simple (Apple-klar, große Karten) und Advanced (Gotham-dicht, 2-px-Radien) teilen sich Farben, Schrift und Icons.</p></div>
+  <div class="card"><b>Design folgt dem System</b><p class="rule">Hell oder dunkel richtet sich automatisch nach der Windows-Einstellung, bis jemand bewusst umschaltet.</p></div>
+</div>
+
+<h2 id="logo">Logo</h2>
+<p>Das Logo ersetzt überall die Wortmarke „Tycho“: Seitenleiste, Modulleiste, Login, Digest-Mail, Dokumente. Es liegt in zwei Varianten vor, je nach Hintergrund.</p>
+<div class="frames">
+  <div class="frame frame-light"><div class="cap">Auf hellen Flächen · logo-light.svg</div><div class="logo-box"><img src="logo/logo-light.svg" alt="" onerror="this.parentNode.innerHTML='<span class=wordmark>Tycho</span><span class=meta>Datei <code>design/logo/logo-light.svg</code> noch nicht abgelegt</span>'"></div></div>
+  <div class="frame frame-dark"><div class="cap">Auf dunklen Flächen · logo-dark.svg</div><div class="logo-box"><img src="logo/logo-dark.svg" alt="" onerror="this.parentNode.innerHTML='<span class=wordmark>Tycho</span><span class=meta>Datei <code>design/logo/logo-dark.svg</code> noch nicht abgelegt</span>'"></div></div>
+</div>
+<h3>Regeln</h3>
+<div class="tbl"><table>
+<tr><th style="width:180px">Schutzzone</th><td>Rundherum mindestens die Höhe des Buchstabens „T“ freihalten. Nichts berührt das Logo.</td></tr>
+<tr><th>Mindestgröße</th><td>22 px Höhe in der Oberfläche (Seitenleiste), 8 mm im Druck. Darunter nur das Zeichen „T“ (eingeklappte Seitenleiste).</td></tr>
+<tr><th>Farbe</th><td>Nur die gelieferten Varianten hell/dunkel. Nicht einfärben, nicht mit Verlauf, nicht auf Teal setzen.</td></tr>
+<tr><th>Platzierung</th><td>Oben links in Leisten, zentriert auf dem Simple-Login, groß unten links auf dem Advanced-Login (Hero).</td></tr>
+<tr><th>Dateien</th><td><code>design/logo/logo-light.svg</code>, <code>logo-dark.svg</code>, <code>logo.png</code> (2×). Die App liest Kopien unter <code>web/public/brand/</code>.</td></tr>
+</table></div>
+
+<h2 id="farben">Farben</h2>
+<p class="lead">Basis, Text und Flächen sind fest definiert. Alles Weitere leitet sich daraus ab.</p>
+<h3>Basis</h3>
+<div class="grid">
+  <div class="sw"><div class="chip" style="background:#2A3B4C;color:#fff">#2A3B4C</div><div class="body"><b>Dark Mode Hintergrund</b><span>Schieferblau · Haupthintergrund, Login-Kugel, Digest-Kopf</span></div></div>
+  <div class="sw"><div class="chip" style="background:#F8FAFC;color:#1E293B;border-bottom:1px solid #E2E8F0">#F8FAFC</div><div class="body"><b>Light Mode Hintergrund</b><span>Reines Grau-Blau · steril, gut ausgeleuchtet</span></div></div>
+  <div class="sw"><div class="chip" style="background:#FFFFFF;color:#1E293B;border-bottom:1px solid #E2E8F0">#FFFFFF</div><div class="body"><b>Haupttext (Dark)</b><span>auf #2A3B4C <span class="cr" data-fg="#FFFFFF" data-bg="#2A3B4C"></span></span></div></div>
+  <div class="sw"><div class="chip" style="background:#1E293B;color:#fff">#1E293B</div><div class="body"><b>Haupttext (Light)</b><span>Tiefes Dunkelblau, weicher als Schwarz · auf #F8FAFC <span class="cr" data-fg="#1E293B" data-bg="#F8FAFC"></span></span></div></div>
+</div>
+<h3>Flächen und Linien (abgeleitet)</h3>
+<div class="frames">
+  <div class="frame frame-light"><div class="cap">Light</div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">
+    <div class="sw"><div class="chip" style="background:#F8FAFC;color:#1E293B">#F8FAFC</div><div class="body"><b>Seite</b><span>surface-0</span></div></div>
+    <div class="sw"><div class="chip" style="background:#FFFFFF;color:#1E293B">#FFFFFF</div><div class="body"><b>Karte</b><span>surface-1</span></div></div>
+    <div class="sw"><div class="chip" style="background:#F1F5F9;color:#1E293B">#F1F5F9</div><div class="body"><b>Hover, Nutzer-Bubble</b><span>surface-2</span></div></div>
+    <div class="sw"><div class="chip" style="background:#E2E8F0;color:#1E293B">#E2E8F0</div><div class="body"><b>Linie, Trennung</b><span>surface-3 / line-1</span></div></div>
+    <div class="sw"><div class="chip" style="background:#475569;color:#fff">#475569</div><div class="body"><b>Nebentext</b><span>ink-2</span></div></div>
+    <div class="sw"><div class="chip" style="background:#64748B;color:#fff">#64748B</div><div class="body"><b>Beschriftung</b><span>ink-3</span></div></div>
+  </div></div>
+  <div class="frame frame-dark"><div class="cap">Dark</div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(120px,1fr))">
+    <div class="sw"><div class="chip" style="background:#2A3B4C;color:#fff">#2A3B4C</div><div class="body"><b>Seite</b><span>surface-0</span></div></div>
+    <div class="sw"><div class="chip" style="background:#34475A;color:#fff">#34475A</div><div class="body"><b>Karte</b><span>surface-1</span></div></div>
+    <div class="sw"><div class="chip" style="background:#3E5266;color:#fff">#3E5266</div><div class="body"><b>Hover</b><span>surface-2</span></div></div>
+    <div class="sw"><div class="chip" style="background:#243342;color:#fff">#243342</div><div class="body"><b>Leisten</b><span>bar-0</span></div></div>
+    <div class="sw"><div class="chip" style="background:#CBD5E1;color:#1E293B">#CBD5E1</div><div class="body"><b>Nebentext</b><span>ink-2</span></div></div>
+    <div class="sw"><div class="chip" style="background:#94A3B8;color:#1E293B">#94A3B8</div><div class="body"><b>Beschriftung</b><span>ink-3</span></div></div>
+  </div></div>
+</div>
+
+<h3>KI und Chat (Teal-Fokus)</h3>
+<p>Teal ist die Stimme der KI und gleichzeitig die Akzentfarbe für Auswahl, Links und Fokus. Es kommt sonst nirgends großflächig vor.</p>
+<div class="grid">
+  <div class="sw"><div class="chip" style="background:#2DD4BF;color:#0B1F2B">#2DD4BF</div><div class="body"><b>KI-Bubble · Dark</b><span>Helles Mint-Teal, leuchtet sanft auf #2A3B4C · Text #0B1F2B <span class="cr" data-fg="#0B1F2B" data-bg="#2DD4BF"></span></span></div></div>
+  <div class="sw"><div class="chip" style="background:#0F766E;color:#fff">#0F766E</div><div class="body"><b>KI-Bubble · Light</b><span>Tiefes Medizin-Teal, fachliche Autorität · Text #FFFFFF <span class="cr" data-fg="#FFFFFF" data-bg="#0F766E"></span></span></div></div>
+  <div class="sw"><div class="chip" style="background:#475569;color:#fff">#475569</div><div class="body"><b>Nutzer-Bubble · Dark</b><span>Schiefergrau · Text #FFFFFF <span class="cr" data-fg="#FFFFFF" data-bg="#475569"></span></span></div></div>
+  <div class="sw"><div class="chip" style="background:#F1F5F9;color:#1E293B;border-bottom:1px solid #E2E8F0">#F1F5F9</div><div class="body"><b>Nutzer-Bubble · Light</b><span>Klinisches Weiß-Grau · Text #1E293B <span class="cr" data-fg="#1E293B" data-bg="#F1F5F9"></span></span></div></div>
+</div>
+<div class="frames" style="margin-top:12px">
+  <div class="frame frame-light"><div class="cap">Chat · Light</div><div class="chat"><div class="b user">Wie viele offene Honorarnoten haben wir?</div><div class="ai-row"><span class="orb"></span><div class="b ai">63 Honorarnoten sind überfällig, zusammen € 11.140. Die drei ältesten stammen aus dem Mai.</div></div></div></div>
+  <div class="frame frame-dark"><div class="cap">Chat · Dark</div><div class="chat"><div class="b user">Wie viele offene Honorarnoten haben wir?</div><div class="ai-row"><span class="orb"></span><div class="b ai">63 Honorarnoten sind überfällig, zusammen € 11.140. Die drei ältesten stammen aus dem Mai.</div></div></div></div>
+</div>
+
+<h3>Medizinische Statusfarben</h3>
+<p>Drei Zustände, bewusst sanft. Die reine Farbe dient als Fläche, Punkt oder Balken. Für kleinen Text auf hellem Grund gibt es je eine dunklere Textvariante, damit der Kontrast reicht.</p>
+<div class="grid">
+  <div class="sw"><div class="chip" style="background:#10B981;color:#fff">#10B981</div><div class="body"><b>Gesund · stabil</b><span>Smaragdgrün · Text hell #059669 <span class="cr" data-fg="#059669" data-bg="#FFFFFF"></span> · Text dunkel #34D399 <span class="cr" data-fg="#34D399" data-bg="#2A3B4C"></span></span></div></div>
+  <div class="sw"><div class="chip" style="background:#FBBF24;color:#1E293B">#FBBF24</div><div class="body"><b>Beobachtung · ausstehend</b><span>Warmes Gelb · Text hell #B45309 <span class="cr" data-fg="#B45309" data-bg="#FFFFFF"></span> · Text dunkel #FCD34D <span class="cr" data-fg="#FCD34D" data-bg="#2A3B4C"></span></span></div></div>
+  <div class="sw"><div class="chip" style="background:#F43F5E;color:#fff">#F43F5E</div><div class="body"><b>Akut · Handlungsbedarf</b><span>Korallenrot · Text hell #E11D48 <span class="cr" data-fg="#E11D48" data-bg="#FFFFFF"></span> · Text dunkel #FB7185 <span class="cr" data-fg="#FB7185" data-bg="#2A3B4C"></span></span></div></div>
+</div>
+<div class="frames" style="margin-top:12px">
+  <div class="frame frame-light"><div class="cap">Pills · Light</div><div class="row"><span class="pill ok">stabil</span><span class="pill warn">ausstehend</span><span class="pill bad">akut</span><span class="pill ok">+2,8 %</span><span class="pill bad">−13 %</span></div></div>
+  <div class="frame frame-dark"><div class="cap">Pills · Dark</div><div class="row"><span class="pill ok">stabil</span><span class="pill warn">ausstehend</span><span class="pill bad">akut</span><span class="pill ok">+2,8 %</span><span class="pill bad">−13 %</span></div></div>
+</div>
+
+<h3>Diagramm-Serien</h3>
+<p>Analoge Palette um Teal (Farbkreis: Teal, Cyan, Blau, Mint, Indigo) für alle Kategorien. Koralle steht als Komplementärfarbe außerhalb dieser Reihe und wird nur für Alarme und Negativwerte benutzt. Keine Oliv-, Senf- oder Erdtöne.</p>
+<div class="frames">
+  <div class="frame frame-light"><div class="cap">Simple · Light</div><div class="series"><span style="background:#0F766E">1</span><span style="background:#0284C7">2</span><span style="background:#2563EB">3</span><span style="background:#059669">4</span><span style="background:#6366F1">5</span><span style="background:#64748B">6</span><span style="background:#0891B2">7</span><span style="background:#7C3AED">8</span></div></div>
+  <div class="frame frame-dark"><div class="cap">Simple · Dark</div><div class="series"><span style="background:#2DD4BF;color:#0B1F2B">1</span><span style="background:#38BDF8;color:#0B1F2B">2</span><span style="background:#60A5FA;color:#0B1F2B">3</span><span style="background:#6EE7B7;color:#0B1F2B">4</span><span style="background:#A5B4FC;color:#0B1F2B">5</span><span style="background:#CBD5E1;color:#1E293B">6</span><span style="background:#22D3EE;color:#0B1F2B">7</span><span style="background:#C4B5FD;color:#0B1F2B">8</span></div></div>
+  <div class="frame frame-dark frame-adv"><div class="cap">Advanced (Gotham) · Dark</div><div class="series"><span style="background:#2DD4BF;color:#0B1F2B">1</span><span style="background:#38BDF8;color:#0B1F2B">2</span><span style="background:#60A5FA;color:#0B1F2B">3</span><span style="background:#DFE3E6;color:#1E293B">4</span><span style="background:#6EE7B7;color:#0B1F2B">5</span><span style="background:#A5B4FC;color:#0B1F2B">6</span><span style="background:#22D3EE;color:#0B1F2B">7</span><span style="background:#C4B5FD;color:#0B1F2B">8</span></div><p class="meta" style="margin-top:8px">Heatmaps und Sequenzen laufen von dunklem Teal zu hellem Mint.</p></div>
+</div>
+
+<h2 id="typo">Typografie</h2>
+<p>Drei Schnitte, alle lokal gebündelt (kein Google-Fonts-Aufruf zur Laufzeit): <b>Inter</b> für Oberfläche und Text, <b>Inter Tight</b> für große Überschriften und die Login-Wortmarke, <b>JetBrains Mono</b> für Kennungen, Telemetrie und Codes.</p>
+<div class="card type-sample">
+  <div><span class="n">Display 44 / Inter Tight 500</span><span style="font:500 44px/1.05 var(--display);letter-spacing:-.03em">Ordinations-Übersicht</span></div>
+  <div><span class="n">H2 26 / Inter Tight 500</span><span style="font:500 26px/1.2 var(--display);letter-spacing:-.02em">Umsatz pro Monat</span></div>
+  <div><span class="n">KPI 26 / Inter 600 tabular</span><span style="font:600 26px/1.1 var(--sans);letter-spacing:-.02em;font-variant-numeric:tabular-nums">€ 85.152</span></div>
+  <div><span class="n">Titel 15 / Inter 600</span><span style="font:600 15px var(--sans)">Effizienz &amp; Kosten je Mitarbeiter:in</span></div>
+  <div><span class="n">Text 13,5 / Inter 400</span><span style="font:13.5px/1.55 var(--sans)">Der Assistent beantwortet Fragen ausschließlich aus den lokalen Tycho-Daten des gewählten Zeitraums.</span></div>
+  <div><span class="n">Label 12 / Inter 500</span><span style="font:500 12px var(--sans);color:var(--fg-3)">Personalkostenquote</span></div>
+  <div><span class="n">Label Advanced 10,5</span><span style="font:500 10.5px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--fg-3)">Kontakte nach Rolle</span></div>
+  <div><span class="n">Mono 12 / JetBrains</span><span class="mono">TS-ORD-01 · AES-256-GCM · READ-ONLY</span></div>
+</div>
+<p class="rule" style="margin-top:12px">Zahlen immer mit <code>tabular-nums</code>. Deutsche Formate: Tausenderpunkt, Dezimalkomma, Euro vorangestellt (€ 85.152). Fließtext maximal etwa 65 Zeichen breit.</p>
+
+<h2 id="icons">Icons</h2>
+<p>Icon-Set ist <b>Phosphor Icons</b> (<code>@phosphor-icons/react</code>), Gewicht <b>Regular</b>. Fill nur für aktive Tab-Zustände, Bold nirgends. Größen: 14 px in Pills und Buttons, 16 px in Navigation und Tabellen, 17–18 px in Leisten, 24 px in leeren Zuständen.</p>
+<div class="icons"><div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"/></svg><span>House</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M240,128a8,8,0,0,1-8,8H204.94l-37.78,75.58A8,8,0,0,1,160,216h-.4a8,8,0,0,1-7.08-5.14L95.35,60.76,63.28,131.31A8,8,0,0,1,56,136H24a8,8,0,0,1,0-16H50.85L88.72,36.69a8,8,0,0,1,14.76.46l57.51,151,31.85-63.71A8,8,0,0,1,200,120h32A8,8,0,0,1,240,128Z"/></svg><span>Pulse</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M240,56v64a8,8,0,0,1-16,0V75.31l-82.34,82.35a8,8,0,0,1-11.32,0L96,123.31,29.66,189.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0L136,140.69,212.69,64H168a8,8,0,0,1,0-16h64A8,8,0,0,1,240,56Z"/></svg><span>TrendUp</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48Zm-96,85.15L52.57,64H203.43ZM98.71,128,40,181.81V74.19Zm11.84,10.85,12,11.05a8,8,0,0,0,10.82,0l12-11.05,58,53.15H52.57ZM157.29,128,216,74.18V181.82Z"/></svg><span>Envelope</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M220,160a12,12,0,1,1-12-12A12,12,0,0,1,220,160Zm-4.55,39.29A48.08,48.08,0,0,1,168,240H144a48.05,48.05,0,0,1-48-48V151.49A64,64,0,0,1,40,88V40a8,8,0,0,1,8-8H72a8,8,0,0,1,0,16H56V88a48,48,0,0,0,48.64,48c26.11-.34,47.36-22.25,47.36-48.83V48H136a8,8,0,0,1,0-16h24a8,8,0,0,1,8,8V87.17c0,32.84-24.53,60.29-56,64.31V192a32,32,0,0,0,32,32h24a32.06,32.06,0,0,0,31.22-25,40,40,0,1,1,16.23.27ZM232,160a24,24,0,1,0-24,24A24,24,0,0,0,232,160Z"/></svg><span>Stethoscope</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-68-76a12,12,0,1,1-12-12A12,12,0,0,1,140,132Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,132ZM96,172a12,12,0,1,1-12-12A12,12,0,0,1,96,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,140,172Zm44,0a12,12,0,1,1-12-12A12,12,0,0,1,184,172Z"/></svg><span>CalendarDots</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm0,128H56a8,8,0,0,1-8-8V78.63A23.84,23.84,0,0,0,56,80H216Zm-48-60a12,12,0,1,1,12,12A12,12,0,0,1,168,132Z"/></svg><span>Wallet</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M117.25,157.92a60,60,0,1,0-66.5,0A95.83,95.83,0,0,0,3.53,195.63a8,8,0,1,0,13.4,8.74,80,80,0,0,1,134.14,0,8,8,0,0,0,13.4-8.74A95.83,95.83,0,0,0,117.25,157.92ZM40,108a44,44,0,1,1,44,44A44.05,44.05,0,0,1,40,108Zm210.14,98.7a8,8,0,0,1-11.07-2.33A79.83,79.83,0,0,0,172,168a8,8,0,0,1,0-16,44,44,0,1,0-16.34-84.87,8,8,0,1,1-5.94-14.85,60,60,0,0,1,55.53,105.64,95.83,95.83,0,0,1,47.22,37.71A8,8,0,0,1,250.14,206.7Z"/></svg><span>Users</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M207.06,72.67A111.24,111.24,0,0,0,128,40h-.4C66.07,40.21,16,91,16,153.13V176a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V152A111.25,111.25,0,0,0,207.06,72.67ZM224,176H119.71l54.76-75.3a8,8,0,0,0-12.94-9.42L99.92,176H32V153.13c0-3.08.15-6.12.43-9.13H56a8,8,0,0,0,0-16H35.27c10.32-38.86,44-68.24,84.73-71.66V80a8,8,0,0,0,16,0V56.33A96.14,96.14,0,0,1,221,128H200a8,8,0,0,0,0,16h23.67c.21,2.65.33,5.31.33,8Z"/></svg><span>Gauge</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M152,96H104a8,8,0,0,0-8,8v48a8,8,0,0,0,8,8h48a8,8,0,0,0,8-8V104A8,8,0,0,0,152,96Zm-8,48H112V112h32Zm88,0H216V112h16a8,8,0,0,0,0-16H216V56a16,16,0,0,0-16-16H160V24a8,8,0,0,0-16,0V40H112V24a8,8,0,0,0-16,0V40H56A16,16,0,0,0,40,56V96H24a8,8,0,0,0,0,16H40v32H24a8,8,0,0,0,0,16H40v40a16,16,0,0,0,16,16H96v16a8,8,0,0,0,16,0V216h32v16a8,8,0,0,0,16,0V216h40a16,16,0,0,0,16-16V160h16a8,8,0,0,0,0-16Zm-32,56H56V56H200v95.87s0,.09,0,.13,0,.09,0,.13V200Z"/></svg><span>Cpu</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"/></svg><span>Phone</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,176a48.05,48.05,0,0,0,48-48V64a48,48,0,0,0-96,0v64A48.05,48.05,0,0,0,128,176ZM96,64a32,32,0,0,1,64,0v64a32,32,0,0,1-64,0Zm40,143.6V240a8,8,0,0,1-16,0V207.6A80.11,80.11,0,0,1,48,128a8,8,0,0,1,16,0,64,64,0,0,0,128,0,8,8,0,0,1,16,0A80.11,80.11,0,0,1,136,207.6Z"/></svg><span>Microphone</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M184,184a32,32,0,0,1-32,32c-13.7,0-26.95-8.93-31.5-21.22a8,8,0,0,1,15-5.56C137.74,195.27,145,200,152,200a16,16,0,0,0,0-32H40a8,8,0,0,1,0-16H152A32,32,0,0,1,184,184Zm-64-80a32,32,0,0,0,0-64c-13.7,0-26.95,8.93-31.5,21.22a8,8,0,0,0,15,5.56C105.74,60.73,113,56,120,56a16,16,0,0,1,0,32H24a8,8,0,0,0,0,16Zm88-32c-13.7,0-26.95,8.93-31.5,21.22a8,8,0,0,0,15,5.56C193.74,92.73,201,88,208,88a16,16,0,0,1,0,32H32a8,8,0,0,0,0,16H208a32,32,0,0,0,0-64Z"/></svg><span>Wind</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M24,104H48v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16H208V104h24a8,8,0,0,0,4.19-14.81l-104-64a8,8,0,0,0-8.38,0l-104,64A8,8,0,0,0,24,104Zm40,0H96v64H64Zm80,0v64H112V104Zm48,64H160V104h32ZM128,41.39,203.74,88H52.26ZM248,208a8,8,0,0,1-8,8H16a8,8,0,0,1,0-16H240A8,8,0,0,1,248,208Z"/></svg><span>Bank</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"/></svg><span>ShieldCheck</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"/></svg><span>Gear</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg><span>MagnifyingGlass</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></svg><span>Sparkle</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z"/></svg><span>ChartBar</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216.42,39.6a53.26,53.26,0,0,0-75.32,0L39.6,141.09a53.26,53.26,0,0,0,75.32,75.31h0L216.43,114.91A53.31,53.31,0,0,0,216.42,39.6ZM103.61,205.09h0a37.26,37.26,0,0,1-52.7-52.69L96,107.31,148.7,160ZM205.11,103.6,160,148.69,107.32,96l45.1-45.09a37.26,37.26,0,0,1,52.69,52.69ZM189.68,82.34a8,8,0,0,1,0,11.32l-24,24a8,8,0,1,1-11.31-11.32l24-24A8,8,0,0,1,189.68,82.34Z"/></svg><span>Pill</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM222.93,203.8a8.5,8.5,0,0,1-7.48,4.2H40.55a8.5,8.5,0,0,1-7.48-4.2,7.59,7.59,0,0,1,0-7.72L120.52,44.21a8.75,8.75,0,0,1,15,0l87.45,151.87A7.59,7.59,0,0,1,222.93,203.8ZM120,144V104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,180Z"/></svg><span>Warning</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg><span>CheckCircle</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M165.66,101.66,139.31,128l26.35,26.34a8,8,0,0,1-11.32,11.32L128,139.31l-26.34,26.35a8,8,0,0,1-11.32-11.32L116.69,128,90.34,101.66a8,8,0,0,1,11.32-11.32L128,116.69l26.34-26.35a8,8,0,0,1,11.32,11.32ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg><span>XCircle</span></div> <div class="icon-cell"><svg class="ic " width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM40,56H80V200H40ZM216,200H96V56H216V200Z"/></svg><span>SidebarSimple</span></div></div>
+<p class="rule" style="margin-top:12px">Icons stehen immer neben einem Wort, nie allein (Ausnahme: Leisten-Aktionen mit Tooltip). Farbe folgt dem Text: <code>ink-3</code> inaktiv, <code>ink-1</code> aktiv, Teal nur bei Auswahl.</p>
+
+<h2 id="komponenten">Komponenten</h2>
+<div class="frames">
+  <div class="frame frame-light"><div class="cap">Simple · Light</div><div class="stack">
+    <div class="row"><span class="btn primary">Mit Windows-Konto anmelden</span><span class="btn">Anmelden</span><span class="btn teal"><svg class="ic " width="14" height="14" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></svg> Assistent</span><span class="btn ghost">Zurücksetzen</span></div>
+    <div class="row"><span class="input" style="max-width:220px">a.berger</span><span class="input focus" style="max-width:220px">Suchen … ( / )</span></div>
+    <div class="card kpi"><div class="l"><svg class="ic " width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm0,128H56a8,8,0,0,1-8-8V78.63A23.84,23.84,0,0,0,56,80H216Zm-48-60a12,12,0,1,1,12,12A12,12,0,0,1,168,132Z"/></svg> Umsatz</div><div class="v">€ 85.152 <span class="pill bad">−13 %</span></div><div class="s">zum Zeitraum davor</div></div>
+    <div class="row"><div class="nav"><div class="h">Finanzen</div><a><svg class="ic " width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm0,128H56a8,8,0,0,1-8-8V78.63A23.84,23.84,0,0,0,56,80H216Zm-48-60a12,12,0,1,1,12,12A12,12,0,0,1,168,132Z"/></svg> Finanzen</a><a class="on"><svg class="ic " width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M24,104H48v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16H208V104h24a8,8,0,0,0,4.19-14.81l-104-64a8,8,0,0,0-8.38,0l-104,64A8,8,0,0,0,24,104Zm40,0H96v64H64Zm80,0v64H112V104Zm48,64H160V104h32ZM128,41.39,203.74,88H52.26ZM248,208a8,8,0,0,1-8,8H16a8,8,0,0,1,0-16H240A8,8,0,0,1,248,208Z"/></svg> Tarife</a><a><svg class="ic " width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M184,184a32,32,0,0,1-32,32c-13.7,0-26.95-8.93-31.5-21.22a8,8,0,0,1,15-5.56C137.74,195.27,145,200,152,200a16,16,0,0,0,0-32H40a8,8,0,0,1,0-16H152A32,32,0,0,1,184,184Zm-64-80a32,32,0,0,0,0-64c-13.7,0-26.95,8.93-31.5,21.22a8,8,0,0,0,15,5.56C105.74,60.73,113,56,120,56a16,16,0,0,1,0,32H24a8,8,0,0,0,0,16Zm88-32c-13.7,0-26.95,8.93-31.5,21.22a8,8,0,0,0,15,5.56C193.74,92.73,201,88,208,88a16,16,0,0,1,0,32H32a8,8,0,0,0,0,16H208a32,32,0,0,0,0-64Z"/></svg> Tailwind</a></div><div class="tabs"><span class="on">Kostenträger</span><span>Gesamt</span></div></div>
+  </div></div>
+  <div class="frame frame-dark"><div class="cap">Simple · Dark</div><div class="stack">
+    <div class="row"><span class="btn primary">Mit Windows-Konto anmelden</span><span class="btn">Anmelden</span><span class="btn teal"><svg class="ic " width="14" height="14" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></svg> Assistent</span><span class="btn ghost">Zurücksetzen</span></div>
+    <div class="row"><span class="input" style="max-width:220px">a.berger</span><span class="input focus" style="max-width:220px">Suchen … ( / )</span></div>
+    <div class="card kpi"><div class="l"><svg class="ic " width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm0,128H56a8,8,0,0,1-8-8V78.63A23.84,23.84,0,0,0,56,80H216Zm-48-60a12,12,0,1,1,12,12A12,12,0,0,1,168,132Z"/></svg> Umsatz</div><div class="v">€ 85.152 <span class="pill bad">−13 %</span></div><div class="s">zum Zeitraum davor</div></div>
+    <div class="row"><div class="nav"><div class="h">Finanzen</div><a><svg class="ic " width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm0,128H56a8,8,0,0,1-8-8V78.63A23.84,23.84,0,0,0,56,80H216Zm-48-60a12,12,0,1,1,12,12A12,12,0,0,1,168,132Z"/></svg> Finanzen</a><a class="on"><svg class="ic " width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M24,104H48v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16H208V104h24a8,8,0,0,0,4.19-14.81l-104-64a8,8,0,0,0-8.38,0l-104,64A8,8,0,0,0,24,104Zm40,0H96v64H64Zm80,0v64H112V104Zm48,64H160V104h32ZM128,41.39,203.74,88H52.26ZM248,208a8,8,0,0,1-8,8H16a8,8,0,0,1,0-16H240A8,8,0,0,1,248,208Z"/></svg> Tarife</a><a><svg class="ic " width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M184,184a32,32,0,0,1-32,32c-13.7,0-26.95-8.93-31.5-21.22a8,8,0,0,1,15-5.56C137.74,195.27,145,200,152,200a16,16,0,0,0,0-32H40a8,8,0,0,1,0-16H152A32,32,0,0,1,184,184Zm-64-80a32,32,0,0,0,0-64c-13.7,0-26.95,8.93-31.5,21.22a8,8,0,0,0,15,5.56C105.74,60.73,113,56,120,56a16,16,0,0,1,0,32H24a8,8,0,0,0,0,16Zm88-32c-13.7,0-26.95,8.93-31.5,21.22a8,8,0,0,0,15,5.56C193.74,92.73,201,88,208,88a16,16,0,0,1,0,32H32a8,8,0,0,0,0,16H208a32,32,0,0,0,0-64Z"/></svg> Tailwind</a></div><div class="tabs"><span class="on">Kostenträger</span><span>Gesamt</span></div></div>
+  </div></div>
+  <div class="frame frame-dark frame-adv"><div class="cap">Advanced · Dark (Gotham)</div><div class="stack">
+    <div class="row"><span class="btn">Anmelden</span><span class="btn teal"><svg class="ic " width="14" height="14" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></svg> Assistent</span><span class="btn">Export CSV</span></div>
+    <div class="card kpi"><div class="l" style="text-transform:uppercase;letter-spacing:.07em;font-size:10.5px">Efficacy Score</div><div class="v">76 <span class="pill ok">+2</span></div><div class="s">Team-basiert · 4 Wochen</div></div>
+    <div class="row"><div class="tabs"><span class="on">Übersicht</span><span>Tabelle</span><span>Charts</span></div><span class="pill warn">Findings 8</span></div>
+  </div></div>
+</div>
+<h3>Regeln</h3>
+<div class="tbl"><table>
+<tr><th style="width:180px">Radien</th><td>Simple 14 px (Karten), 10 px (Controls), 999 px (Pills). Advanced 2 px überall.</td></tr>
+<tr><th>Karten</th><td>Weiß bzw. #34475A, 1-px-Linie, weicher Schatten nur im Simple-Modus. Keine Schatten im Advanced-Modus.</td></tr>
+<tr><th>Primärer Button</th><td>Textfarbe als Fläche (dunkel auf hell, weiß auf dunkel). Teal-Button nur für den Assistenten.</td></tr>
+<tr><th>Auswahl</th><td>Teal-Text auf 12 % Teal-Fläche (Seitenleiste). Tabs: helle Fläche mit Schatten (Simple) bzw. surface-2 (Advanced).</td></tr>
+<tr><th>Fokus</th><td>Teal-Rahmen plus 3 px Teal bei 22 %. Immer sichtbar, auch mit Tastatur.</td></tr>
+<tr><th>Abstände</th><td>4-px-Raster: 4 / 8 / 12 / 16 / 24 / 32. Karten-Innenabstand 16–24 px (Simple), 12–16 px (Advanced).</td></tr>
+</table></div>
+
+<h2 id="modi">Modi</h2>
+<div class="grid wide">
+  <div class="card"><b>Simple</b><p class="rule">Seitenleiste mit fünf Bereichen, große Karten, Assistent als Panel rechts. Für den täglichen Blick der Leitung.</p></div>
+  <div class="card"><b>Advanced</b><p class="rule">Modulleiste, Facetten, KPI-Leiste, Donuts, Zeitachse. Gotham-Dichte auf derselben Farbbasis und Palette.</p></div>
+  <div class="card"><b>Hell / Dunkel</b><p class="rule">Folgt automatisch <code>prefers-color-scheme</code> (Windows-Einstellung). Wer umschaltet, überschreibt bis zum Zurücksetzen auf „System“.</p></div>
+  <div class="card"><b>Login</b><p class="rule">Advanced: Schieferblau #1F2D3B, Erdkugel, Telemetrie in Mono, Glas-Karte. Simple: helle Fläche, Kugel dezent, Karte zentriert.</p></div>
+</div>
+
+<h2 id="bewegung">Bewegung</h2>
+<p>Kurz, ruhig, zukunftsorientiert. Bewegung erklärt einen Zustandswechsel, sie unterhält nicht.</p>
+<div class="motion">
+  <div class="card"><span class="demo-rise"></span><b style="display:block;margin-top:8px">Einblenden</b><small>rise · 0,32 s Seitenwechsel · 0,7 s Login · cubic-bezier(.2,.7,.2,1)</small></div>
+  <div class="card"><b>Übergänge</b><small>Farbe, Rahmen, Hintergrund: 0,15–0,18 s ease. Seitenleiste 0,2 s.</small></div>
+  <div class="card"><b>Login-Kugel</b><small>Drehung 0,006 rad/s, Radar-Sweep 40 s je Umdrehung, Satelliten 0,03–0,045 rad/s.</small></div>
+  <div class="card"><b>Reduzierte Bewegung</b><small><code>prefers-reduced-motion</code> schaltet alle Animationen ab; Inhalte sind ohne Bewegung vollständig.</small></div>
+</div>
+
+<h2 id="sprache">Sprache</h2>
+<div class="tbl"><table>
+<tr><th style="width:180px">Anrede</th><td>Sie. Kurz, sachlich, freundlich. Keine Ausrufezeichen.</td></tr>
+<tr><th>Begriffe</th><td>Ordination, Patient:innen, Ärzt:innen, Honorarnote, Kostenträger (ÖGK, SVS, BVAEB), Leistungsposition. Österreichische Schreibweise.</td></tr>
+<tr><th>Zahlen</th><td>€ 85.152 · 13,7 % · 24.08.2026 · 19:00. Immer mit Zeitraum und Vergleich.</td></tr>
+<tr><th>Sicherheit</th><td>Der Read-only-Charakter wird sichtbar gemacht („0 Schreibvorgänge“, „lokal“), aber nie aufdringlich.</td></tr>
+<tr><th>Beschriftungen</th><td>Ein bis zwei Wörter: Start, Termine, Finanzen. Keine Sätze in Navigation und Buttons.</td></tr>
+</table></div>
+
+<h2 id="dodont">Do &amp; Don’t</h2>
+<div class="dd">
+  <div class="card"><b>Do</b><ul><li>Teal nur für KI, Auswahl, Fokus und Links.</li><li>Statusfarbe nur, wenn sie Status bedeutet.</li><li>Logo in der passenden Variante, mit Schutzzone.</li><li>Phosphor Regular, Icons neben Text.</li><li>Ein Zustand, eine Farbe: grün stabil, gelb ausstehend, rot akut.</li><li>Diagramme in der teal-analogen Reihe; Koralle nur als Ausreißer für Alarme.</li></ul></div>
+  <div class="card no"><b>Don’t</b><ul><li>Kein reines Schwarz, kein reines Signalrot, keine Oliv-, Senf- oder Erdtöne.</li><li>Keine Teal-Flächen als Dekoration oder Hintergrund.</li><li>Kein zweites Icon-Set, keine Emojis in der Oberfläche.</li><li>Keine Schatten im Advanced-Modus, keine 2-px-Radien im Simple-Modus.</li><li>Nichts verstecken, nichts deaktivieren, kein „Mehr“-Menü.</li></ul></div>
+</div>
+
+<h2 id="tokens">Tokens</h2>
+<p>Die CSS-Variablen in <code>web/src/index.css</code> sind die Referenz. Tailwind bindet sie als <code>surface-*</code>, <code>ink-*</code>, <code>line-*</code>, <code>accent</code>, <code>series-*</code> und <code>status-*</code> ein.</p>
+<div class="tbl"><table>
+<tr><th>Token</th><th>Light</th><th>Dark</th><th>Advanced Dark</th><th>Verwendung</th></tr>
+<tr><td class="mono">--surface-0</td><td class="mono">#F8FAFC</td><td class="mono">#2A3B4C</td><td class="mono">#2A3B4C</td><td>Seite</td></tr>
+<tr><td class="mono">--surface-1</td><td class="mono">#FFFFFF</td><td class="mono">#34475A</td><td class="mono">#304254</td><td>Karte</td></tr>
+<tr><td class="mono">--surface-2</td><td class="mono">#F1F5F9</td><td class="mono">#3E5266</td><td class="mono">#384B5F</td><td>Hover, aktiv, Nutzer-Bubble</td></tr>
+<tr><td class="mono">--bar-0</td><td class="mono">#FFFFFF</td><td class="mono">#243342</td><td class="mono">#1F2D3B</td><td>Leisten, Seitenleiste</td></tr>
+<tr><td class="mono">--ink-1 / -2 / -3</td><td class="mono">#1E293B / #475569 / #64748B</td><td class="mono">#FFFFFF / #CBD5E1 / #94A3B8</td><td class="mono">#FFFFFF / #B8C4D0 / #8899AA</td><td>Text, Nebentext, Beschriftung</td></tr>
+<tr><td class="mono">--line-1 / -2</td><td class="mono">#E2E8F0 / #CBD5E1</td><td class="mono">#3C4F63 / #4E637A</td><td class="mono">#3A4D61 / #4C6178</td><td>Linien, Rahmen</td></tr>
+<tr><td class="mono">--accent</td><td class="mono">#0F766E</td><td class="mono">#2DD4BF</td><td class="mono">#2DD4BF</td><td>Auswahl, Links, Fokus</td></tr>
+<tr><td class="mono">--ai-bubble / -text</td><td class="mono">#0F766E / #FFFFFF</td><td class="mono">#2DD4BF / #0B1F2B</td><td class="mono">#2DD4BF / #0B1F2B</td><td>KI-Antworten</td></tr>
+<tr><td class="mono">--user-bubble / -text</td><td class="mono">#F1F5F9 / #1E293B</td><td class="mono">#475569 / #FFFFFF</td><td class="mono">#475569 / #FFFFFF</td><td>Nutzer-Eingaben</td></tr>
+<tr><td class="mono">--good / --good-text</td><td class="mono">#10B981 / #059669</td><td class="mono">#10B981 / #34D399</td><td class="mono">#10B981 / #34D399</td><td>Gesund, stabil, positiv</td></tr>
+<tr><td class="mono">--warn / --warn-text</td><td class="mono">#FBBF24 / #B45309</td><td class="mono">#FBBF24 / #FCD34D</td><td class="mono">#FBBF24 / #FCD34D</td><td>Beobachtung, ausstehend</td></tr>
+<tr><td class="mono">--bad / --bad-text</td><td class="mono">#F43F5E / #E11D48</td><td class="mono">#F43F5E / #FB7185</td><td class="mono">#F43F5E / #FB7185</td><td>Akut, Handlungsbedarf, negativ</td></tr>
+<tr><td class="mono">--radius</td><td class="mono">14px</td><td class="mono">14px</td><td class="mono">2px</td><td>Karten</td></tr>
+</table></div>
+
+<div class="foot">Tycho CI · Stand September 2026 · Kontrastwerte nach WCAG 2.1: AA ab 4,5:1 für Text, 3:1 für große Schrift und Bedienelemente.</div>
+</main>
+</div>
+<script>
+(function(){
+  var root=document.documentElement;
+  function lum(h){h=h.replace('#','');var r=parseInt(h.substr(0,2),16)/255,g=parseInt(h.substr(2,2),16)/255,b=parseInt(h.substr(4,2),16)/255;function f(c){return c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4)}return 0.2126*f(r)+0.7152*f(g)+0.0722*f(b)}
+  function cr(a,b){var l1=lum(a),l2=lum(b);var hi=Math.max(l1,l2),lo=Math.min(l1,l2);return (hi+0.05)/(lo+0.05)}
+  document.querySelectorAll('.cr[data-fg]').forEach(function(el){var v=cr(el.dataset.fg,el.dataset.bg);el.textContent=v.toFixed(1)+':1';el.classList.add(v>=4.5?'aa':v>=3?'lg':'no');el.title=v>=4.5?'AA für Text':v>=3?'AA nur für große Schrift und Bedienelemente':'unter AA'});
+  var keys={'t-sys':null,'t-light':'light','t-dark':'dark'};
+  Object.keys(keys).forEach(function(id){document.getElementById(id).addEventListener('click',function(){Object.keys(keys).forEach(function(k){document.getElementById(k).classList.toggle('on',k===id)});if(keys[id])root.setAttribute('data-theme',keys[id]);else root.removeAttribute('data-theme');try{if(keys[id])localStorage.setItem('ci.theme',keys[id]);else localStorage.removeItem('ci.theme')}catch(e){}})});
+  try{var s=localStorage.getItem('ci.theme');if(s){document.getElementById(s==='dark'?'t-dark':'t-light').click()}}catch(e){}
+  var links=[].slice.call(document.querySelectorAll('.toc a'));var secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
+  function onScroll(){var y=window.scrollY+120,i=0;secs.forEach(function(s,k){if(s&&s.offsetTop<=y)i=k});links.forEach(function(a,k){a.classList.toggle('on',k===i)})}
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+})();
+</script>
+</body>
+</html>

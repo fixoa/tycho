@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { Area, AreaChart, CartesianGrid, Pie, PieChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { AlertTriangle, ArrowRight, ArrowUp, ArrowDown, ChevronDown, Sparkles } from 'lucide-react'
+import { Warning as AlertTriangle, ArrowRight, ArrowUp, ArrowDown, CaretDown as ChevronDown, Sparkle as Sparkles } from '@phosphor-icons/react'
 import { Badge, Card, ChartTooltip, Delta, Bar as MiniBar } from '../components/ui'
 import { fmt } from '../lib/format'
 import { BILLING_FINDINGS, PREV_QUARTER, demo } from '../data/mock'
@@ -39,7 +39,7 @@ function Donut({ title, data, total }: { title: string; data: { name: string; va
       <div className="w-[150px] h-[150px] shrink-0 relative">
         <ResponsiveContainer>
           <PieChart>
-            <Pie data={data} dataKey="value" innerRadius={44} outerRadius={70} paddingAngle={1} stroke="var(--surface-1)" strokeWidth={2} isAnimationActive={false}
+            <Pie data={data} dataKey="value" innerRadius={44} outerRadius={70} paddingAngle={1} stroke="var(--surface-1)" isAnimationActive={false}
               onMouseEnter={(_, i) => setHover(i)} onMouseLeave={() => setHover(null)}>
               {data.map((_, i) => <Cell key={i} fill={C[i % C.length]} opacity={hover === null || hover === i ? 1 : 0.45} />)}
             </Pie>
@@ -148,9 +148,9 @@ export default function Station() {
                 <XAxis dataKey="label" axisLine={false} tickLine={false} />
                 <YAxis axisLine={false} tickLine={false} />
                 <Tooltip content={<ChartTooltip />} />
-                <Area type="linear" dataKey="assistenz" stackId="a" name="Assistenz (Check-in)" stroke="var(--series-1)" fill="var(--series-1)" fillOpacity={0.35} strokeWidth={1.5} isAnimationActive={false} />
-                <Area type="linear" dataKey="dgkp" stackId="a" name="DGKP" stroke="var(--series-4)" fill="var(--series-4)" fillOpacity={0.35} strokeWidth={1.5} isAnimationActive={false} />
-                <Area type="linear" dataKey="arzt" stackId="a" name="Ärzt:innen" stroke="var(--series-3)" fill="var(--series-3)" fillOpacity={0.35} strokeWidth={1.5} isAnimationActive={false} />
+                <Area type="linear" dataKey="assistenz" stackId="a" name="Assistenz (Check-in)" stroke="var(--series-1)" fill="var(--series-1)" fillOpacity={0.35} isAnimationActive={false} />
+                <Area type="linear" dataKey="dgkp" stackId="a" name="DGKP" stroke="var(--series-4)" fill="var(--series-4)" fillOpacity={0.35} isAnimationActive={false} />
+                <Area type="linear" dataKey="arzt" stackId="a" name="Ärzt:innen" stroke="var(--series-3)" fill="var(--series-3)" fillOpacity={0.35} isAnimationActive={false} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -171,7 +171,7 @@ export default function Station() {
             {roles.map((r) => (
               <div key={r.role}>
                 <div className="flex justify-between text-[11.5px] mb-1"><span className="text-ink-2">{ROLE_LABEL[r.role]} · Score</span><span className="tabular text-ink-1">{r.score} <Delta value={r.score - r.prev} /></span></div>
-                <MiniBar value={r.score} max={100} tone={r.score >= 80 ? '#4fb3a8' : r.score >= 65 ? '#b9bb5f' : '#d9834a'} height={4} />
+                <MiniBar value={r.score} max={100} tone={r.score >= 80 ? 'var(--good)' : r.score >= 65 ? 'var(--warn)' : 'var(--bad)'} height={4} />
               </div>
             ))}
           </div>

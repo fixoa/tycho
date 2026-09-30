@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { ArrowUp, History, X, ArrowRight, Cpu, Trash2 } from 'lucide-react'
+import { ArrowUp, ClockCounterClockwise as History, X, ArrowRight, Cpu, Trash as Trash2 } from '@phosphor-icons/react'
 import { useAssistant } from '../state/assistant'
 import { useData } from '../data/aggregate'
 import { usePersonMode } from '../state/config'
@@ -65,11 +65,11 @@ export default function Assistant({ variant = 'panel' }: { variant?: 'panel' | '
         )}
         {a.messages.map((m, i) => (
           <div key={i} className={m.role === 'user' ? 'flex justify-end' : ''}>
-            {m.role === 'user' ? <div className="bg-surface-2 rounded-2xl px-3.5 py-2 text-[13px] max-w-[85%]">{m.text}</div> : (
+            {m.role === 'user' ? <div className="bubble-user rounded-2xl px-3.5 py-2 text-[13px] max-w-[85%]">{m.text}</div> : (
               <div className="flex gap-2.5">
                 <Orb size={22} />
                 <div className="min-w-0 flex-1 text-[13px] leading-relaxed text-ink-1">
-                  <p>{m.text}</p>
+                  <p className="bubble-ai rounded-2xl px-3.5 py-2 inline-block max-w-full">{m.text}</p>
                   {m.answer?.table && (
                     <div className="mt-2 overflow-x-auto rounded-lg border border-line-1"><table className="w-full text-[12px]"><thead><tr>{m.answer.table.head.map((h) => <th key={h} className="label text-left px-2 py-1.5 border-b border-line-1">{h}</th>)}</tr></thead><tbody>{m.answer.table.rows.map((r, ri) => <tr key={ri} className="border-b border-line-1 last:border-0">{r.map((c, ci) => <td key={ci} className={`px-2 py-1.5 ${ci > 0 && typeof c !== 'string' ? 'text-right tabular' : ''}`}>{c}</td>)}</tr>)}</tbody></table></div>
                   )}

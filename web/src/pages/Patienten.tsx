@@ -1,5 +1,5 @@
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { Clock, TrendingUp, Stethoscope } from 'lucide-react'
+import { Clock, TrendUp as TrendingUp, Stethoscope } from '@phosphor-icons/react'
 import { useData, pctDelta } from '../data/aggregate'
 import { Panel, Heat, BarTable, Pill } from '../components/simple'
 import { ChartTooltip, Legend } from '../components/ui'
@@ -34,8 +34,8 @@ export default function Patienten() {
               <YAxis axisLine={false} tickLine={false} />
               <Tooltip content={<ChartTooltip />} />
               <ReferenceLine y={avg} stroke="var(--ink-3)" strokeDasharray="4 4" label={{ value: `Ø ${fmt.num1(avg)}`, position: 'right', fill: 'var(--ink-2)', fontSize: 12 }} />
-              {d.compareRange && <Line type="linear" dataKey="prev" name={d.compareRange.label} stroke="var(--series-1)" strokeDasharray="3 3" strokeWidth={1.5} dot={false} isAnimationActive={false} />}
-              <Line type="linear" dataKey="contacts" name={d.range.label} stroke="var(--series-1)" strokeWidth={2.2} dot={false} isAnimationActive={false} />
+              {d.compareRange && <Line type="linear" dataKey="prev" name={d.compareRange.label} stroke="var(--series-1)" strokeDasharray="3 3" dot={false} isAnimationActive={false} />}
+              <Line type="linear" dataKey="contacts" name={d.range.label} stroke="var(--series-1)" dot={false} isAnimationActive={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>

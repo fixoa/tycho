@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Info, Lock, Users } from 'lucide-react'
+import { Info, Lock, Users } from '@phosphor-icons/react'
 import { usePersonMode } from '../state/config'
 import { useFilters } from '../state/filters'
 import { Avatar, Badge, Card, Delta, ScoreRing, Bar as MiniBar, Table } from '../components/ui'
@@ -106,7 +106,7 @@ export default function Team() {
               <span className="inline-flex items-center gap-1 text-ink-3 text-xs"><Lock size={12} /> nur aggregiert</span>
             ) : (
               <div className="flex items-center gap-2 justify-end">
-                <div className="w-20"><MiniBar value={s.score} max={100} tone={s.score >= 80 ? '#4fb3a8' : s.score >= 65 ? '#b9bb5f' : '#d9834a'} /></div>
+                <div className="w-20"><MiniBar value={s.score} max={100} tone={s.score >= 80 ? 'var(--good)' : s.score >= 65 ? 'var(--warn)' : 'var(--bad)'} /></div>
                 <span className="font-medium w-7">{s.score}</span>
                 <Delta value={s.score - s.prevScore} />
               </div>

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { ArrowDownRight, ArrowUpRight, Minus, Info } from 'lucide-react'
+import { ArrowDownRight, ArrowUpRight, Minus, Info } from '@phosphor-icons/react'
 import { fmt } from '../lib/format'
 
 export function Card({ title, subtitle, action, children, className = '', padded = true }: {
@@ -30,7 +30,7 @@ export function Delta({ value, format = (v: number) => fmt.num(Math.abs(v)), inv
   const Icon = neutral ? Minus : value > 0 ? ArrowUpRight : ArrowDownRight
   return (
     <span className={`inline-flex items-center gap-0.5 text-xs font-medium ${color}`}>
-      <Icon size={14} strokeWidth={2.2} />
+      <Icon size={14} />
       {format(value)}{suffix}
     </span>
   )
@@ -85,12 +85,12 @@ export function Avatar({ name, hue, size = 32 }: { name: string; hue: number; si
 export function ScoreRing({ score, size = 96, stroke = 8, label, prev }: { score: number; size?: number; stroke?: number; label?: string; prev?: number }) {
   const r = (size - stroke) / 2
   const c = 2 * Math.PI * r
-  const tone = score >= 80 ? '#4fb3a8' : score >= 65 ? '#b9bb5f' : score >= 50 ? '#d9834a' : '#d64545'
+  const tone = score >= 80 ? 'var(--good)' : score >= 65 ? 'var(--warn)' : score >= 50 ? 'var(--bad)' : 'var(--bad)'
   return (
     <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--surface-3)" strokeWidth={stroke} />
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={tone} strokeWidth={stroke} strokeLinecap="round"
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--surface-3)" />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={tone} strokeLinecap="round"
           strokeDasharray={`${(score / 100) * c} ${c}`} />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">

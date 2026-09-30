@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Info } from 'lucide-react'
+import { Info } from '@phosphor-icons/react'
 import { fmt } from '../lib/format'
 
 /** KPI-Karte im Stil der Simple-Ansicht: Icon + Label, große Zahl, Delta-Pill, Unterzeile */
