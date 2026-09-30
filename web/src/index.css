@@ -1,4 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+/* Schriften lokal gebündelt (kein Netzwerkzugriff zur Laufzeit) */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/inter-tight/300.css';
+@import '@fontsource/inter-tight/400.css';
+@import '@fontsource/inter-tight/500.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -135,5 +144,30 @@ input[type='range'] { accent-color: var(--accent); }
 
 @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
-@media (prefers-reduced-motion: reduce) { .pulse-dot { animation: none; } }
+
 details > summary::-webkit-details-marker { display: none; }
+
+/* ------------------------------------------------------------------
+   Bewegung: kurz, ruhig, zukunftsorientiert. Alles lokal (CSS), keine Assets.
+   ------------------------------------------------------------------ */
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes wordmark { from { opacity: 0; transform: translateY(0.5em); } to { opacity: 1; transform: translateY(0.2em); } }
+@keyframes scanline { from { top: -2px; } to { top: 100%; } }
+@keyframes sweep { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+.rise { animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.fade-in { animation: fade-in 1.2s ease-out both; }
+.page-enter { animation: rise 0.32s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.wordmark { animation: wordmark 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) 0.25s both; }
+.hud-scan { position: absolute; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(160, 190, 215, 0.35) 40%, rgba(160, 190, 215, 0.35) 60%, transparent 100%); animation: scanline 18s linear infinite; pointer-events: none; z-index: 5; }
+.hud-corner { position: absolute; width: 18px; height: 18px; border-color: rgba(154, 161, 169, 0.5); pointer-events: none; z-index: 5; }
+.glass { background: rgba(15, 18, 22, 0.78); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(14px); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8); }
+.glass::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(230, 232, 234, 0.45), transparent); }
+.progress-sweep { background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--accent) 60%, transparent) 50%, transparent 100%); background-size: 200% 100%; animation: sweep 1.4s linear infinite; }
+:root[data-ui='advanced'] .progress-sweep { background: linear-gradient(90deg, transparent 0%, #4fb3a8 50%, transparent 100%); background-size: 200% 100%; }
+.card { transition: border-color 0.18s ease, box-shadow 0.18s ease; }
+.bp-btn, .bp-input, nav a, button { transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .rise, .fade-in, .page-enter, .wordmark, .hud-scan, .progress-sweep, .pulse-dot { animation: none !important; }
+  .wordmark { transform: translateY(0.2em); }
+}

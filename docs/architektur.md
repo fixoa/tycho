@@ -109,7 +109,8 @@ Der Modus wirkt global: Team-, Personen-, Tailwind-HR-, Verordnungs- und Digest-
 
 ## Oberflächen-Modi und Assistent (Stand 29.09.2026)
 
-- **Simple**: helle, ruhige Oberfläche nach Vorlage (Textnavigation, Zeitraum/Standort rechts, KPI-Karten, Assistent-Panel). Standard für die Leitung.
-- **Advanced**: Gotham-Stil (Modulleiste, Facetten, KPI-Leiste, Donuts, Zeitachse). Für Analyse.
+- **Simple**: helle, ruhige Oberfläche (Seitenleiste mit fünf Bereichen nach Apple HIG, Toolbar mit Ort/Suche/Zeitraum/Standort, KPI-Karten, Assistent-Panel). Standard für die Leitung.
+- **Advanced**: Gotham-Stil (Modulleiste mit denselben fünf Bereichen, Seiten-Tabs, Facetten, KPI-Leiste, Donuts, Zeitachse). Für Analyse.
+- **Login**: Canvas-Erdkugel (Orbits, Radar-Sweep, Parallaxe) plus optionaler, lokal gebündelter Video-Loop (`web/public/login/`, Higgsfield-Render). Schriften liegen gebündelt bei (`@fontsource`), zur Laufzeit gibt es keinen Netzwerkzugriff.
 - Beide Modi teilen Routen, Filterzustand (`web/src/state/filters.tsx`) und Datenzugriff (`web/src/data/aggregate.ts` → `useData()`), nur die Shell und die Design-Tokens (`data-ui`, `data-theme`) unterscheiden sich.
 - **Assistent**: `web/src/components/Assistant.tsx` + `web/src/data/agent.ts`. Produktiv: llama.cpp-Server auf TS-ORD-01 (GPU optional), Modell lokal (Llama 3.1 8B Instruct oder Mistral 7B), Tool-Calling auf Read-only-Funktionen (Summaries, Positionen, Honorarnoten, HR, Score, Prognose). System-Prompt ohne Patientendaten; Antworten werden mit den Rohwerten zitiert. Verlauf nur bei „Dauerhaft speichern“ im verschlüsselten Store.

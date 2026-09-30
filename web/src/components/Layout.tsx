@@ -1,10 +1,10 @@
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useState, type ComponentType } from 'react'
 import {
-  Activity, Phone, Mic, Users, ClipboardList, TrendingUp, Mail, ShieldCheck, Settings, LogOut, Sun, Moon, CalendarClock,
-  Wind, Share2, Pill, ClipboardCheck, Smile, UserCircle, Search, ChevronDown, ChevronsLeft, ChevronsRight, Upload, Download, Bell,
+  Users, LogOut, Sun, Moon, Search, ChevronDown, ChevronsLeft, ChevronsRight, Upload, Download, Bell,
   LayoutGrid, Table2, BarChart3, Clock, List, SlidersHorizontal,
 } from 'lucide-react'
+import { visibleNav, groupOf, itemOf } from '../nav'
 import { useAuth, isLeader } from '../state/auth'
 import { useConfig } from '../state/config'
 import { useFilters } from '../state/filters'
@@ -19,29 +19,11 @@ import { Avatar } from './ui'
 
 type Icon = ComponentType<{ size?: number; strokeWidth?: number; className?: string }>
 
-// Modulleiste (Gotham: Home · Browser · Graph · Map · … · Metrics)
-const MODULES: { to: string; label: string; icon: Icon; leader: boolean; module?: string }[] = [
-  { to: '/station', label: 'Station', icon: Activity, leader: true },
-  { to: '/start', label: 'Start', icon: UserCircle, leader: true },
-  { to: '/finanzen', label: 'Finanzen', icon: TrendingUp, leader: true },
-  { to: '/prognose', label: 'Prognose', icon: TrendingUp, leader: true },
-  { to: '/team', label: 'Personal', icon: Users, leader: true },
-  { to: '/tarife', label: 'Tarife', icon: ClipboardList, leader: true, module: 'billing' },
-  { to: '/landschaft', label: 'Landschaft', icon: Share2, leader: true },
-  { to: '/termine', label: 'Termine', icon: CalendarClock, leader: true, module: 'capacity' },
-  { to: '/zuweiser', label: 'Zuweiser', icon: Share2, leader: true, module: 'zuweiser' },
-  { to: '/verordnungen', label: 'Verordnung', icon: Pill, leader: true, module: 'verordnung' },
-  { to: '/zufriedenheit', label: 'NPS', icon: Smile, leader: true, module: 'nps' },
-  { to: '/qm', label: 'QM', icon: ClipboardCheck, leader: true, module: 'qm' },
-  { to: '/ordicall', label: 'Ordicall', icon: Phone, leader: true, module: 'ordicall' },
-  { to: '/diktara', label: 'Diktara', icon: Mic, leader: true, module: 'diktara' },
-  { to: '/tailwind', label: 'Tailwind', icon: Wind, leader: true, module: 'tailwind' },
-  { to: '/hr', label: 'HR', icon: Users, leader: true, module: 'tailwind' },
-  { to: '/digest', label: 'Digest', icon: Mail, leader: true },
-  { to: '/mein-score', label: 'Mein Score', icon: UserCircle, leader: false, module: 'selfservice' },
-  { to: '/sicherheit', label: 'Sicherheit', icon: ShieldCheck, leader: true },
-  { to: '/einstellungen', label: 'Admin', icon: Settings, leader: true },
-]
+/*
+ * Modulleiste nach Apple HIG: 5 Bereiche (Überblick · Praxis · Finanzen · Team · Systeme)
+ * statt 20 Einzelmodulen; die Seiten des aktiven Bereichs liegen als Tabs in der zweiten Zeile.
+ * Navigation und Aktionen bleiben getrennt (Aktionen rechts in der Toolbar).
+ */
 
 // Seiten-Chrome: Titel, Ansichts-Tabs, Facetten (Gotham: Types / Properties mit Balken)
 interface Facet { title: string; rows: { label: string; count: number }[]; sortable?: boolean }
@@ -123,8 +105,10 @@ export default function Layout() {
   const [q, setQ] = useState('')
   const results = q.length >= 2 ? searchAll(q).slice(0, 8) : []
   const leader = session ? isLeader(session.user) : false
-  const items = MODULES.filter((n) => (leader || !n.leader) && (!n.module || (config?.modules?.[n.module] ?? true)))
+  const groups = visibleNav(leader, config?.modules)
   const base = '/' + loc.pathname.split('/')[1]
+  const group = groupOf(loc.pathname)
+  const item = itemOf(loc.pathname)
   const chrome = CHROME[base] ?? DEFAULT_CHROME
   const dayOfQ = Math.round((DATA_AS_OF.getTime() - QUARTER.start.getTime()) / 86400000) + 1
   const showFacets = leader && chrome.facets.length > 0
@@ -135,13 +119,16 @@ export default function Layout() {
       <header className="h-14 shrink-0 bg-bar-0 flex items-center px-2 gap-1 border-b border-line-1">
         <div className="flex items-center pl-3 pr-4 mr-1 border-r border-line-1 h-9"><span className="font-medium tracking-tight text-[15px] text-ink-1">Tycho</span></div>
         <nav className="flex items-stretch gap-0.5 overflow-x-auto">
-          {items.map((n) => (
-            <NavLink key={n.to} to={n.to} onClick={() => setTab(0)}
-              className={({ isActive }) => `flex flex-col items-center justify-center w-[58px] h-11 rounded ${isActive ? 'text-ink-1 bg-surface-2' : 'text-ink-3 hover:text-ink-1 hover:bg-surface-2'}`}>
-              <n.icon size={17} strokeWidth={1.7} />
-              <span className="text-[9.5px] mt-1 leading-none whitespace-nowrap">{n.label}</span>
-            </NavLink>
-          ))}
+          {groups.map((g) => {
+            const active = group?.key === g.key
+            return (
+              <button key={g.key} onClick={() => { setTab(0); nav(g.items[0].to) }} title={g.items.map((i) => i.label).join(' · ')}
+                className={`flex flex-col items-center justify-center w-[66px] h-11 rounded ${active ? 'text-ink-1 bg-surface-2' : 'text-ink-3 hover:text-ink-1 hover:bg-surface-2'}`}>
+                <g.icon size={17} strokeWidth={1.7} />
+                <span className="text-[9.5px] mt-1 leading-none whitespace-nowrap">{g.label}</span>
+              </button>
+            )
+          })}
         </nav>
         <div className="ml-auto flex items-center gap-1 pr-1">
           <div className="hidden xl:flex items-center gap-0.5 pr-2 mr-1 border-r border-line-1">
@@ -168,12 +155,21 @@ export default function Layout() {
 
       {/* Sub-Header: Titel · Ansichts-Tabs · Filter · Zeitraum */}
       <div className="h-11 shrink-0 bg-bar-1 flex items-center px-4 gap-4 border-b border-line-1">
-        <div className="text-[17px] font-bold text-ink-1 tracking-tight whitespace-nowrap">{chrome.title || PRACTICE.name}</div>
-        <div className="flex items-center gap-1 ml-2">
-          {chrome.tabs.map((t, i) => (
-            <button key={t.label} onClick={() => { setTab(i); filters.setView(i) }} className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[12.5px] ${tab === i ? 'bg-surface-2 text-ink-1 font-semibold' : 'text-ink-2 hover:text-ink-1'}`}><t.icon size={14} /> {t.label}</button>
-          ))}
-        </div>
+        <div className="text-[17px] font-bold text-ink-1 tracking-tight whitespace-nowrap">{chrome.title || item?.hint || item?.label || PRACTICE.name}</div>
+        {group && group.items.length > 1 && (
+          <div className="flex items-center gap-0.5 ml-1">
+            {group.items.map((i) => (
+              <NavLink key={i.to} to={i.to} onClick={() => setTab(0)} title={i.hint} className={({ isActive }) => `inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[12.5px] whitespace-nowrap ${isActive ? 'bg-surface-2 text-ink-1 font-semibold' : 'text-ink-2 hover:text-ink-1'}`}><i.icon size={13} /> {i.label}</NavLink>
+            ))}
+          </div>
+        )}
+        {chrome.tabs.length > 1 && (
+          <div className="flex items-center gap-0.5 ml-1 pl-3 border-l border-line-1">
+            {chrome.tabs.map((t, i) => (
+              <button key={t.label} title={t.label} onClick={() => { setTab(i); filters.setView(i) }} className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-[12px] ${tab === i ? 'bg-surface-2 text-ink-1 font-semibold' : 'text-ink-2 hover:text-ink-1'}`}><t.icon size={14} /><span className="hidden 2xl:inline">{t.label}</span></button>
+            ))}
+          </div>
+        )}
         <div className="ml-auto hidden lg:flex items-center gap-3 text-[12px] text-ink-2">
           <Choice label="Rolle" value={filters.role} options={[...ROLE_OPTS]} onChange={filters.setRole} />
           <Choice label="Kostenträger" value={filters.payer} options={[...PAYER_OPTS]} onChange={filters.setPayer} />
@@ -189,7 +185,7 @@ export default function Layout() {
           <button onClick={() => setFacetsOpen(true)} className="w-7 shrink-0 bg-bar-1 border-r border-line-1 text-ink-3 hover:text-ink-1 flex items-start justify-center pt-2" title="Facetten ausklappen"><ChevronsRight size={14} /></button>
         ))}
         <main className="flex-1 min-w-0 overflow-y-auto plane">
-          <div className="px-5 py-4">
+          <div key={loc.pathname} className="px-5 py-4 page-enter">
             <Outlet />
           </div>
           <Assistant variant="drawer" />
