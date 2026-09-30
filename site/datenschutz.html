@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tycho · Datenschutz</title>
+<meta name="description" content="Whitepaper: Tycho, die lokale, nur lesende Kontrollinstanz für Ordinationen. Architektur, Sicherheit, Datenmodell, Recht, Roadmap.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+<style>
+.doc { display: grid; gap: 48px; padding-top: 110px; padding-bottom: 80px; }
+@media (min-width: 1000px) { .doc { grid-template-columns: 220px minmax(0, 1fr); } }
+.doc nav { position: sticky; top: 90px; align-self: start; display: none; gap: 6px; font-size: 12.5px; }
+@media (min-width: 1000px) { .doc nav { display: grid; } }
+.doc nav a { color: var(--fg-3); padding: 3px 0 3px 10px; border-left: 1px solid var(--line); }
+.doc nav a:hover { color: var(--fg); border-color: var(--teal); }
+.doc article { max-width: 76ch; }
+.doc h1 { font-size: clamp(32px, 4.5vw, 52px); line-height: 1.05; margin-bottom: 8px; }
+.doc h2 { font-size: 28px; margin: 48px 0 12px; }
+.doc h3 { font-size: 16px; margin: 28px 0 8px; }
+.doc p { margin: 0 0 14px; color: var(--fg-2); }
+.doc p:first-of-type { color: var(--fg); }
+.doc b { color: var(--fg); }
+.doc ul, .doc ol { color: var(--fg-2); padding-left: 20px; margin: 0 0 14px; }
+.doc li { margin: 4px 0; }
+.doc code { font-family: var(--mono); font-size: 12px; background: rgba(255,255,255,.06); padding: 1px 5px; border-radius: 2px; }
+.doc pre { font-family: var(--mono); font-size: 11.5px; line-height: 1.5; background: var(--bg-1); border: 1px solid var(--line); padding: 16px; overflow-x: auto; color: var(--fg-2); margin: 0 0 16px; }
+.doc hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+.doc .tbl { overflow-x: auto; border: 1px solid var(--line); margin: 0 0 16px; }
+.doc table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.doc th, .doc td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.doc th { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-3); font-weight: 400; }
+.doc td { color: var(--fg-2); }
+</style>
+</head>
+<body>
+<nav class="nav scrolled" aria-label="Hauptnavigation"><div class="wrap"><a class="logo" href="index.html" aria-label="Tycho"><img src="brand/logo-dark.svg" alt="Tycho"></a><ul><li><a href="index.html#abgekapselt">Lokale KI</a></li><li><a href="index.html#funktion">Funktionsweise</a></li><li><a href="index.html#sicherheit">Sicherheit</a></li><li><a href="index.html#roadmap">Roadmap</a></li></ul><div class="cta"><a class="btn sm solid" href="index.html#demo">Demo buchen</a></div></div></nav>
+<main class="wrap doc"><div></div><article><h1>Datenschutz</h1><p>Diese Website setzt keine Tracker und keine Analyse-Cookies. Beim Absenden des Demo-Formulars werden Name, Organisation, E-Mail, Telefon und Nachricht ausschließlich zur Terminvereinbarung verarbeitet (Art. 6 Abs. 1 lit. b DSGVO) und nach Abschluss gelöscht. Schriften werden von Google Fonts geladen; dabei wird Ihre IP-Adresse an Google übermittelt. Verantwortlicher: siehe Impressum.</p></article></main>
+<footer><div class="wrap"><img src="brand/logo-dark.svg" alt="Tycho"><span>© 2026 Tycho</span><a href="index.html">Startseite</a><a href="index.html#demo">Demo</a></div></footer>
+<script src="app.js"></script>
+</body>
+</html>

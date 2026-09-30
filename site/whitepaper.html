@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tycho Whitepaper</title>
+<meta name="description" content="Whitepaper: Tycho, die lokale, nur lesende Kontrollinstanz für Ordinationen. Architektur, Sicherheit, Datenmodell, Recht, Roadmap.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+<style>
+.doc { display: grid; gap: 48px; padding-top: 110px; padding-bottom: 80px; }
+@media (min-width: 1000px) { .doc { grid-template-columns: 220px minmax(0, 1fr); } }
+.doc nav { position: sticky; top: 90px; align-self: start; display: none; gap: 6px; font-size: 12.5px; }
+@media (min-width: 1000px) { .doc nav { display: grid; } }
+.doc nav a { color: var(--fg-3); padding: 3px 0 3px 10px; border-left: 1px solid var(--line); }
+.doc nav a:hover { color: var(--fg); border-color: var(--teal); }
+.doc article { max-width: 76ch; }
+.doc h1 { font-size: clamp(32px, 4.5vw, 52px); line-height: 1.05; margin-bottom: 8px; }
+.doc h2 { font-size: 28px; margin: 48px 0 12px; }
+.doc h3 { font-size: 16px; margin: 28px 0 8px; }
+.doc p { margin: 0 0 14px; color: var(--fg-2); }
+.doc p:first-of-type { color: var(--fg); }
+.doc b { color: var(--fg); }
+.doc ul, .doc ol { color: var(--fg-2); padding-left: 20px; margin: 0 0 14px; }
+.doc li { margin: 4px 0; }
+.doc code { font-family: var(--mono); font-size: 12px; background: rgba(255,255,255,.06); padding: 1px 5px; border-radius: 2px; }
+.doc pre { font-family: var(--mono); font-size: 11.5px; line-height: 1.5; background: var(--bg-1); border: 1px solid var(--line); padding: 16px; overflow-x: auto; color: var(--fg-2); margin: 0 0 16px; }
+.doc hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
+.doc .tbl { overflow-x: auto; border: 1px solid var(--line); margin: 0 0 16px; }
+.doc table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.doc th, .doc td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.doc th { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-3); font-weight: 400; }
+.doc td { color: var(--fg-2); }
+</style>
+</head>
+<body>
+<nav class="nav scrolled" aria-label="Hauptnavigation"><div class="wrap"><a class="logo" href="index.html" aria-label="Tycho"><img src="brand/logo-dark.svg" alt="Tycho"></a><ul><li><a href="index.html#abgekapselt">Lokale KI</a></li><li><a href="index.html#funktion">Funktionsweise</a></li><li><a href="index.html#sicherheit">Sicherheit</a></li><li><a href="index.html#roadmap">Roadmap</a></li></ul><div class="cta"><a class="btn sm solid" href="index.html#demo">Demo buchen</a></div></div></nav>
+<main class="wrap doc">
+  <nav aria-label="Inhalt"><a href="#s1">Zusammenfassung</a><a href="#s2">1. Ausgangslage</a><a href="#s3">2. Was Tycho leistet</a><a href="#s4">3. Architektur</a><a href="#s5">4. Datenmodell</a><a href="#s6">5. Sicherheit</a><a href="#s7">6. Recht und Regulatorik (Österreich)</a><a href="#s8">7. Betrieb</a><a href="#s9">8. Roadmap</a><a href="#s10">9. Fazit</a></nav>
+  <article>
+<h1>Tycho – Whitepaper</h1>
+<p><b>Die lokale Kontrollinstanz für Ordinationen. Liest nur. Verlässt nie das Haus.</b></p>
+<p>Version 1.0 · September 2026 · Tycho Demo</p>
+<hr>
+<h2 id="s1">Zusammenfassung</h2>
+<p>Tycho ist eine Analyse- und Kontrollplattform für Arztpraxen und Primärversorgungseinheiten in Österreich. Sie liest die Daten, die in einer Ordination ohnehin entstehen (Praxisverwaltungssystem, Telefon-KI, Diktat-KI, Terminkalender, Dienstplan, Zahlungseingänge), verdichtet sie zu wenigen belastbaren Kennzahlen und beantwortet Fragen der Leitung in natürlicher Sprache. Drei Eigenschaften unterscheiden Tycho von Cloud-Analytik:</p>
+<ol><li><b>Lokal und abgekapselt.</b> Tycho läuft vollständig auf dem Ordinationsserver. Es gibt keine ausgehende Verbindung, keinen Cloud-Dienst, keinen Telemetrie-Kanal. Auch das Sprachmodell des Assistenten läuft lokal.</li><li><b>Nur lesend.</b> Tycho schreibt in kein Quellsystem. Datenbank-Logins sind auf <code>SELECT</code> beschränkt, gelesen wird von Snapshots statt aus der Produktivdatenbank, und ein täglicher Schreib-Selbsttest muss scheitern. Für die Quellsysteme ist Tycho ein weiterer Benutzer mit Leserechten, nicht mehr.</li><li><b>Verschlüsselt und nachvollziehbar.</b> Alle Ergebnisse liegen AES-256-GCM-verschlüsselt mit Schlüsseln im TPM. Jeder Zugriff steht in einer append-only-Audit-Kette.</li></ol>
+<p>Der Nutzen für die Ordination: der <b>Efficacy Score</b> als eine Zahl für den Zustand des Betriebs, eine <b>Quartalsprognose</b> auf Basis der laufenden Abrechnung, die <b>Kreuzprüfung</b> von Leistungsziffern gegen Dokumentation und Anrufe (liegengelassene Honorare), ein <b>HR-Bild</b> aus Dienstplan und Ertrag je Stunde, und ein wöchentlicher <b>Digest</b> für die Leitung.</p>
+<hr>
+<h2 id="s2">1. Ausgangslage</h2>
+<p>Eine Ordination erzeugt jeden Tag Daten in sechs bis acht getrennten Systemen. Das PVS kennt Leistungen und Termine, die Telefon-KI kennt Anrufe und Anliegen, die Diktat-KI kennt Dokumentationszeiten, der Dienstplan kennt Anwesenheiten, die Bank kennt Zahlungseingänge. Niemand sieht das Ganze. Fragen wie „Wie liegen wir im Quartal?“, „Was haben wir nicht abgerechnet?“ oder „Wer ist überlastet?“ werden mit Gefühl oder mit Excel beantwortet, meist Wochen zu spät.</p>
+<p>Cloud-Analytik löst das technisch, scheitert aber an der Realität der Ordination: Gesundheitsdaten nach Art. 9 DSGVO, ärztliche Verschwiegenheit nach § 54 ÄrzteG, Personaldaten unter § 96 ArbVG, und ein Berufsstand, der zu Recht keine Kopie seiner Kartei bei einem Anbieter haben will.</p>
+<p>Tycho setzt deshalb einen anderen Rahmen: <b>Die Daten bleiben, wo sie sind. Die Auswertung kommt zu den Daten.</b></p>
+<h2 id="s3">2. Was Tycho leistet</h2>
+<div class="tbl"><table><thead><tr><th>Bereich</th><th>Was Tycho beantwortet</th><th>Quelle</th></tr></thead><tbody><tr><td><b>Station</b></td><td>Efficacy Score, KPIs, Handlungsbedarf, Zeitachse</td><td>alle</td></tr><tr><td><b>Finanzen &amp; Tarife</b></td><td>Umsatz je Kostenträger, Honorarkatalog (ÖGK-HO-Logik), Limits (z. B. Pos. 39), Kennzeichnungen 8a–8i/T, Fristen</td><td>PVS, e-card</td></tr><tr><td><b>Kreuzprüfung</b></td><td>Konsultationen ohne Grundleistung, Diktate mit erkannter Leistung ohne Position, Telemedizin ohne T-Kennzeichnung</td><td>PVS × Diktara × Ordicall</td></tr><tr><td><b>Prognose</b></td><td>Quartalsende mit 90-%-Band, Vergleich Vorquartal, Kostenträger-Mix</td><td>PVS, Historie</td></tr><tr><td><b>Produktivität &amp; Personal</b></td><td>Kontakte, Umsatz, Dokuzeit je Rolle oder Person; Team- oder Pro-Person-Modus</td><td>PVS, Diktara, AD</td></tr><tr><td><b>Tailwind</b></td><td>Honorarnoten, Inkasso-KI (Erinnerung, Ratenzahlung), Zahlungsabgleich</td><td>PVS, Bank</td></tr><tr><td><b>Tailwind HR</b></td><td>Personalkosten, Kostenquote, Umsatz je Arztstunde gegen Richtwert 120 €/h, Überstunden, Frühwarnungen</td><td>Planery, Lohnverrechnung</td></tr><tr><td><b>Ordicall / Diktara</b></td><td>Anrufe nach Ergebnis und Anliegen, KI-Quote, Stoßzeiten; Dokuzeit, Akzeptanz, ICD-10-Quote</td><td>Exporte / Metadaten</td></tr><tr><td><b>Termine, Zuweiser, Verordnungen, QM, NPS</b></td><td>Auslastung, No-Shows, Zuweiserbindung, Verordnungs-Ausreißer, Fristen, Zufriedenheit</td><td>PVS, Import</td></tr><tr><td><b>Digest</b></td><td>Montags 06:00 als signierte Mail an die Leitung</td><td>Store</td></tr><tr><td><b>Assistent</b></td><td>Fragen in natürlicher Sprache, Antworten mit Tabellen und Sprüngen in die passende Ansicht</td><td>Store, lokales LLM</td></tr></tbody></table></div>
+<h3 id="">Der Efficacy Score</h3>
+<p>Der Score verdichtet je Rolle sechs bis sieben Komponenten auf 0–100: Durchsatz, Ertrag, Dokumentation, Diktara-Nutzung, Telemedizin, No-Show-Quote, Abrechnungsqualität. Gewichte und Zielwerte sind je Rolle hinterlegt und in der Oberfläche sichtbar. Der Score ist zeitraumbezogen: Er gilt für den gewählten Zeitraum und wird gegen den Vergleichszeitraum ausgewiesen. Es gibt keinen Peer-Vergleich zwischen Ordinationen.</p>
+<h3 id="">Team-basiert oder pro Person</h3>
+<p>Bei der Erstkonfiguration entscheidet der Haupt-Admin zwischen <b>Team-basiert</b> (nur Gruppenkennzahlen, k-Anonymität ≥ 5, keine Rankings) und <b>Pro Person</b> (Einzelwerte, nur mit NDA und dokumentierter Zustimmung). Die Entscheidung steht im Audit-Log und ist nur durch den Admin umkehrbar.</p>
+<h2 id="s4">3. Architektur</h2>
+<pre>Quellen (nur lesend)           Tycho-Kern (TS-ORD-01)            Oberfläche
+──────────────────────         ──────────────────────────         ───────────────────
+PVS (CGM MedXPert)   ─SELECT─► Collector (gMSA-Dienst)   ──►   Tycho Station (HTTPS 127.0.0.1)
+e-card / ELGA (via PVS)        · Adapter · Pseudonymisierung     Simple- und Advanced-Modus
+Ordicall (JSON-Export)         · Aggregation · Scoring           Kerberos-SSO, AD-Gruppen
+Diktara (Metadaten-API)        · Kreuzprüfung · Prognose
+Active Directory (LDAPS)               │
+Planery (API, read-only)               ▼
+Bank (CAMT.053)                Verschlüsselter Store             Lokaler Agent (llama.cpp)
+Lohnverrechnung (CSV)          AES-256-GCM · TPM                 Tools nur lesend
+                               Audit-Kette (SHA-256)             Digest (S/MIME, intern)</pre>
+<p><b>Ablauf eines Tages.</b> Während der Sprechstunde liest Tycho nichts aus der Produktivdatenbank. Um 19:00 entsteht ein Datenbank-Snapshot, um 05:10 läuft der Collector (29 Minuten): Lesen, Pseudonymisieren, Aggregieren, Scoren, Kreuzprüfen, Prognose. Um 05:41 liegt der neue Stand verschlüsselt im Store, der Snapshot wird verworfen. Montags um 06:00 geht der Digest.</p>
+<p><b>Adapter.</b> Jede Quelle hat einen Adapter mit genau einer Fähigkeit: lesen. Schreib-APIs existieren im Code nicht; eine Lint-Regel verhindert, dass sie entstehen. Für CGM MedXPert nutzt Tycho einen Leselogin (<code>db_datareader</code> + <code>db_denydatawriter</code>) auf der Snapshot-Kopie. Ordicall und Diktara liefern Exporte bzw. Metadaten ohne Audio und ohne Transkripte. Planery wird über einen Read-only-Token angesprochen, der im TPM liegt.</p>
+<p><b>Assistent.</b> Das Sprachmodell (Llama 3.1 8B, quantisiert) läuft über llama.cpp auf dem Server. Es hat keine Netzwerkverbindung. Seine einzigen Werkzeuge sind lesende Funktionen auf den Store; Patientendaten kommen nie in den Prompt, weil der Store keine enthält.</p>
+<h2 id="s5">4. Datenmodell</h2>
+<p>Gespeichert werden ausschließlich pseudonymisierte, aggregierte oder metadatenbezogene Werte:</p>
+<ul><li><b>Fall</b> (HMAC-Pseudonym mit lokalem Salt), Quartal, Kostenträger, Erstkontakt, Kennzeichnung</li><li><b>Kontakt</b>: Datum, Art (persönlich, Video, Telefon), Ärzt:in, ICD-10 ja/nein</li><li><b>Leistung</b>: Position, Anzahl, Tarif, Regelprüfung</li><li><b>Termin</b>: Slot, Terminart, No-Show, Wartezeit</li><li><b>Anruf</b>: Ergebnis, Anliegen, Dauer, Übergabe</li><li><b>Diktat</b>: Dauer, Akzeptanz, erkannte Positionen</li><li><b>Honorarnote</b>: Betrag, Status, WAHonline, Zahlungseingang</li><li><b>Person</b>: AD-Konto, Rolle, FTE, Kostensatz, Zustimmung</li><li><b>HR-Periode</b>: Soll/Ist, Überstunden, Urlaub, Abwesenheiten</li><li><b>Finding</b>: Typ, Wert, Quelle, Status</li></ul>
+<p><b>Nicht gespeichert:</b> Patientennamen, Sozialversicherungsnummern, Diagnosen im Klartext, Kartei-Freitexte, Audio, Transkripte, Befunde.</p>
+<p>Aufbewahrung: Aggregate 36 Monate, Personenwerte 24 Monate, Audit-Log 10 Jahre.</p>
+<h2 id="s6">5. Sicherheit</h2>
+<h3 id="">Grundsatz: abgekapselt</h3>
+<p>Der Tycho-Dienst hat keine ausgehende Netzwerkverbindung. Das ist keine Konfiguration, sondern eine Firewall-Regel auf Host-Ebene, die im Onboarding gesetzt und im Audit-Log dokumentiert wird. Es gibt keinen Update-Kanal, keine Telemetrie, keine Lizenzprüfung gegen einen Server. Updates werden als signiertes Paket eingespielt. Einzige optionale Ausnahme ist der interne SMTP-Relay für den Digest.</p>
+<h3 id="">Beweisführung „nur lesend“</h3>
+<div class="tbl"><table><thead><tr><th>Ebene</th><th>Maßnahme</th></tr></thead><tbody><tr><td>Datenbank-Login</td><td>eigener Login <code>tycho_ro</code>: <code>db_datareader</code> + <code>db_denydatawriter</code>, keine DDL</td></tr><tr><td>Verbindung</td><td><code>ApplicationIntent=ReadOnly</code>; Firebird nur <code>GRANT SELECT</code>; Btrieve/Pervasive nur Backup-Kopie</td></tr><tr><td>Quelle</td><td>Snapshot statt Produktivdatenbank, nach dem Lauf verworfen</td></tr><tr><td>Code</td><td>Adapter kennen nur <code>SELECT</code>; Schreib-APIs existieren nicht (Lint-Regel, Review)</td></tr><tr><td>Selbsttest</td><td>täglicher Schreibversuch (<code>INSERT</code>) muss scheitern; Ergebnis im Audit-Log und in der Oberfläche</td></tr><tr><td>Netzwerk</td><td>keine ausgehenden Verbindungen (Host-Firewall)</td></tr></tbody></table></div>
+<h3 id="">Verschlüsselung und Identität</h3>
+<ul><li>Store: AES-256-GCM, Schlüssel im TPM 2.0, an die Maschine gebunden</li><li>Personaldaten (Tailwind HR): eigener Schlüssel, eigenes Audit-Log</li><li>Transport: HTTPS nur auf 127.0.0.1 des Terminalservers, Kerberos/Negotiate-SSO, Fallback LDAPS</li><li>Dienstkonto: gMSA mit automatischer Passwortrotation, Kerberos AES-only</li><li>Rollen: <code>G_Tycho_Leitung</code>, <code>G_Tycho_Admin</code>, <code>G_Tycho_Self</code>; optional <code>G_Tycho_Audit</code></li></ul>
+<h3 id="">Audit</h3>
+<p>Jeder Lesezugriff, jede Anmeldung, jeder abgewiesene Versuch und jede Konfigurationsänderung wird als Ereignis in eine SHA-256-verkettete, append-only Datei geschrieben. Die Kette wird stündlich geprüft. Der Audit-Log ist in der Oberfläche einsehbar (Sicherheit &amp; Compliance) und exportierbar.</p>
+<h3 id="">Bedrohungsmodell (Auszug)</h3>
+<div class="tbl"><table><thead><tr><th>Bedrohung</th><th>Antwort</th></tr></thead><tbody><tr><td>Datenabfluss an Dritte</td><td>keine ausgehende Verbindung; nichts verlässt den Server</td></tr><tr><td>Kompromittierung des Servers</td><td>Store nur mit TPM-Schlüssel dieser Maschine lesbar; keine Klartext-Patientendaten vorhanden</td></tr><tr><td>Manipulation der Quellsysteme durch Tycho</td><td>technisch ausgeschlossen (Leselogin, Snapshot, Selbsttest)</td></tr><tr><td>Missbrauch von Personendaten</td><td>Team-Modus als Standard; Pro-Person nur mit NDA, Zustimmung, k-Anonymität, Audit</td></tr><tr><td>Prompt-Injection über Daten</td><td>Assistent hat nur lesende Tools und keinen Netzwerkzugang; Antworten sind auf Store-Daten begrenzt</td></tr><tr><td>Insider mit Leitungsrechten</td><td>vollständiges Audit; Pro-Person-Modus nur durch Admin mit protokollierter Entscheidung</td></tr></tbody></table></div>
+<h2 id="s7">6. Recht und Regulatorik (Österreich)</h2>
+<ul><li><b>DSGVO</b>: Art. 9 (Gesundheitsdaten), Art. 35 Datenschutz-Folgenabschätzung (DSFA-V Z 1: Leistungsbewertung von Beschäftigten), Art. 22 (keine automatisierte Entscheidung), Art. 28 (Hersteller als Auftragsverarbeiter nur für Wartung, ohne Datenzugriff)</li><li><b>ÄrzteG § 54</b> Verschwiegenheit, <b>§ 51</b> Dokumentation und Aufbewahrung</li><li><b>ArbVG § 96 Abs 1 Z 3 / § 96a</b>: Kontrollmaßnahmen und Personaldaten-Systeme; ohne Betriebsrat <b>§ 10 AVRAG</b> (Einzelzustimmung). Tycho unterstützt das durch Team-Modus, Zustimmungsverwaltung und Audit.</li><li><b>EU AI Act</b> Anhang III (Beschäftigung): Hochrisiko-Anwendung bei Personenbewertung; Tycho liefert menschliche Aufsicht (keine automatischen Entscheidungen), Information (Mein Score für jede Person) und Protokollierung.</li><li><b>Abrechnung</b>: ASVG §§ 338 ff., Gesamtverträge ÖGK/SVS/BVAEB, Honorarordnungen mit Limits und Kennzeichnungen; Einreichfristen im QM-Modul</li><li><b>Dokumentation</b>: ELGA, e-Medikation, e-Befund; ICD-10 ambulant seit 01.07.2026; WAHonline für Wahlärzt:innen</li></ul>
+<h2 id="s8">7. Betrieb</h2>
+<ul><li><b>Voraussetzungen</b>: Windows Server 2019 oder neuer, 8 GB RAM für den Dienst, 16 GB für den lokalen Assistenten, TPM 2.0, SQL Server oder Firebird als PVS-Datenbank, Active Directory</li><li><b>Onboarding</b> (ein Tag): Leselogin und Snapshot-Job einrichten, Firewall-Regel setzen, gMSA anlegen, AD-Gruppen zuordnen, Erstkonfiguration (Team/Pro Person), Schreib-Selbsttest ausführen</li><li><b>Aktualisierung</b>: signiertes Paket, manuell eingespielt; Changelog im Audit-Log</li><li><b>Support</b>: Wartung ohne Datenzugriff; Fernzugriff nur auf Einladung, protokolliert</li></ul>
+<h2 id="s9">8. Roadmap</h2>
+<div class="tbl"><table><thead><tr><th>Zeitraum</th><th>Meilenstein</th></tr></thead><tbody><tr><td>Q4 2026</td><td>Pilot in einer Primärversorgungseinheit in Wien (CGM MedXPert), Diktara- und Ordicall-Schnittstellen nach Entwickleranforderung</td></tr><tr><td>Q1 2027</td><td>Planery-Anbindung produktiv, Tailwind Inkasso-KI, Digest per S/MIME</td></tr><tr><td>Q2 2027</td><td>Weitere PVS-Adapter, Mehrstandort-Betrieb, DSFA-Vorlage und Betriebsvereinbarungs-Muster</td></tr><tr><td>Q3 2027</td><td>Wahlarzt-Edition (WAHonline, Honorarnoten-Fokus), Assistent mit Sprachdiktat lokal</td></tr><tr><td>2028</td><td>Zertifizierung, Ausschreibungsfähigkeit für Ärztezentren und Träger</td></tr></tbody></table></div>
+<h2 id="s10">9. Fazit</h2>
+<p>Tycho gibt der Ordinationsleitung das, was bisher gefehlt hat: ein tägliches, belastbares Bild des Betriebs, ohne dass eine einzige Patienteninformation das Haus verlässt und ohne dass ein einziger Datensatz in einem Quellsystem verändert wird. Die Kontrollinstanz kontrolliert nur durch Lesen.</p>
+<hr>
+<p><em>Kontakt und Demo: siehe Landingpage. Dieses Dokument beschreibt den Stand der Demo-Version; Tarife und Kennzahlen darin sind Beispieldaten.</em></p>
+  </article>
+</main>
+<footer><div class="wrap"><img src="brand/logo-dark.svg" alt="Tycho"><span>© 2026 Tycho</span><a href="index.html">Startseite</a><a href="index.html#demo">Demo</a></div></footer>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+# Netlify: statische Landingpage aus dem Ordner site/ (kein Build). Formular "demo" wird von Netlify Forms erfasst.
+[build]
+  publish = "site"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
