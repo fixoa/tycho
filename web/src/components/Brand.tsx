@@ -8,7 +8,7 @@ import { useAuth } from '../state/auth'
  * Das „T“-Zeichen ist ausschließlich das Favicon (web/public/favicon.svg) und wird hier nie gerendert.
  */
 const SRC = { light: 'brand/logo-light.svg', dark: 'brand/logo-dark.svg' }
-const HEIGHT = { sm: 22, md: 32, lg: 44, hero: 180 }
+const HEIGHT = { sm: 20, md: 32, lg: 56, hero: 180 }
 const missing = new Set<string>()
 
 export default function Brand({ size = 'sm', tone, compact = false, className = '', style, fallback }: {
