@@ -57,7 +57,7 @@ p { margin: 0; }
 .hero .media video { opacity: 0; transition: opacity 1.6s ease; }
 .hero .media video.on { opacity: 1; }
 .hero .shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(31,45,59,.55) 0%, rgba(31,45,59,.15) 40%, rgba(31,45,59,.85) 100%); pointer-events: none; }
-.hero .telemetry { display: none; position: absolute; top: 72px; left: 24px; right: 24px; display: flex; gap: 22px; flex-wrap: wrap; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; color: var(--fg-3); text-transform: uppercase; }
+.hero .telemetry { display: none; position: absolute; top: 72px; left: 24px; right: 24px; gap: 22px; flex-wrap: wrap; font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; color: var(--fg-3); text-transform: uppercase; }
 .hero .telemetry span::before { content: ''; display: inline-block; width: 4px; height: 4px; background: var(--teal); margin-right: 8px; vertical-align: middle; animation: pulse 2.4s ease-in-out infinite; }
 .hero .content { position: relative; z-index: 2; align-self: end; padding-bottom: 32px; }
 @media (min-width: 900px) { .hero .telemetry { display: flex; } }
