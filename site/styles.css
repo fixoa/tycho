@@ -1029,3 +1029,45 @@ body.is-scrolled .hero,body.is-scrolled .pagehead{padding-top:160px}
 .article__toc a:hover{color:var(--ink);border-color:var(--accent-ink)}
 .wp{display:grid;grid-template-columns:220px minmax(0,1fr);gap:clamp(32px,6vw,96px);align-items:start}
 @media (max-width:900px){.wp{grid-template-columns:1fr}.article__toc{display:none}}
+
+/* Responsiv: Diagramme bleiben lesbar (seitlich verschiebbar), Raster brechen früher um, weniger Höhe auf dem Handy */
+.diag__hint{display:none;font-size:12.5px;color:var(--grey-2);margin-top:10px}
+.section--dark .diag__hint{color:var(--grey)}
+.wp>*{min-width:0}
+.article{max-width:min(76ch,100%)}
+.article .tbl{max-width:100%}
+@media (max-width:1200px){
+  .roadmap .steps{grid-template-columns:repeat(3,1fr)}
+  .roadmap__track{display:none}
+  .roadmap .step{padding-top:clamp(22px,2.4vw,32px)}
+  .roadmap .step::before{display:none}
+}
+@media (max-width:900px){
+  .diag{padding:12px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .diag svg{min-width:860px}
+  .diag__hint{display:block}
+  .diag__legend{margin-top:10px}
+  .section{padding:64px 0}
+  .contact{padding:72px 0}
+  .promise{min-height:0;padding:72px 0}
+  .head{margin-bottom:28px}
+  .hero__foot{gap:12px 22px;font-size:11px;padding:16px 0}
+  .gap,.src,.step,.rule,.price__c{padding:18px}
+  .gap b,.src b,.step b{font-size:16px}
+  .gap p,.src p,.step p,.rule p{font-size:14px}
+  .rule b{font-size:19px}
+  .roadmap .steps{grid-template-columns:1fr 1fr}
+  .steps--six{grid-template-columns:1fr 1fr}
+  .col h3{font-size:24px}
+}
+@media (max-width:640px){
+  .roadmap .steps,.steps--six{grid-template-columns:1fr}
+  .booking{gap:18px}
+  .cal{padding:14px}
+  .slots{grid-template-columns:repeat(3,1fr)}
+  .hero{padding-top:120px}
+  .hero__sub{margin-top:18px}
+  .hero__cta{margin-top:24px}
+}
+@media (max-width:1200px){.roadmap .step:last-child{grid-column:span 2}}
+@media (max-width:640px){.roadmap .step:last-child{grid-column:auto}}
