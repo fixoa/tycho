@@ -1,348 +1,376 @@
-<!doctype html>
-<html lang="de">
+<!DOCTYPE html>
+<html lang="de-AT">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tycho – Die lokale Kontrollinstanz für Ordinationen</title>
-<meta name="description" content="Tycho liest die Daten Ihrer Ordination, verdichtet sie zu Efficacy Score, Prognose und Kreuzprüfung – lokal, nur lesend, ohne Internet. Demo buchen.">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Tycho – Die lokale Kontrollinstanz für Ordinationen">
-<meta property="og:description" content="Lokale KI. Liest nur. Verlässt nie das Haus.">
-<meta property="og:type" content="website">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tycho: Kontrollinstanz für die Ordinationsleitung</title>
+  <meta name="description" content="Tycho führt PVS, Telefon-KI, Dokumentation, Aufrufsystem und Dienstplan zu einem Bild zusammen: Efficacy Score, Prognose bis Quartalsende, Kreuzprüfung der Abrechnung und Montagsbericht. Nur lesend, lokal in der Ordination, verschlüsselt.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://tycho.at/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tycho">
+  <meta property="og:locale" content="de_AT">
+  <meta property="og:url" content="https://tycho.at/">
+  <meta property="og:title" content="Tycho: Kontrollinstanz für die Ordinationsleitung">
+  <meta property="og:description" content="Tycho führt PVS, Telefon-KI, Dokumentation, Aufrufsystem und Dienstplan zu einem Bild zusammen: Efficacy Score, Prognose bis Quartalsende, Kreuzprüfung der Abrechnung und Montagsbericht. Nur lesend, lokal in der Ordination, verschlüsselt.">
+  <meta property="og:image" content="https://tycho.at/shots/station-hell.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tycho: Kontrollinstanz für die Ordinationsleitung">
+  <meta name="twitter:description" content="Tycho führt PVS, Telefon-KI, Dokumentation, Aufrufsystem und Dienstplan zu einem Bild zusammen: Efficacy Score, Prognose bis Quartalsende, Kreuzprüfung der Abrechnung und Montagsbericht. Nur lesend, lokal in der Ordination, verschlüsselt.">
+  <meta name="twitter:image" content="https://tycho.at/shots/station-hell.png">
+  <meta name="theme-color" content="#1F2D3B">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Tycho","url":"https://tycho.at/","description":"Tycho ist die Kontrollinstanz für die Ordinationsleitung: ein Auswertungssystem, das PVS, Telefon-KI, Dokumentations-KI, Aufrufsystem und Dienstplan zusammenführt. Nur lesend, lokal, verschlüsselt.","areaServed":["AT"],"email":"hallo@tycho.at"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Tycho","url":"https://tycho.at/","inLanguage":"de-AT"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Tycho","applicationCategory":"BusinessApplication","operatingSystem":"Windows Server","description":"Auswertung und Kontrolle für Ordinationen: Efficacy Score, Quartalsprognose, Kreuzprüfung der Abrechnung und wöchentlicher Digest, aus PVS, Telefon-KI und Dokumentations-KI. Ausschließlich lesender Zugriff, lokale Installation, AES-256-GCM.","offers":{"@type":"Offer","priceCurrency":"EUR","availability":"https://schema.org/PreOrder","url":"https://tycho.at/kontakt.html"},"areaServed":"AT"}</script>
 </head>
 <body>
-
-<nav class="nav" aria-label="Hauptnavigation">
-  <div class="wrap">
-    <a class="logo" href="#top" aria-label="Tycho"><img src="brand/logo-dark.svg" alt="Tycho"></a>
-    <ul>
-      <li><a href="#abgekapselt">Lokale KI</a></li>
-      <li><a href="#funktion">Funktionsweise</a></li>
-      <li><a href="#module">Module</a></li>
-      <li><a href="#sicherheit">Sicherheit</a></li>
-      <li><a href="#roadmap">Roadmap</a></li>
-      <li><a href="whitepaper.html">Whitepaper</a></li>
-    </ul>
-    <div class="cta">
-      <a class="btn sm" href="https://claude.ai/artifact/KDXpm8rhm1esjqNTFxcHR5" target="_blank" rel="noopener">Live-Demo öffnen</a>
-      <a class="btn sm solid" href="#demo">Demo buchen</a>
+  <div class="topbar" id="topbar">
+    <div class="container topbar__inner">
+      <span class="topbar__dot" aria-hidden="true"></span>
+      <p>Tycho liest PVS, Telefon und Dokumentation zusammen. Nur lesend, lokal in der Ordination, verschlüsselt.</p>
+      <a href="produkt.html">Produkt ansehen <span aria-hidden="true">&rarr;</span></a>
     </div>
-    <button class="burger" aria-label="Menü" aria-controls="mm"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M2 8h12M2 12h12"/></svg></button>
   </div>
-</nav>
-<div class="mobile-menu" id="mm" hidden>
-  <a href="https://claude.ai/artifact/KDXpm8rhm1esjqNTFxcHR5" target="_blank" rel="noopener">Live-Demo öffnen</a><a href="#abgekapselt">Lokale KI</a><a href="#funktion">Funktionsweise</a><a href="#module">Module</a><a href="#sicherheit">Sicherheit</a><a href="#roadmap">Roadmap</a><a href="whitepaper.html">Whitepaper</a><a href="#demo">Demo buchen</a>
-</div>
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="./" aria-label="Tycho Startseite"><img class="nav__logo" src="brand/logo-dark.svg" alt="Tycho"></a>
+    <nav class="nav__links" aria-label="Hauptnavigation">
+      <a href="produkt.html">Produkt</a>
+      <a href="sicherheit.html">Sicherheit</a>
+      <a href="integration.html">Anbindung</a>
+      <a href="einfuehrung.html">Einführung</a>
+      <a href="idee.html">Warum Tycho</a>
+    </nav>
+    <a class="nav__cta" href="kontakt.html">Demo buchen</a>
+    <button class="nav__burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
+  </header>
+  <div class="mobile-menu" id="mobileMenu" hidden>
+<a href="produkt.html">Produkt</a><a href="sicherheit.html">Sicherheit</a><a href="integration.html">Anbindung</a><a href="einfuehrung.html">Einführung</a><a href="idee.html">Warum Tycho</a><a href="kontakt.html">Kontakt</a>
+  </div>
 
-<header class="hero" id="top">
-  <div class="media" aria-hidden="true">
-    <canvas id="globe"></canvas>
-    <video data-hero autoplay muted loop playsinline preload="metadata">
-      <source src="media/hero.mp4" type="video/mp4">
-      <source src="https://d8j0ntlcm91z4.cloudfront.net/user_3AALlz5xLxMJqHp2cBRMiZvmBqJ/hf_20260930_091920_16d56d98-e746-4b6c-a74b-75191c490c1e.mp4" type="video/mp4">
-    </video>
-    <div class="shade"></div>
-  </div>
-  <div class="telemetry" aria-hidden="true">
-    <span>Lokal · Ordinationsserver</span><span>Read-only · 0 Schreibvorgänge</span><span>AES-256-GCM · TPM</span><span>Kein Cloud-Zugriff</span><span id="clock"></span>
-  </div>
-  <div class="captions" aria-hidden="true">
-    <span>Sie betreten die Kontrollinstanz</span><span>Zeit: 3 Min zum Erkunden</span><span>Das Betriebssystem für Entscheidungen in der Ordination</span>
-  </div>
-  <div class="content wrap">
-    <div class="claim">
-      <span class="eyebrow">Tycho · Kontrollinstanz für Ordinationen</span>
-      <h1>Lokale KI.<br>Liest nur.<br>Verlässt nie das Haus.</h1>
-      <p class="lead">Tycho verbindet PVS, Telefon-KI, Diktat-KI, Dienstplan und Bank zu einem täglichen Bild Ihrer Ordination: Efficacy Score, Quartalsprognose, liegengelassene Honorare, Personalkosten. Vollständig auf Ihrem Server, ohne eine einzige ausgehende Verbindung.</p>
-      <div class="badges"><span class="badge"><i></i>Air-gapped</span><span class="badge"><i></i>Nur lesend</span><span class="badge"><i></i>AES-256 · TPM</span><span class="badge"><i></i>Made for Österreich</span></div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn teal" href="#demo">Demo buchen</a><a class="btn" href="#funktion">So funktioniert es</a></div>
-    </div>
-    <div class="wordmark"><img src="brand/logo-dark.svg" alt=""></div>
-  </div>
-</header>
+  <main id="top">
+    <section class="hero">
+      <div class="video video--seq" aria-hidden="true">
+        <video class="is-live" autoplay muted playsinline preload="auto" data-dur="7000" data-caption="Die Ordination am Morgen" src="https://d8j0ntlcm91z4.cloudfront.net/user_3AALlz5xLxMJqHp2cBRMiZvmBqJ/hf_20260930_094530_ac62b1ea-4eaf-4ce5-80ef-a0cb8b117c61.mp4"></video>
+        <video muted playsinline preload="none" data-dur="7000" data-caption="e-card, Stethoskop, Leistungsblatt" data-src="https://d8j0ntlcm91z4.cloudfront.net/user_3AALlz5xLxMJqHp2cBRMiZvmBqJ/hf_20260930_094945_2ddc56a9-6d6c-428c-b4ec-21e719d4bb16.mp4"></video>
+        <video muted playsinline preload="none" data-dur="7000" data-caption="Das ganze Bild, nicht fünf Ausschnitte" data-src="https://d8j0ntlcm91z4.cloudfront.net/user_3AALlz5xLxMJqHp2cBRMiZvmBqJ/hf_20260930_094530_186b177c-60a3-4c03-bdad-e280757cc3b9.mp4"></video>
+        <video muted playsinline preload="none" data-dur="7000" data-caption="Der Server bleibt im Haus" data-src="https://d8j0ntlcm91z4.cloudfront.net/user_3AALlz5xLxMJqHp2cBRMiZvmBqJ/hf_20260930_094530_469d2cd0-4bd0-4473-a801-20f6457b46ec.mp4"></video>
+      </div>
+      <div class="hero__content container">
+        <p class="label reveal-hero">Tycho &middot; für Ordinationen, Gruppenpraxen und Primärversorgungszentren</p>
+        <h1 class="hero__title lines"><span class="ln"><span>Wissen, wie die Ordination läuft.</span></span><span class="ln"><span>Bevor der Bescheid kommt.</span></span></h1>
+        <p class="hero__sub reveal-hero">Tycho liest Praxisprogramm, Telefon-KI, Dokumentation und Dienstplan zusammen und sagt Ihnen jeden Montag, wo Sie stehen. Auf Ihrem Server, nur lesend, ohne Internet.</p>
+        <div class="hero__cta reveal-hero">
+          <a class="btn btn--light" href="kontakt.html">Demo buchen</a>
+          <a class="btn btn--line" href="#funktion">So funktioniert es</a>
+        </div>
+      </div>
+      <div class="scrollhint" aria-hidden="true"><span></span>Scroll</div>
+      <div class="hero__clip" aria-hidden="true"><span class="dots"><i class="is-on"></i><i></i><i></i><i></i></span><i></i><b>Die Ordination am Morgen</b></div>
+      <div class="hero__foot container reveal-hero">
+        <span>Lokale KI</span><span>Nur lesend</span><span>Ohne Internet</span><span>Verschlüsselt</span><span>Montagsbericht</span>
+      </div>
+    </section>
+    <section class="section section--mist" id="problem">
+      <div class="container head">
+        <p class="label reveal">Die Ausgangslage<span class="label__idx">/01</span></p>
+        <h2 class="h2 reveal">Ihre Ordination erzeugt jeden Tag<br>Daten, die niemand zusammenführt.</h2>
+        <p class="lead reveal">Das Praxisverwaltungssystem weiß, welche Leistungen erbracht wurden. Die Telefon-KI weiß, wie viele Anrufe nie zu einem Termin wurden. Die Dokumentations-KI weiß, wie lange ein Arztbrief liegen bleibt. Jedes System für sich ist blind für das, was die anderen wissen.</p>
+      </div>
+      <div class="container gaps reveal">
+        <article class="gap"><span class="gap__n">01</span><b>Der Bescheid kommt zu spät</b><p>Was das Quartal bringt, sagt Ihnen die Kasse Monate später. Bis dahin lässt sich nichts mehr ändern.</p></article>
+        <article class="gap"><span class="gap__n">02</span><b>Leistungen bleiben liegen</b><p>Erbracht, dokumentiert, nicht verrechnet. Ohne Abgleich über alle Systeme fällt das niemandem auf.</p></article>
+        <article class="gap"><span class="gap__n">03</span><b>Zahlen ohne Zusammenhang</b><p>Fünf Auswertungen aus fünf Programmen ergeben noch kein Bild davon, wie die Ordination wirklich läuft.</p></article>
+        <article class="gap"><span class="gap__n">04</span><b>Auswerten kostet Zeit</b><p>Wer selbst exportiert und in der Tabellenkalkulation rechnet, tut das einmal im Quartal. Nicht jeden Montag.</p></article>
+      </div>
+    </section>
+    <section class="section" id="produkt">
+      <div class="container head">
+        <p class="label reveal">Was Tycho zeigt<span class="label__idx">/02</span></p>
+        <h2 class="h2 reveal">Vier Antworten, die eine<br>Ordinationsleitung wirklich braucht.</h2>
+        <p class="lead reveal">Alles aus Ihren eigenen Daten, berechnet in der Nacht, fertig, wenn Sie morgens aufsperren.</p>
+      </div>
+      <div class="container tiles tiles--shots">
+        <a class="tile tile--shot reveal" href="produkt.html#station">
+          <div class="tile__img" aria-hidden="true"><img src="shots/station-hell.png" alt="" loading="lazy" width="1600" height="950"></div>
+          <div class="tile__body">
+            <span class="label">Tycho Station</span>
+            <h3>Wie läuft es gerade?</h3>
+            <p>Efficacy Score der Ordination, Kontakte, Umsatz, Telemedizinanteil, Ausfallquote, Wartezeit, Anrufe, gesparte Dokuzeit und offene Punkte. Eine Leiste, die sich nach Rolle, Kostenträger, Team und Zeitraum filtern lässt.</p>
+            <span class="tile__link">Station ansehen</span>
+          </div>
+        </a>
+        <a class="tile tile--shot reveal" href="produkt.html#kreuzpruefung">
+          <div class="tile__img" aria-hidden="true"><img src="shots/kreuzpruefung-hell.png" alt="" loading="lazy" width="1600" height="950"></div>
+          <div class="tile__body">
+            <span class="label">Kreuzprüfung</span>
+            <h3>Was blieb liegen?</h3>
+            <p>Tycho vergleicht das Leistungsblatt mit Kartei, Terminen, erkannten Leistungen aus der Dokumentation und e-card Konsultationen. Was erbracht, aber nicht verrechnet wurde, steht als Liste da, mit Betrag und Begründung.</p>
+            <span class="tile__link">Kreuzprüfung ansehen</span>
+          </div>
+        </a>
+        <a class="tile tile--shot reveal" href="produkt.html#prognose">
+          <div class="tile__img" aria-hidden="true"><img src="shots/prognose-hell.png" alt="" loading="lazy" width="1600" height="950"></div>
+          <div class="tile__body">
+            <span class="label">Prognose</span>
+            <h3>Wo stehen wir am Quartalsende?</h3>
+            <p>Hochrechnung von Honorar, Scheinzahl und Fallwert mit Konfidenzband, aufgeteilt nach Kostenträger, mit Vergleich zum Vorquartal. Dazu Szenarien: was passiert, wenn die Ausfallquote sinkt oder ein Tag mehr besetzt ist.</p>
+            <span class="tile__link">Prognose ansehen</span>
+          </div>
+        </a>
+        <a class="tile tile--shot reveal" href="produkt.html#digest">
+          <div class="tile__img" aria-hidden="true"><img src="shots/digest-hell.png" alt="" loading="lazy" width="1600" height="950"></div>
+          <div class="tile__body">
+            <span class="label">Digest</span>
+            <h3>Was muss ich diese Woche wissen?</h3>
+            <p>Montag um sechs liegt ein Bericht im Postfach: die wichtigsten Kennzahlen, was sich verändert hat und woran das lag, in ganzen Sätzen. Signiert und verschlüsselt versendet, ohne dass ein Programm geöffnet werden muss.</p>
+            <span class="tile__link">Digest ansehen</span>
+          </div>
+        </a>
+      </div>
+    </section>
+    <section class="systems" aria-label="Herkunft und angebundene Systeme">
+      <div class="container">
+        <div class="systems__head"><p class="label">Gebaut im eigenen Gesundheitszentrum, nicht am Reißbrett</p></div>
+        <div class="systems__list">
+          <span>Erster Adapter <b>CGM MedXPert</b></span>
+          <span>Telefon-KI <b>ordicall</b></span>
+          <span>Dokumentations-KI <b>diktara</b></span>
+          <span>Dienstplan <b>Planery</b></span>
+          <span>Verzeichnis <b>Active Directory</b></span>
+          <span>Honorarkatalog nach <b>ÖGK-Honorarordnung</b></span>
+          <span>Weitere Systeme <b>auf Anfrage geprüft</b></span>
+        </div>
+      </div>
+    </section>
 
-<!-- 01 Abgekapselt -->
-<section class="statement" id="abgekapselt">
-  <div class="wrap">
-    <div class="head rv"><span class="num">01 / Lokale KI</span></div>
-    <p class="big rv">Keine Cloud. Kein Update-Server. Keine Telemetrie. Tycho ist eine <em>vollständig abgekapselte KI</em>, die Ihre Ordination nur von innen sieht.</p>
-    <div class="split wide" style="margin-top:56px">
-      <div class="panel corner rv" style="aspect-ratio:16/9">
-        <span class="cap">Netzwerkgrenze · Host-Firewall · keine ausgehende Verbindung</span>
-        <svg class="diagram" viewBox="0 0 960 420" role="img" aria-label="Tycho läuft abgekapselt auf dem Ordinationsserver; Verbindungen nach außen werden blockiert">
-          <defs><clipPath id="inside"><rect x="380" y="40" width="560" height="340"/></clipPath></defs>
-          <!-- Außenwelt -->
-          <g opacity=".8">
-            <text x="40" y="70" class="mono">Außen · Internet</text>
-            <g stroke="#38BDF8" stroke-opacity=".25" fill="none">
-              <path d="M40 120h260M40 170h260M40 220h260M40 270h260M40 320h260M90 100v240M150 100v240M210 100v240M270 100v240"/>
+    <section class="section section--dark" id="vorschau">
+      <div class="container head">
+        <p class="label reveal">Live-Vorschau<span class="label__idx">/03</span></p>
+        <h2 class="h2 reveal">So sieht ein Monat<br>in Ihrer Ordination aus.</h2>
+        <p class="lead reveal">Ein Ausschnitt der Tycho Station mit Beispieldaten einer Gruppenpraxis. Wechseln Sie den Zeitraum, die Zahlen rechnen sich neu.</p>
+      </div>
+      <div class="container demo2 reveal">
+        <div class="ops">
+          <div class="ops__bar">
+            <span class="label">Tycho Station &middot; Ordinations-Übersicht</span>
+            <div class="ops__chips" id="opsChips" role="group" aria-label="Zeitraum wählen">
+              <button type="button" data-range="woche">Diese Woche</button>
+              <button type="button" class="is-on" data-range="monat">Dieser Monat</button>
+              <button type="button" data-range="quartal">Quartal</button>
+            </div>
+          </div>
+          <div class="ops__kpis" id="opsKpis"></div>
+          <div class="ops__main">
+            <div class="ops__chart">
+              <div class="ops__chead"><span class="label">Patientenkontakte je Tag</span><span class="label" id="opsRange">01.09. bis 30.09.</span></div>
+              <svg id="opsChart" viewBox="0 0 640 260" role="img" aria-label="Patientenkontakte je Tag im gewählten Zeitraum"></svg>
+            </div>
+            <div class="ops__side">
+              <span class="label">Tycho-Einschätzung</span>
+              <p id="opsNote">Der Monat liegt 2,8 Prozent über dem Vergleichszeitraum. Getragen wird das von der Telemedizin, die Ausfallquote ist stabil.</p>
+              <ul class="ops__find" id="opsFind"></ul>
+            </div>
+          </div>
+          <div class="ops__foot"><span>Datenstand gestern 19:00</span><span>Nur lesend &middot; 0 Schreibvorgänge</span><span>AES-256-GCM &middot; TPM</span></div>
+        </div>
+        <p class="hint hint--center">Beispieldaten einer fiktiven Gruppenpraxis. In Ihrer Ordination stehen hier Ihre eigenen Zahlen.</p>
+      </div>
+    </section>
+    <section class="promise" id="lokal">
+      <div class="container">
+        <p class="label">Lokale KI<span class="label__idx">/04</span></p>
+        <p class="promise__text" id="promiseText" data-key="keinen Draht nach draußen.">Tycho ist eine KI, die nur zuhört. Sie läuft auf Ihrem Server, schreibt nirgends hinein und hat keinen Draht nach draußen.</p>
+        <div class="promise__foot"><span>Kein Internet</span><span>Kein Update-Server</span><span>Keine Telemetrie</span><span>Kein Schreibrecht</span></div>
+      </div>
+    </section>
+    <section class="section section--dark" id="abgekapselt">
+      <div class="container head">
+        <p class="label reveal">Abgekapselt<span class="label__idx">/05</span></p>
+        <h2 class="h2 reveal">Was draußen ist,<br>bleibt draußen.</h2>
+        <p class="lead reveal">Die Firewall am Server lässt keine Verbindung hinaus. Drinnen liest Tycho von einer Kopie, rechnet, verschlüsselt und antwortet. Auch der Assistent, ein Sprachmodell auf Ihrem Server, kennt nur diesen Raum.</p>
+      </div>
+      <div class="container reveal">
+        <div class="diag">
+          <svg viewBox="0 0 1280 560" role="img" aria-label="Tycho läuft abgekapselt auf dem Ordinationsserver. Verbindungen nach außen werden von der Firewall blockiert.">
+            <text x="40" y="60" class="m">Außen · Internet · Cloud · Hersteller</text>
+            <g stroke="#38BDF8" stroke-opacity=".25" fill="none" stroke-width="1.5"><path d="M40 120h320M40 190h320M40 260h320M40 330h320M40 400h320M100 90v340M180 90v340M260 90v340"/></g>
+            <g fill="#38BDF8" fill-opacity=".7"><circle cx="100" cy="190" r="5"/><circle cx="260" cy="330" r="5"/><circle cx="180" cy="400" r="5"/><circle cx="260" cy="120" r="5"/></g>
+            <text x="40" y="470" class="s">Von hier kommt nichts hinein.</text>
+            <text x="40" y="498" class="s">Und von drinnen geht nichts hinaus.</text>
+            <line x1="420" y1="70" x2="420" y2="500" class="wall"/>
+            <text x="420" y="536" class="m" text-anchor="middle">Firewall</text>
+            <g>
+              <circle r="6" class="bad"><animateMotion dur="3s" repeatCount="indefinite" path="M330 230 L414 230 L330 230"/></circle>
+              <circle r="6" class="bad"><animateMotion dur="3.8s" begin="1.3s" repeatCount="indefinite" path="M300 300 L414 300 L300 300"/></circle>
+              <circle r="6" fill="#2DD4BF"><animateMotion dur="3.4s" begin=".7s" repeatCount="indefinite" path="M520 160 L426 160 L520 160"/></circle>
             </g>
-            <g fill="#38BDF8" fill-opacity=".6"><circle cx="90" cy="170" r="3"/><circle cx="210" cy="220" r="3"/><circle cx="150" cy="320" r="3"/><circle cx="270" cy="120" r="3"/></g>
-            <text x="40" y="365" class="sub">Cloud-Dienste · Hersteller · Telemetrie</text>
-          </g>
-          <!-- Wand -->
-          <line x1="340" y1="40" x2="340" y2="380" class="wall"/>
-          <text x="334" y="30" class="mono" text-anchor="end">Firewall</text>
-          <g id="packets">
-            <circle class="pk" r="4" fill="#F43F5E"><animateMotion dur="2.8s" repeatCount="indefinite" path="M300 200 L338 200 L300 200"/></circle>
-            <circle class="pk" r="4" fill="#F43F5E"><animateMotion dur="3.6s" begin="1.2s" repeatCount="indefinite" path="M280 260 L338 260 L280 260"/></circle>
-            <circle class="pk" r="4" fill="#2DD4BF"><animateMotion dur="3.2s" begin=".6s" repeatCount="indefinite" path="M420 140 L342 140 L420 140"/></circle>
-          </g>
-          <!-- Innen -->
-          <text x="380" y="70" class="mono">Innen · Ordination · TS-ORD-01</text>
-          <rect x="380" y="90" width="560" height="290" class="box" rx="2"/>
-          <rect x="400" y="110" width="150" height="250" fill="#1F2D3B" stroke="rgba(255,255,255,.14)" rx="2"/>
-          <text x="410" y="132" class="lbl">Quellen</text>
-          <g class="sub"><text x="410" y="156">PVS · CGM MedXPert</text><text x="410" y="176">Ordicall · Diktara</text><text x="410" y="196">Active Directory</text><text x="410" y="216">Planery · Bank</text></g>
-          <rect x="590" y="110" width="150" height="250" class="core" rx="2"/>
-          <text x="600" y="132" class="lbl">Tycho-Kern</text>
-          <g class="sub"><text x="600" y="156">Collector (read-only)</text><text x="600" y="176">Store AES-256-GCM</text><text x="600" y="196">Lokales LLM</text><text x="600" y="216">llama.cpp · 8B</text><text x="600" y="236">Audit-Kette</text></g>
-          <rect x="780" y="110" width="140" height="250" fill="#1F2D3B" stroke="rgba(255,255,255,.14)" rx="2"/>
-          <text x="790" y="132" class="lbl">Leitung</text>
-          <g class="sub"><text x="790" y="156">Station</text><text x="790" y="176">Assistent</text><text x="790" y="196">Digest</text></g>
-          <path d="M550 235 H590" class="flow on" data-step="0"/><path d="M740 235 H780" class="flow on" data-step="0"/>
-          <text x="565" y="228" class="mono">SELECT</text>
-          <g class="sub"><text x="380" y="405">Einzige Verbindungen: lesend nach innen. Keine nach außen.</text></g>
-        </svg>
-      </div>
-      <div class="rv">
-        <h2>Die KI, die nur zuhört.</h2>
-        <p class="lead" style="margin-top:16px">Der Assistent von Tycho ist ein lokales Sprachmodell (Llama 3.1 8B über llama.cpp) auf Ihrem Terminalserver. Es hat keine Netzwerkverbindung und genau eine Art von Werkzeug: lesende Abfragen auf den verschlüsselten Store. Patientendaten gelangen nie in einen Prompt, weil der Store keine enthält.</p>
-        <div class="proof">
-          <div><div class="v">0</div><div class="l">ausgehende Verbindungen</div></div>
-          <div><div class="v">0</div><div class="l">Schreibvorgänge in Quellsysteme</div></div>
-          <div><div class="v">100 %</div><div class="l">der Verarbeitung auf Ihrem Server</div></div>
-          <div><div class="v">1</div><div class="l">täglicher Schreib-Selbsttest, der scheitern muss</div></div>
+            <text x="470" y="60" class="m">Innen · Ihr Server · TS-ORD-01</text>
+            <rect x="470" y="90" width="770" height="410" class="box" rx="2"/>
+            <rect x="500" y="120" width="210" height="350" class="box" rx="2"/>
+            <text x="520" y="156" class="t">Quellen</text>
+            <text x="520" y="196" class="s">Praxisprogramm</text><text x="520" y="228" class="s">Telefon-KI</text><text x="520" y="260" class="s">Dokumentations-KI</text><text x="520" y="292" class="s">Verzeichnisdienst</text><text x="520" y="324" class="s">Dienstplan, Bank</text>
+            <text x="520" y="440" class="m">nur lesen</text>
+            <rect x="760" y="120" width="230" height="350" class="core" rx="2"/>
+            <text x="780" y="156" class="t">Tycho</text>
+            <text x="780" y="196" class="s">Liest die Kopie</text><text x="780" y="228" class="s">Rechnet und prüft</text><text x="780" y="260" class="s">Speichert verschlüsselt</text><text x="780" y="292" class="s">Sprachmodell, lokal</text><text x="780" y="324" class="s">Protokoll, verkettet</text>
+            <text x="780" y="440" class="m">kein Ausgang</text>
+            <rect x="1040" y="120" width="170" height="350" class="box" rx="2"/>
+            <text x="1060" y="156" class="t">Leitung</text>
+            <text x="1060" y="196" class="s">Station</text><text x="1060" y="228" class="s">Assistent</text><text x="1060" y="260" class="s">Montagsbericht</text>
+            <text x="1060" y="440" class="m">im Haus</text>
+            <path d="M710 295 H760" class="flow on"/><path d="M990 295 H1040" class="flow on"/>
+          </svg>
+          <div class="diag__legend"><span><i></i>lesende Verbindung, nur nach innen</span><span><i style="background:#F43F5E"></i>Verbindungsversuch, abgewiesen</span></div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- 02 Funktionsweise -->
-<section id="funktion">
-  <div class="wrap">
-    <div class="head rv"><span class="num">02 / Funktionsweise</span><h2>Von sieben Quellen zu einer Zahl. Jede Nacht, vollständig eigenständig.</h2><p class="lead">Tycho braucht keinen Bediener. Der Collector läuft nach Betriebsschluss, liest Snapshots, pseudonymisiert, aggregiert, prüft und prognostiziert. Am Morgen steht der neue Stand.</p></div>
-    <div class="split wide">
-      <div class="panel corner rv" style="aspect-ratio:16/9">
-        <span class="cap">Datenfluss · nur lesend · TS-ORD-01</span>
-        <svg class="diagram" viewBox="0 0 960 480" role="img" aria-label="Datenfluss von den Quellen über Collector und Store zu den Modulen">
-          <text x="40" y="50" class="mono">Quellen</text><text x="380" y="50" class="mono">Tycho-Kern</text><text x="720" y="50" class="mono">Ergebnis</text>
-          <g class="src">
-            <g><rect x="40" y="70" width="220" height="40" class="box" rx="2"/><text x="52" y="94" class="lbl">CGM MedXPert (PVS)</text><text x="200" y="94" class="mono">SQL</text></g>
-            <g><rect x="40" y="122" width="220" height="40" class="box" rx="2"/><text x="52" y="146" class="lbl">e-card / ELGA</text><text x="190" y="146" class="mono">via PVS</text></g>
-            <g><rect x="40" y="174" width="220" height="40" class="box" rx="2"/><text x="52" y="198" class="lbl">Ordicall</text><text x="196" y="198" class="mono">JSON</text></g>
-            <g><rect x="40" y="226" width="220" height="40" class="box" rx="2"/><text x="52" y="250" class="lbl">Diktara</text><text x="190" y="250" class="mono">Meta</text></g>
-            <g><rect x="40" y="278" width="220" height="40" class="box" rx="2"/><text x="52" y="302" class="lbl">Active Directory</text><text x="186" y="302" class="mono">LDAPS</text></g>
-            <g><rect x="40" y="330" width="220" height="40" class="box" rx="2"/><text x="52" y="354" class="lbl">Planery (HR)</text><text x="200" y="354" class="mono">API</text></g>
-            <g><rect x="40" y="382" width="220" height="40" class="box" rx="2"/><text x="52" y="406" class="lbl">Bank · Lohn</text><text x="184" y="406" class="mono">Import</text></g>
-          </g>
-          <g>
-            <path d="M260 90 C320 90 320 200 380 200" class="flow" data-step="0"/><path d="M260 142 C320 142 320 200 380 200" class="flow" data-step="0"/><path d="M260 194 C320 194 320 200 380 200" class="flow" data-step="0"/><path d="M260 246 C320 246 320 200 380 200" class="flow" data-step="0"/><path d="M260 298 C320 298 320 200 380 200" class="flow" data-step="0"/><path d="M260 350 C320 350 320 200 380 200" class="flow" data-step="0"/><path d="M260 402 C320 402 320 200 380 200" class="flow" data-step="0"/>
-          </g>
-          <rect x="380" y="150" width="220" height="100" class="core" rx="2"/><text x="392" y="176" class="lbl">Collector</text><g class="sub"><text x="392" y="196">05:10 · Snapshot lesen</text><text x="392" y="212">Pseudonymisieren · Aggregieren</text><text x="392" y="228">Scoring · Kreuzprüfung · Prognose</text></g>
-          <path d="M490 250 V300" class="flow" data-step="1 2"/>
-          <rect x="380" y="300" width="220" height="70" class="core" rx="2"/><text x="392" y="326" class="lbl">Verschlüsselter Store</text><g class="sub"><text x="392" y="346">AES-256-GCM · Schlüssel im TPM</text><text x="392" y="362">Audit-Kette SHA-256</text></g>
-          <path d="M600 335 C660 335 660 100 720 100" class="flow" data-step="3"/><path d="M600 335 C660 335 660 180 720 180" class="flow" data-step="3"/><path d="M600 335 C660 335 660 260 720 260" class="flow" data-step="4"/><path d="M600 335 C660 335 660 340 720 340" class="flow" data-step="4"/><path d="M600 335 C660 335 660 420 720 420" class="flow" data-step="5"/>
-          <g>
-            <rect x="720" y="80" width="200" height="40" class="box" rx="2"/><text x="732" y="104" class="lbl">Station · Efficacy Score</text>
-            <rect x="720" y="160" width="200" height="40" class="box" rx="2"/><text x="732" y="184" class="lbl">Finanzen · Tarife · Prognose</text>
-            <rect x="720" y="240" width="200" height="40" class="box" rx="2"/><text x="732" y="264" class="lbl">Personal · Tailwind HR</text>
-            <rect x="720" y="320" width="200" height="40" class="box" rx="2"/><text x="732" y="344" class="lbl">Assistent (lokales LLM)</text>
-            <rect x="720" y="400" width="200" height="40" class="box" rx="2"/><text x="732" y="424" class="lbl">Digest · Montag 06:00</text>
-          </g>
-          <text x="380" y="460" class="mono">Sprechstunde: kein Zugriff auf die Produktivdatenbank</text>
-        </svg>
+    </section>
+    <section class="section section--mist" id="funktion">
+      <div class="container head">
+        <p class="label reveal">So funktioniert Tycho<span class="label__idx">/06</span></p>
+        <h2 class="h2 reveal">Jede Nacht ein Durchlauf.<br>Am Morgen ein Bild.</h2>
+        <p class="lead reveal">Kein Bediener, kein Export, keine Tabellenkalkulation. Um 19 Uhr entsteht die Kopie, um fünf rechnet Tycho, um sechs steht der neue Stand. Klicken Sie einen Schritt an, das Diagramm zeigt ihn.</p>
       </div>
-      <div class="steps rv">
-        <div class="step"><span class="n">01</span><div><h4>Lesen</h4><p>Um 19:00 entsteht ein Datenbank-Snapshot. Um 05:10 liest der Collector mit einem Leselogin, der nur SELECT kann. Exporte von Ordicall und Diktara enthalten keine Audio- oder Textdaten.</p></div></div>
-        <div class="step"><span class="n">02</span><div><h4>Pseudonymisieren und verdichten</h4><p>Fälle werden per HMAC mit lokalem Salt ersetzt. Gespeichert werden Aggregate je Tag, Rolle, Position und Kostenträger, keine Namen, keine Diagnosen.</p></div></div>
-        <div class="step"><span class="n">03</span><div><h4>Prüfen und prognostizieren</h4><p>Kreuzprüfung PVS × Diktara × Ordicall findet nicht abgerechnete Leistungen. Die Prognose rechnet das Quartal mit 90-%-Band hoch. Der Score entsteht je Rolle.</p></div></div>
-        <div class="step"><span class="n">04</span><div><h4>Verschlüsselt speichern</h4><p>Das Ergebnis landet AES-256-GCM-verschlüsselt im Store, der Snapshot wird verworfen. Jeder Schritt steht in der Audit-Kette.</p></div></div>
-        <div class="step"><span class="n">05</span><div><h4>Anzeigen und fragen</h4><p>Station zeigt den Stand von gestern in Simple- oder Advanced-Ansicht. Der Assistent beantwortet Fragen in natürlicher Sprache, ausschließlich aus dem Store.</p></div></div>
-        <div class="step"><span class="n">06</span><div><h4>Berichten</h4><p>Montags um 06:00 geht der Tycho Digest signiert an die Leitung: Score, Prognose, Handlungsbedarf, Fristen.</p></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 03 Efficacy Score -->
-<section id="score">
-  <div class="wrap">
-    <div class="split">
-      <div class="rv">
-        <div class="head" style="margin-bottom:24px"><span class="num">03 / Efficacy Score</span><h2>Eine Zahl für den Zustand der Ordination.</h2></div>
-        <p class="lead">Der Score verdichtet je Rolle sechs bis sieben Komponenten auf 0 bis 100. Gewichte und Ziele sind sichtbar, der Score gilt für den gewählten Zeitraum und wird gegen den Vergleichszeitraum gestellt. Kein Peer-Vergleich, kein Ranking ohne Zustimmung.</p>
-        <div class="bars" style="margin-top:28px">
-          <div><span>Durchsatz</span><span class="t"><i data-w="82"></i></span><span class="v">82</span></div>
-          <div><span>Ertrag / Honorar</span><span class="t"><i data-w="74"></i></span><span class="v">74</span></div>
-          <div><span>Dokumentation</span><span class="t"><i data-w="88"></i></span><span class="v">88</span></div>
-          <div><span>Diktara-Nutzung</span><span class="t"><i data-w="71"></i></span><span class="v">71</span></div>
-          <div><span>Telemedizin</span><span class="t"><i data-w="64"></i></span><span class="v">64</span></div>
-          <div><span>No-Show-Quote</span><span class="t"><i data-w="79"></i></span><span class="v">79</span></div>
-          <div><span>Abrechnungsqualität</span><span class="t"><i data-w="69"></i></span><span class="v">69</span></div>
+      <div class="container reveal">
+        <div class="diag">
+          <svg viewBox="0 0 1280 600" role="img" aria-label="Datenfluss: sieben Quellen werden nachts gelesen, verdichtet, geprüft, verschlüsselt gespeichert und morgens angezeigt.">
+            <text x="40" y="50" class="m">Quellen</text><text x="520" y="50" class="m">Nachts, auf dem Server</text><text x="960" y="50" class="m">Am Morgen</text>
+            <g class="box"><rect x="40" y="80" width="400" height="52" rx="2"/><rect x="40" y="144" width="400" height="52" rx="2"/><rect x="40" y="208" width="400" height="52" rx="2"/><rect x="40" y="272" width="400" height="52" rx="2"/><rect x="40" y="336" width="400" height="52" rx="2"/><rect x="40" y="400" width="400" height="52" rx="2"/><rect x="40" y="464" width="400" height="52" rx="2"/></g>
+            <g class="s"><text x="58" y="113">Praxisprogramm (MedXPert)</text><text x="58" y="177">e-card und ELGA, über das PVS</text><text x="58" y="241">Telefon-KI ordicall</text><text x="58" y="305">Dokumentations-KI diktara</text><text x="58" y="369">Active Directory</text><text x="58" y="433">Dienstplan Planery</text><text x="58" y="497">Bank und Lohnverrechnung</text></g>
+            <g class="m"><text x="424" y="113" text-anchor="end">SQL</text><text x="424" y="177" text-anchor="end">via PVS</text><text x="424" y="241" text-anchor="end">JSON</text><text x="424" y="305" text-anchor="end">Meta</text><text x="424" y="369" text-anchor="end">LDAPS</text><text x="424" y="433" text-anchor="end">API</text><text x="424" y="497" text-anchor="end">Import</text></g>
+            <g><path d="M440 106 C480 106 480 200 520 200" class="flow" data-step="0"/><path d="M440 170 C480 170 480 200 520 200" class="flow" data-step="0"/><path d="M440 234 C480 234 480 200 520 200" class="flow" data-step="0"/><path d="M440 298 C480 298 480 200 520 200" class="flow" data-step="0"/><path d="M440 362 C480 362 480 200 520 200" class="flow" data-step="0"/><path d="M440 426 C480 426 480 200 520 200" class="flow" data-step="0"/><path d="M440 490 C480 490 480 200 520 200" class="flow" data-step="0"/></g>
+            <rect x="520" y="130" width="330" height="140" class="core" rx="2"/><text x="540" y="166" class="t">Lesen und verdichten</text><text x="540" y="200" class="s">19:00 Kopie, 05:10 Durchlauf</text><text x="540" y="230" class="s">Pseudonymisieren, zusammenzählen</text><text x="540" y="258" class="s">Prüfen, hochrechnen, bewerten</text>
+            <path d="M685 270 V330" class="flow" data-step="1 2"/>
+            <rect x="520" y="330" width="330" height="120" class="core" rx="2"/><text x="540" y="366" class="t">Verschlüsselt ablegen</text><text x="540" y="400" class="s">AES-256, Schlüssel im Sicherheitschip</text><text x="540" y="430" class="s">Jeder Schritt im Protokoll</text>
+            <path d="M850 390 C905 390 905 110 960 110" class="flow" data-step="3"/><path d="M850 390 C905 390 905 210 960 210" class="flow" data-step="3"/><path d="M850 390 C905 390 905 310 960 310" class="flow" data-step="4"/><path d="M850 390 C905 390 905 410 960 410" class="flow" data-step="4"/><path d="M850 390 C905 390 905 510 960 510" class="flow" data-step="5"/>
+            <g class="box"><rect x="960" y="84" width="280" height="52" rx="2"/><rect x="960" y="184" width="280" height="52" rx="2"/><rect x="960" y="284" width="280" height="52" rx="2"/><rect x="960" y="384" width="280" height="52" rx="2"/><rect x="960" y="484" width="280" height="52" rx="2"/></g>
+            <g class="s"><text x="978" y="117">Station: Score und Kennzahlen</text><text x="978" y="217">Prognose bis Quartalsende</text><text x="978" y="317">Kreuzprüfung: was liegen blieb</text><text x="978" y="417">Assistent, fragt man einfach</text><text x="978" y="517">Montagsbericht um sechs</text></g>
+            <text x="520" y="560" class="m">Während der Sprechstunde: kein Zugriff auf die Produktivdatenbank</text>
+          </svg>
+          <div class="diag__legend"><span><i></i>aktiver Schritt</span><span><i class="grey"></i>Datenfluss</span></div>
         </div>
       </div>
-      <div class="panel corner rv" style="padding:40px;display:grid;place-items:center;gap:20px">
-        <span class="cap">Beispiel · Primärversorgung Zentrum · Q3 2026</span>
-        <div class="ring"><svg viewBox="0 0 180 180"><circle class="bgc" cx="90" cy="90" r="80"/><circle class="fgc" cx="90" cy="90" r="80"/></svg><div class="val">0</div></div>
-        <div class="mono" style="text-align:center">Efficacy Score · Team-basiert · +2 zum Vormonat</div>
-        <div class="proof small" style="margin-top:8px;width:100%"><div><div class="v">€ 423 k</div><div class="l">Prognose Quartal</div></div><div><div class="v">€ 2.810</div><div class="l">liegengelassen, vor Einreichung</div></div><div><div class="v">20,3 %</div><div class="l">Personalkostenquote</div></div><div><div class="v">76 %</div><div class="l">Anrufe von der KI erledigt</div></div></div>
+      <div class="container steps steps--six reveal" style="margin-top:clamp(28px,3vw,44px)">
+        <article class="step" data-flowstep><span class="step__t">Schritt 1</span><b>Lesen</b><p>Um 19 Uhr entsteht eine Kopie der Datenbank. Um 05:10 liest Tycho daraus, mit einem Zugang, der nur lesen kann. Von ordicall und diktara kommen Kennzahlen, kein Ton, kein Text.</p></article>
+        <article class="step" data-flowstep><span class="step__t">Schritt 2</span><b>Verdichten</b><p>Aus Fällen werden Pseudonyme, aus Einzelposten Summen je Tag, Rolle, Position und Kostenträger. Namen und Diagnosen kommen gar nicht erst herein.</p></article>
+        <article class="step" data-flowstep><span class="step__t">Schritt 3</span><b>Prüfen und hochrechnen</b><p>Leistungsblatt, Diktate und Anrufe werden gegeneinander gehalten. Was erbracht, aber nicht verrechnet wurde, steht auf der Liste. Das Quartal wird bis zum Ende gerechnet.</p></article>
+        <article class="step" data-flowstep><span class="step__t">Schritt 4</span><b>Verschlüsselt ablegen</b><p>Das Ergebnis liegt verschlüsselt auf dem Server, der Schlüssel im Sicherheitschip. Die Kopie wird gelöscht. Jeder Schritt steht im Protokoll.</p></article>
+        <article class="step" data-flowstep><span class="step__t">Schritt 5</span><b>Anschauen und fragen</b><p>Die Station zeigt den Stand von gestern. Wer lieber fragt, fragt den Assistenten: „Welche Honorarnoten sind offen?“ Die Antwort kommt vom Server, nicht aus der Cloud.</p></article>
+        <article class="step" data-flowstep><span class="step__t">Schritt 6</span><b>Montag um sechs</b><p>Der Bericht liegt im Postfach: Score, Prognose, was liegen blieb, welche Fristen anstehen. In ganzen Sätzen, signiert, ohne dass jemand ein Programm öffnet.</p></article>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- 04 Module -->
-<section id="module">
-  <div class="wrap">
-    <div class="head rv"><span class="num">04 / Module</span><h2>Alles, was eine Leitung wissen muss. Nichts, was sie nicht wissen darf.</h2></div>
-    <div class="panel corner rv" style="aspect-ratio:21/9;margin-bottom:24px">
-      <span class="cap">Datenfluss · Quellen → Kern → Module</span>
-      <svg class="diagram fallback" viewBox="0 0 1260 540" aria-hidden="true">
-        <g fill="#38BDF8" fill-opacity=".8">
-          <circle cx="160" cy="120" r="5"/><circle cx="160" cy="190" r="5"/><circle cx="160" cy="260" r="5"/><circle cx="160" cy="330" r="5"/><circle cx="160" cy="400" r="5"/><circle cx="160" cy="470" r="5"/><circle cx="160" cy="50" r="5"/>
-        </g>
-        <g class="flow on" stroke="#2DD4BF"><path d="M160 50 C400 50 400 270 630 270"/><path d="M160 120 C400 120 400 270 630 270"/><path d="M160 190 C400 190 400 270 630 270"/><path d="M160 260 C400 260 400 270 630 270"/><path d="M160 330 C400 330 400 270 630 270"/><path d="M160 400 C400 400 400 270 630 270"/><path d="M160 470 C400 470 400 270 630 270"/><path d="M630 270 C860 270 860 150 1100 150"/><path d="M630 270 C860 270 860 270 1100 270"/><path d="M630 270 C860 270 860 390 1100 390"/></g>
-        <polygon points="630,210 682,240 682,300 630,330 578,300 578,240" fill="#1F2D3B" stroke="#2DD4BF" stroke-width="1.5"/>
-        <g fill="#6EE7B7" fill-opacity=".85"><rect x="1100" y="135" width="60" height="30"/><rect x="1100" y="255" width="60" height="30"/><rect x="1100" y="375" width="60" height="30"/></g>
-      </svg>
-      <video data-panel autoplay muted loop playsinline preload="metadata"><source src="media/flow.mp4" type="video/mp4"><source src="https://d8j0ntlcm91z4.cloudfront.net/user_3AALlz5xLxMJqHp2cBRMiZvmBqJ/hf_20260930_091308_f1f9d53f-6312-42e3-be84-924ff92b9e83.mp4" type="video/mp4"></video>
-    </div>
-    <div class="grid g3 rv">
-      <div class="cell"><span class="k">Station</span><h3>Cockpit</h3><p>Efficacy Score, KPIs, Handlungsbedarf, Zeitachse. Simple-Ansicht für den Alltag, Advanced-Ansicht für Analyse.</p></div>
-      <div class="cell"><span class="k">Finanzen · Tarife</span><h3>Honorarkatalog nach HO-Logik</h3><p>Umsatz je Kostenträger (ÖGK, SVS, BVAEB, Privat), Positionen mit Limits und Kennzeichnungen 8a–8i/T, Einreichfristen.</p></div>
-      <div class="cell"><span class="k">Kreuzprüfung</span><h3>Liegengelassene Honorare</h3><p>Konsultationen ohne Grundleistung, Diktate mit erkannter Leistung ohne Position, Telemedizin ohne T-Kennzeichnung.</p></div>
-      <div class="cell"><span class="k">Prognose</span><h3>Quartalsende mit Band</h3><p>Hochrechnung aus laufender Abrechnung und Historie, Vergleich Vorquartal, Kostenträger-Mix.</p></div>
-      <div class="cell"><span class="k">Personal</span><h3>Produktivität, Team oder Person</h3><p>Kontakte, Umsatz und Dokuzeit je Rolle. Pro-Person-Modus nur mit NDA, Zustimmung und k-Anonymität.</p></div>
-      <div class="cell"><span class="k">Tailwind</span><h3>Honorarnoten und Inkasso-KI</h3><p>Offene und überfällige Honorarnoten, Zahlungsabgleich mit der Bank, Erinnerungen und Ratenzahlung als Vorschlag.</p></div>
-      <div class="cell"><span class="k">Tailwind HR</span><h3>Dienstplan, Kosten, Effizienz</h3><p>Aus Planery: Personalkosten, Kostenquote, Umsatz je Arztstunde gegen den Richtwert 120 €/h, Überstunden, Frühwarnungen.</p></div>
-      <div class="cell"><span class="k">Ordicall · Diktara</span><h3>Telefon- und Diktat-KI</h3><p>Anrufe nach Ergebnis und Anliegen, KI-Quote, Stoßzeiten. Dokumentationszeit, Akzeptanz, ICD-10-Quote.</p></div>
-      <div class="cell"><span class="k">Termine · Zuweiser · QM</span><h3>Kapazität und Pflichten</h3><p>Auslastung, No-Shows, Zuweiserbindung, Verordnungs-Ausreißer, QM-Fristen, NPS. Dazu Landschaft mit Systemstatus.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- 05 Sicherheit -->
-<section id="sicherheit">
-  <div class="wrap">
-    <div class="head rv"><span class="num">05 / Sicherheit</span><h2>Nur lesend ist kein Versprechen. Es ist technisch bewiesen.</h2><p class="lead">Für Ihre Systeme ist Tycho ein weiterer Benutzer mit Leserechten. Jede Ebene verhindert Schreiben, und ein täglicher Selbsttest belegt es.</p></div>
-    <div class="split wide">
-      <div class="chain rv">
-        <div><span class="i">1</span><div><h4>Datenbank-Login</h4><p>Eigener Login <code>tycho_ro</code>: db_datareader + db_denydatawriter, keine DDL, kein db_owner.</p></div><span class="ok">geprüft</span></div>
-        <div><span class="i">2</span><div><h4>Snapshot statt Produktivdatenbank</h4><p>Gelesen wird eine nächtliche Kopie, die nach dem Lauf verworfen wird. In der Sprechstunde kein Zugriff.</p></div><span class="ok">geprüft</span></div>
-        <div><span class="i">3</span><div><h4>Code ohne Schreibpfad</h4><p>Adapter kennen nur SELECT. Schreib-APIs existieren nicht; eine Lint-Regel verhindert, dass sie entstehen.</p></div><span class="ok">geprüft</span></div>
-        <div><span class="i">4</span><div><h4>Täglicher Schreib-Selbsttest</h4><p>Ein INSERT-Versuch muss scheitern. Ergebnis im Audit-Log und in der Oberfläche unter Sicherheit &amp; Compliance.</p></div><span class="ok">abgelehnt ✓</span></div>
-        <div><span class="i">5</span><div><h4>Keine ausgehende Verbindung</h4><p>Host-Firewall-Regel, im Onboarding gesetzt und protokolliert. Updates als signiertes Paket, ohne Update-Server.</p></div><span class="ok">geprüft</span></div>
-        <div><span class="i">6</span><div><h4>Verschlüsselung und Audit</h4><p>AES-256-GCM, Schlüssel im TPM 2.0. Personaldaten mit eigenem Schlüssel. SHA-256-verkettetes, append-only Audit-Log.</p></div><span class="ok">geprüft</span></div>
+    </section>
+    <section class="section section--mist" id="regeln">
+      <div class="container head">
+        <p class="label reveal">Die vier Regeln<span class="label__idx">/07</span></p>
+        <h2 class="h2 reveal">Ein Auswertungssystem darf<br>den Betrieb nicht gefährden.</h2>
+        <p class="lead reveal">Tycho ist als Kontrollinstanz gebaut, nicht als weiteres Programm im Behandlungsablauf. Vier Regeln stehen darüber, und jede ist technisch erzwungen, nicht nur versprochen.</p>
       </div>
-      <div class="panel corner rv" style="aspect-ratio:16/9">
-        <span class="cap">Verschlüsselter Store · Zugriff nur von innen</span>
-        <svg class="diagram fallback" viewBox="0 0 960 540" aria-hidden="true">
-          <g stroke="#38BDF8" stroke-opacity=".18" fill="none"><path d="M0 90h960M0 180h960M0 270h960M0 360h960M0 450h960M160 0v540M320 0v540M640 0v540M800 0v540"/></g>
-          <polygon points="480,150 590,213 590,327 480,390 370,327 370,213" fill="none" stroke="#2DD4BF" stroke-width="1.5"/>
-          <polygon points="480,190 555,233 555,307 480,350 405,307 405,233" fill="rgba(45,212,191,.08)" stroke="rgba(45,212,191,.5)"/>
-          <g fill="#1F2D3B" stroke="rgba(255,255,255,.2)"><rect x="440" y="240" width="80" height="14"/><rect x="440" y="260" width="80" height="14"/><rect x="440" y="280" width="80" height="14"/></g>
-          <path d="M60 270 H360" stroke="#F43F5E" stroke-width="1.5" stroke-dasharray="6 6"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="1.2s" repeatCount="indefinite"/></path>
-          <circle cx="366" cy="270" r="4" fill="#F43F5E"/>
-        </svg>
-        <video data-panel autoplay muted loop playsinline preload="metadata"><source src="media/vault.mp4" type="video/mp4"><source src="https://d8j0ntlcm91z4.cloudfront.net/user_3AALlz5xLxMJqHp2cBRMiZvmBqJ/hf_20260930_091308_252c11dd-e8b5-4cb2-9406-677caf7d7e1c.mp4" type="video/mp4"></video>
+      <div class="container rules reveal">
+        <article class="rule"><span class="rule__n">01</span><b>Nur lesen</b><p>Tycho schreibt nie in eine Datenbank. Eigener Leselogin ohne Schreibrechte, Verbindung mit Lesevermerk, Zugriff auf eine Kopie statt auf das laufende System. Ein Testlauf versucht jede Nacht einen Schreibvorgang. Er muss scheitern, sonst schlägt Tycho Alarm.</p></article>
+        <article class="rule"><span class="rule__n">02</span><b>Nicht bemerkbar</b><p>Während der Ordinationszeit rührt Tycho die Produktivdatenbank nicht an. Gearbeitet wird nach Betriebsschluss auf einer Momentaufnahme. Keine Erweiterung im Praxisprogramm, kein Dienst auf den Arbeitsplätzen, keine spürbare Last.</p></article>
+        <article class="rule"><span class="rule__n">03</span><b>Wie ein Benutzer</b><p>Tycho hat dieselben Leserechte wie eine Person, die Auswertungen macht. Nicht mehr. Anmeldung über das Windows-Konto, Berechtigung über eine Gruppe im Verzeichnisdienst, Dienstkonto mit automatisch wechselndem Passwort.</p></article>
+        <article class="rule"><span class="rule__n">04</span><b>Verschlüsselt und lokal</b><p>Der Datenspeicher ist mit AES-256-GCM verschlüsselt, der Hauptschlüssel liegt im Sicherheitschip des Servers und lässt sich nicht herauskopieren. Keine Cloud, keine Telemetrie, keine ausgehende Verbindung. Jeder Zugriff steht in einem verketteten Protokoll.</p></article>
       </div>
-    </div>
-    <div class="grid g4 rv" style="margin-top:40px">
-      <div class="cell"><span class="k">Identität</span><h3>Kerberos-SSO</h3><p>Anmeldung mit dem Windows-Konto, Rollen über AD-Gruppen, Dienst als gMSA mit Passwortrotation.</p></div>
-      <div class="cell"><span class="k">Datenschutz</span><h3>DSGVO Art. 9, 22, 35</h3><p>Keine Klartext-Patientendaten, keine automatisierten Entscheidungen, DSFA-Vorlage im Lieferumfang.</p></div>
-      <div class="cell"><span class="k">Arbeitsrecht</span><h3>§ 96 ArbVG, § 10 AVRAG</h3><p>Team-Modus als Standard. Pro-Person nur mit NDA, dokumentierter Zustimmung und k-Anonymität ≥ 5.</p></div>
-      <div class="cell"><span class="k">AI Act</span><h3>Menschliche Aufsicht</h3><p>Tycho bewertet, entscheidet aber nicht. Jede Person sieht ihren eigenen Score. Alles ist protokolliert.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- 06 Roadmap -->
-<section id="roadmap">
-  <div class="wrap">
-    <div class="head rv"><span class="num">06 / Roadmap</span><h2>Vom Pilot in Wien zur ausschreibungsfähigen Plattform.</h2></div>
-    <div class="roadmap rv">
-      <div class="track"><i></i></div>
-      <ol>
-        <li class="done"><span class="q">Q3 2026</span><h4>Demo und Architektur</h4><p>Demo-Plattform mit Simple- und Advanced-Modus, lokalem Assistenten, HO-Katalog, Tailwind HR. Entwickleranforderung für Diktara, Ordicall, Planery.</p><span class="state">erledigt</span></li>
-        <li><span class="q">Q4 2026</span><h4>Pilot PVE Wien</h4><p>CGM-MedXPert-Adapter auf Snapshot, Schreib-Selbsttest, Kerberos-SSO, erste Digests. Schnittstellen Diktara und Ordicall produktiv.</p><span class="state">in Arbeit</span></li>
-        <li><span class="q">Q1 2027</span><h4>Planery und Inkasso</h4><p>Tailwind HR mit Planery-API, Inkasso-KI für Honorarnoten, Bankabgleich CAMT.053, DSFA- und Betriebsvereinbarungs-Muster.</p><span class="state">geplant</span></li>
-        <li><span class="q">Q2 2027</span><h4>Weitere PVS, Mehrstandort</h4><p>Adapter für weitere Praxissysteme, Standortvergleich innerhalb einer Organisation, Wahlarzt-Edition mit WAHonline.</p><span class="state">geplant</span></li>
-        <li><span class="q">2028</span><h4>Zertifizierung</h4><p>Sicherheitsaudit, Ausschreibungsfähigkeit für Ärztezentren und Träger, lokales Sprachdiktat für den Assistenten.</p><span class="state">Ziel</span></li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-<!-- 07 Whitepaper -->
-<section id="whitepaper">
-  <div class="wrap">
-    <div class="head rv"><span class="num">07 / Whitepaper</span><h2>Das Produkt, vollständig beschrieben.</h2><p class="lead">Ausgangslage, Leistungsumfang, Architektur, Datenmodell, Sicherheit mit Bedrohungsmodell, Recht in Österreich, Betrieb und Roadmap auf zehn Seiten.</p></div>
-    <div class="wp rv">
-      <div class="toc">
-        <span><b>01</b>Zusammenfassung</span><span><b>02</b>Ausgangslage</span><span><b>03</b>Was Tycho leistet · Efficacy Score</span><span><b>04</b>Architektur · Ablauf eines Tages</span><span><b>05</b>Datenmodell · was nicht gespeichert wird</span><span><b>06</b>Sicherheit · Beweisführung · Bedrohungsmodell</span><span><b>07</b>Recht und Regulatorik (AT)</span><span><b>08</b>Betrieb</span><span><b>09</b>Roadmap</span>
+      <div class="container" style="margin-top:clamp(28px,3vw,44px)">
+        <a class="btn btn--dark reveal" href="sicherheit.html">Wie das nachgewiesen wird</a>
       </div>
-      <div style="display:grid;gap:16px;align-content:start">
-        <p class="lead">„Die Daten bleiben, wo sie sind. Die Auswertung kommt zu den Daten.“</p>
-        <p style="color:var(--fg-2)">Das Whitepaper richtet sich an Ordinationsleitungen, IT-Betreuer und Datenschutzbeauftragte. Es beschreibt, was Tycho liest, was es speichert und was es nie tut.</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn teal" href="whitepaper.html">Whitepaper lesen</a><a class="btn" href="#demo">Fragen im Demo-Termin</a></div>
+    </section>
+    <section class="promise" id="versprechen">
+      <div class="container">
+        <p class="label">Die Lücke<span class="label__idx">/08</span></p>
+        <p class="promise__text" id="promiseText2" data-key="dort entsteht das vollständige Bild.">Kein Auswertungssystem am Markt verbindet Telefon und Dokumentation mit dem Praxisverwaltungssystem. Genau dort entsteht das vollständige Bild.</p>
+        <div class="promise__foot"><span>PVS</span><span>Telefon-KI</span><span>Dokumentations-KI</span><span>Aufrufsystem</span><span>Dienstplan</span></div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- 08 Demo & Termin -->
-<section id="demo">
-  <div class="wrap">
-    <div class="head rv"><span class="num">08 / Demo</span><h2>Termin wählen. Wir zeigen Tycho an Ihren Fragen.</h2><p class="lead">30 Minuten per Video, mit Beispieldaten einer Primärversorgungseinheit. Oder Sie lassen sich zurückrufen.</p></div>
-    <form class="booking" id="booking-form" name="demo" method="POST" data-netlify="true" netlify-honeypot="firma-website" action="/">
-      <input type="hidden" name="form-name" value="demo">
-      <input type="hidden" name="kind" id="kind" value="termin">
-      <input type="hidden" name="slot" id="slot" value="">
-      <p class="hp"><label>Firma-Website <input name="firma-website"></label></p>
-      <div id="calwrap">
-        <div class="cal" id="cal">
-          <header><button type="button" class="btn sm prev" aria-label="Vormonat">‹</button><b class="m"></b><button type="button" class="btn sm next" aria-label="Nächster Monat">›</button></header>
-          <div class="days"></div>
-          <div class="mono" style="margin-top:14px">Uhrzeit · 30 min · Video</div>
-          <div class="slots" id="slots"></div>
+    </section>
+    <section class="section" id="quellen">
+      <div class="container head">
+        <p class="label reveal">Die Quellen<span class="label__idx">/09</span></p>
+        <h2 class="h2 reveal">Tycho bringt mit, was<br>Sie ohnehin schon haben.</h2>
+        <p class="lead reveal">Nichts muss neu erfasst werden. Tycho liest aus den Systemen, die in Ihrer Ordination bereits laufen, und bringt sie auf einen gemeinsamen Nenner.</p>
+      </div>
+      <div class="container srcs reveal">
+        <article class="src"><span class="label">Praxisverwaltung</span><b>Leistungen, Scheine, Termine, Honorarnoten</b><p>Nächtliche Momentaufnahme mit reinem Leserecht. Adapter für die gängigen österreichischen Systeme, Cloudsysteme über ihren Export.</p></article>
+        <article class="src"><span class="label">Telefon-KI</span><b>Anrufe, Anliegen, Erreichbarkeit</b><p>Aus <a href="ordicall.html">ordicall</a>: wie viele Anrufe die KI erledigt hat, was übergeben wurde, was außerhalb der Öffnungszeiten kam, wie viele Terminwünsche nie zu einem Termin wurden.</p></article>
+        <article class="src"><span class="label">Dokumentations-KI</span><b>Dokuzeit, Akzeptanz, erkannte Leistungen</b><p>Aus <a href="diktara.html">diktara</a> nur Metadaten: Dauer, Nutzungsgrad, erkannte Leistungscodes. Keine Transkripte, keine Befundtexte, kein Ton.</p></article>
+        <article class="src"><span class="label">Aufrufsystem</span><b>Wartezeit vom Eintreffen bis zum Aufruf</b><p>Die Zeitstempel, an denen sich Unzufriedenheit ablesen lässt, je Behandler und Tageszeit, als Median und als oberes Fünftel.</p></article>
+        <article class="src"><span class="label">Verzeichnisdienst</span><b>Personal, Rollen, Anmeldezeiten</b><p>Der Personalstamm kommt aus Active Directory. Damit stimmen Rollen, Rechte und Auswertungen überein, ohne zweite Liste.</p></article>
+        <article class="src"><span class="label">Dienstplan und Bank</span><b>Besetzung, Salden, Zahlungseingänge</b><p>Optional: Zeiten und Abwesenheiten aus dem Dienstplan, Zahlungseingänge aus dem Kontoauszug für die Honorarnoten. Beides nur lesend.</p></article>
+      </div>
+    </section>
+    <section class="section section--mist" id="oberflaechen">
+      <div class="container head">
+        <p class="label reveal">Die Oberfläche<span class="label__idx">/10</span></p>
+        <h2 class="h2 reveal">Eine Ansicht, die<br>niemand erklären muss.</h2>
+        <p class="lead reveal">Oben die Bereiche als Text, rechts Standort und Zeitraum, in der Mitte die Zahlen. Wer eine Ordination führen kann, kann auch Tycho bedienen. Wahlweise hell oder dunkel.</p>
+      </div>
+      <div class="container split2 reveal">
+        <div>
+        <figure class="shotfig reveal">
+          <span class="shotfig__tag">Start</span>
+          <div class="shotfig__frame"><img src="shots/start-hell.png" alt="Startseite von Tycho mit Begrüßung, Frage an den Assistenten und Hinweis auf den Datenstand" loading="lazy" width="1600" height="950"></div>
+          <figcaption>Der Einstieg. Eine Frage, drei Vorschläge und die Zusicherung, dass die Daten aktuell sind und nichts geschrieben wurde.</figcaption>
+        </figure>
+        </div>
+        <div>
+        <figure class="shotfig reveal">
+          <span class="shotfig__tag">Produktivität</span>
+          <div class="shotfig__frame"><img src="shots/produktivitaet-hell.png" alt="Produktivitätsansicht von Tycho mit Umsatz je Ärztin, Telefonie je Assistenz und Anliegen" loading="lazy" width="1600" height="950"></div>
+          <figcaption>Jeder Bereich folgt demselben Aufbau: Kennzahlen oben, Verlauf darunter, Tabelle am Ende. Nichts muss gesucht werden.</figcaption>
+        </figure>
         </div>
       </div>
-      <div class="form">
-        <div class="fields" style="display:grid;gap:14px">
-          <div class="kind"><button type="button" class="on" data-kind="termin">Demo-Termin buchen</button><button type="button" data-kind="rueckruf">Rückruf anfordern</button></div>
-          <div class="pick" id="pick">Noch kein Termin gewählt. Tag und Uhrzeit links auswählen.</div>
-          <div class="row"><label>Name<input name="name" required autocomplete="name"></label><label>Ordination / Organisation<input name="ordination" required autocomplete="organization"></label></div>
-          <div class="row"><label>E-Mail<input type="email" name="email" required autocomplete="email"></label><label>Telefon<input type="tel" name="telefon" autocomplete="tel"></label></div>
-          <div class="row"><label>Praxissoftware<select name="pvs"><option>CGM MedXPert</option><option>Innomed</option><option>Latido</option><option>CGM Turbomed</option><option>andere</option></select></label><label>Ärzt:innen im Haus<select name="groesse"><option>1</option><option>2–3</option><option>4–6</option><option>7–15</option><option>mehr</option></select></label></div>
-          <label>Was interessiert Sie besonders?<textarea name="nachricht" placeholder="z. B. Kreuzprüfung, Tailwind HR, Datenschutz-Folgenabschätzung"></textarea></label>
-          <label style="grid-template-columns:auto 1fr;display:grid;align-items:center;gap:10px;font-size:12.5px"><input type="checkbox" name="datenschutz" required style="height:auto;width:16px;margin:0"><span>Ich bin einverstanden, dass meine Angaben zur Terminvereinbarung verarbeitet werden. Keine Weitergabe, keine Newsletter.</span></label>
-          <div class="err" id="err"></div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><button class="btn teal" type="submit">Anfrage senden</button><span class="mono">Antwort innerhalb eines Werktags</span></div>
-        </div>
-        <div class="done" id="done" hidden><b>Danke.</b><p class="sum"></p><a class="btn sm" id="ics" href="#" download="tycho-demo.ics" hidden>Termin in den Kalender (.ics)</a></div>
+      <div class="container mtline reveal">
+        <p class="lead">Dazu ein Assistent, der Fragen in ganzen Sätzen beantwortet: welche Leistung den meisten Umsatz bringt, welche Honorarnoten offen sind, wie die Auslastung im nächsten Monat aussieht. Das Sprachmodell läuft auf Ihrem Server. Es geht keine Frage und keine Zahl nach außen.</p>
       </div>
-    </form>
-  </div>
-</section>
+    </section>
+    <section class="section" id="roadmap">
+      <div class="container head">
+        <p class="label reveal">Wohin es geht<span class="label__idx">/11</span></p>
+        <h2 class="h2 reveal">Vom eigenen Zentrum<br>in andere Ordinationen.</h2>
+        <p class="lead reveal">Tycho läuft zuerst dort, wo es entstanden ist. Was sich bei uns bewährt, kommt Schritt für Schritt zu Ihnen.</p>
+      </div>
+      <div class="container roadmap reveal">
+        <div class="roadmap__track"><i></i></div>
+        <div class="steps">
+          <article class="step step--done"><span class="step__t">Q3 2026</span><b>Demo und Bauplan</b><p>Die Plattform mit beiden Ansichten, dem lokalen Assistenten und dem Honorarkatalog. Anforderungen an diktara, ordicall und Planery liegen bei den Herstellern.</p><span class="step__state">erledigt</span></article>
+          <article class="step"><span class="step__t">Q4 2026</span><b>Pilot im eigenen Zentrum</b><p>CGM MedXPert auf Kopie, Schreib-Selbsttest, Anmeldung mit dem Windows-Konto, die ersten Montagsberichte.</p><span class="step__state">in Arbeit</span></article>
+          <article class="step"><span class="step__t">Q1 2027</span><b>Dienstplan und Honorarnoten</b><p>Planery angebunden, Zahlungseingänge aus dem Kontoauszug, Erinnerungen und Ratenzahlung als Vorschlag. Vorlagen für Datenschutz-Folgenabschätzung und Betriebsvereinbarung.</p><span class="step__state">geplant</span></article>
+          <article class="step"><span class="step__t">Q2 2027</span><b>Weitere Praxisprogramme</b><p>Adapter für die nächsten Systeme, Standortvergleich innerhalb eines Trägers, Wahlarzt-Ausgabe mit WAHonline.</p><span class="step__state">geplant</span></article>
+          <article class="step"><span class="step__t">2028</span><b>Geprüft und ausschreibungsfähig</b><p>Sicherheitsaudit durch Dritte, Unterlagen für Ärztezentren und Träger, Sprachdiktat für den Assistenten, lokal.</p><span class="step__state">Ziel</span></article>
+        </div>
+      </div>
+    </section>
+    <section class="section section--dark" id="whitepaper">
+      <div class="container head">
+        <p class="label reveal">Zum Nachlesen<span class="label__idx">/12</span></p>
+        <h2 class="h2 reveal">Alles Wesentliche<br>auf zehn Seiten.</h2>
+        <p class="lead reveal">Was Tycho liest, was es speichert und was es nie tut. Für Ordinationsleitung, IT-Betreuung und Datenschutz, ohne Marketingsprache.</p>
+        <div class="hero__cta reveal"><a class="btn btn--light" href="whitepaper.html">Whitepaper lesen</a><a class="btn btn--line" href="sicherheit.html">Sicherheit im Detail</a></div>
+      </div>
+    </section>
+    <section class="contact section--dark ctaband">
+      <div class="container head head--center">
+        <p class="label reveal">Nächster Schritt</p>
+        <h2 class="h2 reveal">Suchen Sie sich einen Termin aus.</h2>
+        <p class="lead reveal" style="margin-inline:auto">30 Minuten per Video, ohne Verkaufsdruck. Wir zeigen Tycho an Beispieldaten, klären, welches Praxisprogramm bei Ihnen läuft, und sagen offen, was geht und was nicht.</p>
+        <div class="hero__cta reveal" style="justify-content:center"><a class="btn btn--light" href="kontakt.html">Demo buchen</a><a class="btn btn--line" href="produkt.html">Produkt ansehen</a></div>
+      </div>
+    </section>
+  </main>
 
-<footer>
-  <div class="wrap">
-    <img src="brand/logo-dark.svg" alt="Tycho">
-    <span>Kontrollinstanz für Ordinationen · Österreich</span>
-    <span>© 2026 Tycho</span>
-    <a href="whitepaper.html">Whitepaper</a>
-    <a href="#demo">Demo</a>
-    <a href="impressum.html">Impressum</a>
-    <a href="datenschutz.html">Datenschutz</a>
-    <span style="margin-left:auto">Diese Seite lädt außer Schriften nichts von Dritten. Keine Tracker.</span>
-  </div>
-</footer>
+  <footer class="footer">
+    <div class="container footer__row">
+      <span class="footer__brand"><img class="footer__logo" src="brand/logo-dark.svg" alt="Tycho"><span class="footer__claim">Kontrollinstanz für die Ordinationsleitung</span></span>
+      <nav class="footer__links"><a href="produkt.html">Produkt</a><a href="sicherheit.html">Sicherheit</a><a href="integration.html">Anbindung</a><a href="einfuehrung.html">Einführung</a><a href="idee.html">Warum Tycho</a><a href="ordicall.html">ordicall</a><a href="diktara.html">diktara</a><a href="kontakt.html">Kontakt</a><a href="whitepaper.html">Whitepaper</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+      <span class="footer__credit">Videos erstellt mit Higgsfield &middot; &copy; 2026 Tycho</span>
+    </div>
+  </footer>
 
-<script src="app.js"></script>
+  <script src="main.js" defer></script>
+  <script src="addons.js" defer></script>
 </body>
 </html>

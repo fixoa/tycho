@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="de-AT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einführung: Ablauf, Voraussetzungen, Investition | Tycho</title>
+  <meta name="description" content="Wie Tycho in die Ordination kommt: Erstgespräch, Zugänge, Zuordnung und Honorarkatalog, vier Wochen Pilot. Dazu Antworten auf die häufigsten Fragen zu Zugriff, Datenschutz, Mitbestimmung und Ausstieg.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://tycho.at/einfuehrung.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tycho">
+  <meta property="og:locale" content="de_AT">
+  <meta property="og:url" content="https://tycho.at/einfuehrung.html">
+  <meta property="og:title" content="Einführung: Ablauf, Voraussetzungen, Investition | Tycho">
+  <meta property="og:description" content="Wie Tycho in die Ordination kommt: Erstgespräch, Zugänge, Zuordnung und Honorarkatalog, vier Wochen Pilot. Dazu Antworten auf die häufigsten Fragen zu Zugriff, Datenschutz, Mitbestimmung und Ausstieg.">
+  <meta property="og:image" content="https://tycho.at/shots/station-hell.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Einführung: Ablauf, Voraussetzungen, Investition | Tycho">
+  <meta name="twitter:description" content="Wie Tycho in die Ordination kommt: Erstgespräch, Zugänge, Zuordnung und Honorarkatalog, vier Wochen Pilot. Dazu Antworten auf die häufigsten Fragen zu Zugriff, Datenschutz, Mitbestimmung und Ausstieg.">
+  <meta name="twitter:image" content="https://tycho.at/shots/station-hell.png">
+  <meta name="theme-color" content="#1F2D3B">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Muss auf den Arbeitsplätzen etwas installiert werden?","acceptedAnswer":{"@type":"Answer","text":"Nein. Tycho läuft als Dienst auf einem Server im Haus, üblicherweise dem vorhandenen Terminalserver. Geöffnet wird es im Browser, und zwar nur auf diesem Rechner beziehungsweise in der Sitzung darauf."}},{"@type":"Question","name":"Kann Tycho unser Praxisprogramm beschädigen?","acceptedAnswer":{"@type":"Answer","text":"Der Zugang hat kein Schreibrecht, es wird von einer Kopie gelesen und der Programmcode kennt keinen Schreibbefehl. Jede Nacht wird ein Schreibvorgang absichtlich versucht und muss abgewiesen werden. Das Ergebnis steht in der Ansicht Sicherheit."}},{"@type":"Question","name":"Verlangsamt die Auswertung den Betrieb?","acceptedAnswer":{"@type":"Answer","text":"Während der Ordinationszeit findet kein Zugriff auf die Produktivdatenbank statt. Gerechnet wird nachts auf einer Kopie."}},{"@type":"Question","name":"Was passiert mit unseren Daten?","acceptedAnswer":{"@type":"Answer","text":"Sie bleiben auf Ihrem Server, verschlüsselt. Tycho baut keine ausgehende Verbindung auf, sendet keine Nutzungsdaten und lädt nichts in eine Cloud. Auch wir sehen Ihre Zahlen nur, wenn Sie sie uns zeigen."}},{"@type":"Question","name":"Dürfen wir die Leistung einzelner Personen auswerten?","acceptedAnswer":{"@type":"Answer","text":"Das hängt davon ab, ob Zustimmungen, Verschwiegenheit und Folgenabschätzung vorliegen. Tycho blendet Einzelwerte aus, solange das nicht geklärt ist, und verlangt für die Freischaltung eine ausdrückliche Bestätigung. Die Vorlagen liefern wir mit, prüfen lassen müssen Sie sie selbst."}},{"@type":"Question","name":"Was, wenn eine Person nicht zustimmt?","acceptedAnswer":{"@type":"Answer","text":"Dann gibt es für sie keinen Einzelwert, auch nicht im Modus pro Person. Ihr Beitrag zählt nur in die Gruppe. Ein Widerruf wirkt sofort."}},{"@type":"Question","name":"Funktioniert das auch bei mehreren Standorten?","acceptedAnswer":{"@type":"Answer","text":"Ja. Standort ist ein Filter wie Zeitraum oder Rolle, und alle Ansichten reagieren darauf."}},{"@type":"Question","name":"Was, wenn wir keine Telefon-KI und keine Dokumentations-KI haben?","acceptedAnswer":{"@type":"Answer","text":"Dann läuft Tycho mit dem Praxisprogramm allein. Die Kreuzprüfung wird dadurch dünner, weil zwei Quellen fehlen. Der Rest funktioniert unverändert."}},{"@type":"Question","name":"Wie schnell sehen wir etwas?","acceptedAnswer":{"@type":"Answer","text":"Nach dem ersten vollständigen Nachtlauf, also am Tag nach der Einrichtung. Belastbar wird die Prognose, sobald Tycho ein paar Wochen Verlauf kennt."}},{"@type":"Question","name":"Können wir wieder aussteigen?","acceptedAnswer":{"@type":"Answer","text":"Ja. Der Dienst wird angehalten, der Leselogin gelöscht, der verschlüsselte Speicher entfernt. In Ihrem Praxisprogramm bleibt nichts zurück, weil Tycho dort nie etwas verändert hat."}}]}</script>
+</head>
+<body>
+  <div class="topbar" id="topbar">
+    <div class="container topbar__inner">
+      <span class="topbar__dot" aria-hidden="true"></span>
+      <p>Tycho liest PVS, Telefon und Dokumentation zusammen. Nur lesend, lokal in der Ordination, verschlüsselt.</p>
+      <a href="produkt.html">Produkt ansehen <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="./" aria-label="Tycho Startseite"><img class="nav__logo" src="brand/logo-dark.svg" alt="Tycho"></a>
+    <nav class="nav__links" aria-label="Hauptnavigation">
+      <a href="produkt.html">Produkt</a>
+      <a href="sicherheit.html">Sicherheit</a>
+      <a href="integration.html">Anbindung</a>
+      <a href="einfuehrung.html">Einführung</a>
+      <a href="idee.html">Warum Tycho</a>
+    </nav>
+    <a class="nav__cta" href="kontakt.html">Demo buchen</a>
+    <button class="nav__burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
+  </header>
+  <div class="mobile-menu" id="mobileMenu" hidden>
+<a href="produkt.html">Produkt</a><a href="sicherheit.html">Sicherheit</a><a href="integration.html">Anbindung</a><a href="einfuehrung.html">Einführung</a><a href="idee.html">Warum Tycho</a><a href="kontakt.html">Kontakt</a>
+  </div>
+
+  <main id="top">
+    <section class="hero hero--sub">
+      <div class="video" aria-hidden="true"><video autoplay muted loop playsinline preload="auto" data-video><source src="https://d8j0ntlcm91z4.cloudfront.net/user_3AALlz5xLxMJqHp2cBRMiZvmBqJ/hf_20260930_094530_ac62b1ea-4eaf-4ce5-80ef-a0cb8b117c61.mp4" type="video/mp4"></video></div>
+      <div class="hero__content container">
+        <p class="label reveal-hero">Einführung</p>
+        <h1 class="hero__title hero__title--sub reveal-hero">Vom Erstgespräch bis zum ersten Digest.</h1>
+        <p class="hero__sub reveal-hero">Tycho wird nicht verkauft und dann sich selbst überlassen. Die Einrichtung ist Handarbeit, weil jede Ordination anders zugeschnitten ist. Dafür steht am Ende ein System, das läuft, ohne dass jemand es bedienen muss.</p>
+<div class="hero__cta reveal-hero"><a class="btn btn--light" href="kontakt.html">Demo anfragen</a><a class="btn btn--line" href="produkt.html">Produkt ansehen</a></div>
+            </div>
+    </section>
+    <section class="section" id="ablauf">
+      <div class="container head">
+        <p class="label reveal">Der Ablauf<span class="label__idx">/01</span></p>
+        <h2 class="h2 reveal">Vier Schritte,<br>rund sechs Wochen.</h2>
+      </div>
+      <div class="container steps reveal">
+        <article class="step"><span class="step__t">Schritt 1</span><b>Erstgespräch</b><p>Dreißig Minuten. Welches Praxisprogramm läuft, welche Nachbarsysteme sind im Einsatz, was wollen Sie als Erstes wissen. Danach sagen wir Ihnen, ob und wie es geht.</p></article>
+        <article class="step"><span class="step__t">Schritt 2</span><b>Zugänge</b><p>Gemeinsam mit Ihrer Betreuung: Leselogin, Momentaufnahme, Gruppen im Verzeichnis, Zugänge der Nachbarsysteme. Nichts davon greift in den Betrieb ein.</p></article>
+        <article class="step"><span class="step__t">Schritt 3</span><b>Zuordnung und Katalog</b><p>Wir ordnen die Tabellen Ihres Systems zu, spielen den Honorarkatalog Ihres Bundeslands ein und legen die Zielwerte fest, an denen Sie gemessen werden wollen.</p></article>
+        <article class="step"><span class="step__t">Schritt 4</span><b>Pilot und Übergabe</b><p>Vier Wochen Pilotbetrieb mit echten Zahlen. Wir prüfen gemeinsam, ob die Kreuzprüfung stimmt, und stellen erst dann den Wochenbericht scharf.</p></article>
+      </div>
+    </section>
+    <section class="section section--mist" id="investition">
+      <div class="container head">
+        <p class="label reveal">Investition<span class="label__idx">/02</span></p>
+        <h2 class="h2 reveal">Was es kostet, hängt<br>von Ihrer Größe ab.</h2>
+        <p class="lead reveal">Ein Einzelordination und ein Primärversorgungszentrum mit vier Standorten sind nicht dasselbe. Deshalb gibt es keinen Listenpreis, der bei der Hälfte der Interessenten falsch wäre. Was Sie bekommen, steht hier trotzdem.</p>
+      </div>
+      <div class="container price reveal">
+        <article class="price__c">
+          <p class="label">Einrichtung</p>
+          <span class="price__v">Einmalig</span>
+          <p>Anbindung, Zuordnung der Tabellen, Honorarkatalog, Zielwerte, Pilotbetrieb und Übergabe. Der Aufwand hängt davon ab, welches Praxisprogramm läuft und wie viele Quellen dazukommen.</p>
+          <ul>
+            <li>Erstgespräch und Prüfung kostenfrei</li>
+            <li>Festpreis nach dem Erstgespräch</li>
+            <li>Vier Wochen Pilot inbegriffen</li>
+          </ul>
+        </article>
+        <article class="price__c">
+          <p class="label">Betrieb</p>
+          <span class="price__v">Je Monat</span>
+          <p>Laufende Nutzung, Aktualisierungen, Pflege des Honorarkatalogs und Unterstützung. Gestaffelt nach Anzahl der Behandelnden und der Standorte.</p>
+          <ul>
+            <li>Keine Nutzungsgebühr je Abfrage</li>
+            <li>Keine Kosten nach Datenmenge</li>
+            <li>Monatlich kündbar nach dem ersten Jahr</li>
+          </ul>
+        </article>
+        <article class="price__c">
+          <p class="label">Zusatzmodule</p>
+          <span class="price__v">Nach Bedarf</span>
+          <p>Honorarnoten und Personalplanung, Zuweiser, Verordnungen, Zufriedenheit, Qualitätsfristen. Jedes Modul lässt sich zuschalten und wieder abschalten.</p>
+          <ul>
+            <li>Erst zuschalten, wenn der Kern läuft</li>
+            <li>Personalmodul mit eigener Berechtigung</li>
+            <li>Kein Modul ist Voraussetzung für ein anderes</li>
+          </ul>
+        </article>
+      </div>
+      <div class="container mtline reveal">
+        <p class="hint">Sie bekommen nach dem Erstgespräch ein Angebot mit einem festen Betrag für die Einrichtung und einem monatlichen Betrag für den Betrieb. Keine versteckten Posten, keine Abrechnung nach Datenmenge.</p>
+      </div>
+    </section>
+    <section class="section" id="fragen">
+      <div class="container head">
+        <p class="label reveal">Häufige Fragen<span class="label__idx">/03</span></p>
+        <h2 class="h2 reveal">Was vor dem<br>Erstgespräch meist kommt.</h2>
+      </div>
+      <div class="container faq reveal">
+        <details><summary>Muss auf den Arbeitsplätzen etwas installiert werden?</summary><p>Nein. Tycho läuft als Dienst auf einem Server im Haus, üblicherweise dem vorhandenen Terminalserver. Geöffnet wird es im Browser, und zwar nur auf diesem Rechner beziehungsweise in der Sitzung darauf.</p></details>
+        <details><summary>Kann Tycho unser Praxisprogramm beschädigen?</summary><p>Der Zugang hat kein Schreibrecht, es wird von einer Kopie gelesen und der Programmcode kennt keinen Schreibbefehl. Jede Nacht wird ein Schreibvorgang absichtlich versucht und muss abgewiesen werden. Das Ergebnis steht in der Ansicht Sicherheit.</p></details>
+        <details><summary>Verlangsamt die Auswertung den Betrieb?</summary><p>Während der Ordinationszeit findet kein Zugriff auf die Produktivdatenbank statt. Gerechnet wird nachts auf einer Kopie.</p></details>
+        <details><summary>Was passiert mit unseren Daten?</summary><p>Sie bleiben auf Ihrem Server, verschlüsselt. Tycho baut keine ausgehende Verbindung auf, sendet keine Nutzungsdaten und lädt nichts in eine Cloud. Auch wir sehen Ihre Zahlen nur, wenn Sie sie uns zeigen.</p></details>
+        <details><summary>Dürfen wir die Leistung einzelner Personen auswerten?</summary><p>Das hängt davon ab, ob Zustimmungen, Verschwiegenheit und Folgenabschätzung vorliegen. Tycho blendet Einzelwerte aus, solange das nicht geklärt ist, und verlangt für die Freischaltung eine ausdrückliche Bestätigung. Die Vorlagen liefern wir mit, prüfen lassen müssen Sie sie selbst.</p></details>
+        <details><summary>Was, wenn eine Person nicht zustimmt?</summary><p>Dann gibt es für sie keinen Einzelwert, auch nicht im Modus pro Person. Ihr Beitrag zählt nur in die Gruppe. Ein Widerruf wirkt sofort.</p></details>
+        <details><summary>Funktioniert das auch bei mehreren Standorten?</summary><p>Ja. Standort ist ein Filter wie Zeitraum oder Rolle, und alle Ansichten reagieren darauf.</p></details>
+        <details><summary>Was, wenn wir keine Telefon-KI und keine Dokumentations-KI haben?</summary><p>Dann läuft Tycho mit dem Praxisprogramm allein. Die Kreuzprüfung wird dadurch dünner, weil zwei Quellen fehlen. Der Rest funktioniert unverändert.</p></details>
+        <details><summary>Wie schnell sehen wir etwas?</summary><p>Nach dem ersten vollständigen Nachtlauf, also am Tag nach der Einrichtung. Belastbar wird die Prognose, sobald Tycho ein paar Wochen Verlauf kennt.</p></details>
+        <details><summary>Können wir wieder aussteigen?</summary><p>Ja. Der Dienst wird angehalten, der Leselogin gelöscht, der verschlüsselte Speicher entfernt. In Ihrem Praxisprogramm bleibt nichts zurück, weil Tycho dort nie etwas verändert hat.</p></details>
+      </div>
+    </section>
+    <section class="contact section--dark ctaband">
+      <div class="container head head--center">
+        <p class="label reveal">Nächster Schritt</p>
+        <h2 class="h2 reveal">Beginnen wir mit dem Erstgespräch.</h2>
+        <p class="lead reveal" style="margin-inline:auto">Dreißig Minuten, kostenfrei und unverbindlich. Danach wissen Sie, ob Tycho bei Ihnen funktioniert und was es kostet.</p>
+        <div class="hero__cta reveal" style="justify-content:center"><a class="btn btn--light" href="kontakt.html">Demo anfragen</a><a class="btn btn--line" href="produkt.html">Produkt ansehen</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__row">
+      <span class="footer__brand"><img class="footer__logo" src="brand/logo-dark.svg" alt="Tycho"><span class="footer__claim">Kontrollinstanz für die Ordinationsleitung</span></span>
+      <nav class="footer__links"><a href="produkt.html">Produkt</a><a href="sicherheit.html">Sicherheit</a><a href="integration.html">Anbindung</a><a href="einfuehrung.html">Einführung</a><a href="idee.html">Warum Tycho</a><a href="ordicall.html">ordicall</a><a href="diktara.html">diktara</a><a href="kontakt.html">Kontakt</a><a href="whitepaper.html">Whitepaper</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+      <span class="footer__credit">Videos erstellt mit Higgsfield &middot; &copy; 2026 Tycho</span>
+    </div>
+  </footer>
+
+  <script src="main.js" defer></script>
+  <script src="addons.js" defer></script>
+</body>
+</html>

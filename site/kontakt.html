@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="de-AT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo buchen | Tycho</title>
+  <meta name="description" content="Demo-Termin für Tycho buchen oder Rückruf anfordern. Dreißig Minuten per Video, mit Beispieldaten einer Gruppenpraxis. Werktags, ohne Verkaufsdruck.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://tycho.at/kontakt.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tycho">
+  <meta property="og:locale" content="de_AT">
+  <meta property="og:url" content="https://tycho.at/kontakt.html">
+  <meta property="og:title" content="Demo buchen | Tycho">
+  <meta property="og:description" content="Demo-Termin für Tycho buchen oder Rückruf anfordern. Dreißig Minuten per Video, mit Beispieldaten einer Gruppenpraxis. Werktags, ohne Verkaufsdruck.">
+  <meta property="og:image" content="https://tycho.at/shots/station-hell.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Demo buchen | Tycho">
+  <meta name="twitter:description" content="Demo-Termin für Tycho buchen oder Rückruf anfordern. Dreißig Minuten per Video, mit Beispieldaten einer Gruppenpraxis. Werktags, ohne Verkaufsdruck.">
+  <meta name="twitter:image" content="https://tycho.at/shots/station-hell.png">
+  <meta name="theme-color" content="#1F2D3B">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+      </head>
+<body>
+  <div class="topbar" id="topbar">
+    <div class="container topbar__inner">
+      <span class="topbar__dot" aria-hidden="true"></span>
+      <p>Tycho liest PVS, Telefon und Dokumentation zusammen. Nur lesend, lokal in der Ordination, verschlüsselt.</p>
+      <a href="produkt.html">Produkt ansehen <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="./" aria-label="Tycho Startseite"><img class="nav__logo" src="brand/logo-dark.svg" alt="Tycho"></a>
+    <nav class="nav__links" aria-label="Hauptnavigation">
+      <a href="produkt.html">Produkt</a>
+      <a href="sicherheit.html">Sicherheit</a>
+      <a href="integration.html">Anbindung</a>
+      <a href="einfuehrung.html">Einführung</a>
+      <a href="idee.html">Warum Tycho</a>
+    </nav>
+    <a class="nav__cta" href="kontakt.html">Demo buchen</a>
+    <button class="nav__burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
+  </header>
+  <div class="mobile-menu" id="mobileMenu" hidden>
+<a href="produkt.html">Produkt</a><a href="sicherheit.html">Sicherheit</a><a href="integration.html">Anbindung</a><a href="einfuehrung.html">Einführung</a><a href="idee.html">Warum Tycho</a><a href="kontakt.html">Kontakt</a>
+  </div>
+
+  <main id="top">
+    <section class="hero hero--sub">
+      <div class="video" aria-hidden="true"><video autoplay muted loop playsinline preload="auto" data-video src="https://d8j0ntlcm91z4.cloudfront.net/user_3AALlz5xLxMJqHp2cBRMiZvmBqJ/hf_20260930_094530_469d2cd0-4bd0-4473-a801-20f6457b46ec.mp4"></video></div>
+      <div class="hero__content container">
+        <p class="label reveal-hero">Kontakt</p>
+        <h1 class="hero__title hero__title--sub reveal-hero">Sehen Sie Tycho an Beispieldaten.</h1>
+        <p class="hero__sub reveal-hero">Dreißig Minuten per Video, ohne Verkaufsdruck. Suchen Sie sich einen Termin aus oder lassen Sie sich zurückrufen. Danach wissen Sie, ob Tycho bei Ihnen funktioniert.</p>
+      </div>
+    </section>
+    <section class="contact section--dark" id="buchen">
+      <div class="container head">
+        <p class="label reveal">Termin wählen<span class="label__idx">/01</span></p>
+        <h2 class="h2 reveal">Wann passt es Ihnen?</h2>
+        <p class="lead reveal">Werktags zwischen neun und halb fünf. Sie bekommen eine Einladung mit Videolink, sonst nichts. Kein Newsletter, keine Weitergabe.</p>
+      </div>
+      <form class="container booking" id="bookingForm" name="demo" method="POST" data-netlify="true" netlify-honeypot="firma-website" action="/">
+        <input type="hidden" name="form-name" value="demo">
+        <input type="hidden" name="kind" id="kind" value="termin">
+        <input type="hidden" name="slot" id="slot" value="">
+        <p hidden><label>Firma-Website <input name="firma-website"></label></p>
+        <div id="calWrap">
+          <div class="cal" id="cal">
+            <div class="cal__head"><button type="button" class="cal__nav" data-cal="prev" aria-label="Vormonat">‹</button><b class="cal__month"></b><button type="button" class="cal__nav" data-cal="next" aria-label="Nächster Monat">›</button></div>
+            <div class="cal__days"></div>
+            <p class="label" style="margin:18px 0 0">Uhrzeit · 30 Minuten · Video</p>
+            <div class="slots" id="slots"></div>
+          </div>
+        </div>
+        <div class="form">
+          <div class="kind"><button type="button" class="is-on" data-kind="termin">Demo-Termin</button><button type="button" data-kind="rueckruf">Rückruf</button></div>
+          <div class="pick-sum" id="pickSum">Noch kein Termin gewählt. Tag und Uhrzeit links auswählen.</div>
+          <div class="form__grid">
+            <input type="text" name="name" placeholder="Ihr Name" autocomplete="name" required>
+            <input type="text" name="ordination" placeholder="Ordination oder Zentrum" autocomplete="organization">
+            <input type="email" name="email" placeholder="E-Mail" autocomplete="email" required>
+            <input type="tel" name="telefon" placeholder="Telefon (für den Rückruf)" autocomplete="tel">
+            <select name="pvs" aria-label="Praxisprogramm"><option>CGM MedXPert</option><option>Innomed</option><option>Latido</option><option>CGM Turbomed</option><option>anderes Praxisprogramm</option></select>
+            <select name="groesse" aria-label="Ärztinnen und Ärzte im Haus"><option>1 Ärztin oder Arzt</option><option>2 bis 3</option><option>4 bis 6</option><option>7 bis 15</option><option>mehr als 15</option></select>
+          </div>
+          <textarea name="nachricht" rows="4" placeholder="Was beschäftigt Sie jedes Quartal? (freiwillig)"></textarea>
+          <label class="chk"><input type="checkbox" name="datenschutz" required><span>Meine Angaben dürfen zur Terminvereinbarung verwendet werden. Keine Weitergabe, kein Newsletter.</span></label>
+          <p class="form__error" id="bookError" hidden></p>
+          <button class="btn btn--light" type="submit">Anfrage senden</button>
+          <p class="form__note">Antwort innerhalb eines Werktags. Oder direkt: hallo@tycho.at</p>
+        </div>
+      </form>
+    </section>
+    <section class="section" id="ablauf">
+      <div class="container head">
+        <p class="label reveal">Was in der Demo passiert<span class="label__idx">/02</span></p>
+        <h2 class="h2 reveal">Dreißig Minuten,<br>drei Fragen.</h2>
+      </div>
+      <div class="container cols reveal">
+        <div class="col"><span class="label">01</span><h3>Wie läuft es gerade?</h3><p>Wir öffnen die Station mit Beispieldaten und zeigen, wie sich Score, Umsatz und Wartezeit nach Zeitraum und Rolle verändern.</p></div>
+        <div class="col"><span class="label">02</span><h3>Was blieb liegen?</h3><p>Die Kreuzprüfung legt Leistungsblatt, Diktate und Anrufe nebeneinander. Meist der Moment, in dem es still wird.</p></div>
+        <div class="col"><span class="label">03</span><h3>Geht das bei uns?</h3><p>Welches Praxisprogramm läuft, welche Nachbarsysteme gibt es, wer betreut den Server. Danach sagen wir offen, was geht und was nicht.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__row">
+      <span class="footer__brand"><img class="footer__logo" src="brand/logo-dark.svg" alt="Tycho"><span class="footer__claim">Kontrollinstanz für die Ordinationsleitung</span></span>
+      <nav class="footer__links"><a href="produkt.html">Produkt</a><a href="sicherheit.html">Sicherheit</a><a href="integration.html">Anbindung</a><a href="einfuehrung.html">Einführung</a><a href="idee.html">Warum Tycho</a><a href="ordicall.html">ordicall</a><a href="diktara.html">diktara</a><a href="kontakt.html">Kontakt</a><a href="whitepaper.html">Whitepaper</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+      <span class="footer__credit">Videos erstellt mit Higgsfield &middot; &copy; 2026 Tycho</span>
+    </div>
+  </footer>
+
+  <script src="main.js" defer></script>
+  <script src="addons.js" defer></script>
+</body>
+</html>

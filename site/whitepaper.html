@@ -1,46 +1,68 @@
-<!doctype html>
-<html lang="de">
+<!DOCTYPE html>
+<html lang="de-AT">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tycho Whitepaper</title>
-<meta name="description" content="Whitepaper: Tycho, die lokale, nur lesende Kontrollinstanz für Ordinationen. Architektur, Sicherheit, Datenmodell, Recht, Roadmap.">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="styles.css">
-<style>
-.doc { display: grid; gap: 48px; padding-top: 110px; padding-bottom: 80px; }
-@media (min-width: 1000px) { .doc { grid-template-columns: 220px minmax(0, 1fr); } }
-.doc nav { position: sticky; top: 90px; align-self: start; display: none; gap: 6px; font-size: 12.5px; }
-@media (min-width: 1000px) { .doc nav { display: grid; } }
-.doc nav a { color: var(--fg-3); padding: 3px 0 3px 10px; border-left: 1px solid var(--line); }
-.doc nav a:hover { color: var(--fg); border-color: var(--teal); }
-.doc article { max-width: 76ch; }
-.doc h1 { font-size: clamp(32px, 4.5vw, 52px); line-height: 1.05; margin-bottom: 8px; }
-.doc h2 { font-size: 28px; margin: 48px 0 12px; }
-.doc h3 { font-size: 16px; margin: 28px 0 8px; }
-.doc p { margin: 0 0 14px; color: var(--fg-2); }
-.doc p:first-of-type { color: var(--fg); }
-.doc b { color: var(--fg); }
-.doc ul, .doc ol { color: var(--fg-2); padding-left: 20px; margin: 0 0 14px; }
-.doc li { margin: 4px 0; }
-.doc code { font-family: var(--mono); font-size: 12px; background: rgba(255,255,255,.06); padding: 1px 5px; border-radius: 2px; }
-.doc pre { font-family: var(--mono); font-size: 11.5px; line-height: 1.5; background: var(--bg-1); border: 1px solid var(--line); padding: 16px; overflow-x: auto; color: var(--fg-2); margin: 0 0 16px; }
-.doc hr { border: 0; border-top: 1px solid var(--line); margin: 32px 0; }
-.doc .tbl { overflow-x: auto; border: 1px solid var(--line); margin: 0 0 16px; }
-.doc table { border-collapse: collapse; width: 100%; font-size: 13px; }
-.doc th, .doc td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
-.doc th { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--fg-3); font-weight: 400; }
-.doc td { color: var(--fg-2); }
-</style>
-</head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whitepaper | Tycho</title>
+  <meta name="description" content="Whitepaper: Tycho, die lokale, nur lesende Kontrollinstanz für Ordinationen. Architektur, Datenmodell, Sicherheit, Recht in Österreich, Betrieb, Roadmap.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://tycho.at/whitepaper.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tycho">
+  <meta property="og:locale" content="de_AT">
+  <meta property="og:url" content="https://tycho.at/whitepaper.html">
+  <meta property="og:title" content="Whitepaper | Tycho">
+  <meta property="og:description" content="Whitepaper: Tycho, die lokale, nur lesende Kontrollinstanz für Ordinationen. Architektur, Datenmodell, Sicherheit, Recht in Österreich, Betrieb, Roadmap.">
+  <meta property="og:image" content="https://tycho.at/shots/station-hell.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Whitepaper | Tycho">
+  <meta name="twitter:description" content="Whitepaper: Tycho, die lokale, nur lesende Kontrollinstanz für Ordinationen. Architektur, Datenmodell, Sicherheit, Recht in Österreich, Betrieb, Roadmap.">
+  <meta name="twitter:image" content="https://tycho.at/shots/station-hell.png">
+  <meta name="theme-color" content="#1F2D3B">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+      </head>
 <body>
-<nav class="nav scrolled" aria-label="Hauptnavigation"><div class="wrap"><a class="logo" href="index.html" aria-label="Tycho"><img src="brand/logo-dark.svg" alt="Tycho"></a><ul><li><a href="index.html#abgekapselt">Lokale KI</a></li><li><a href="index.html#funktion">Funktionsweise</a></li><li><a href="index.html#sicherheit">Sicherheit</a></li><li><a href="index.html#roadmap">Roadmap</a></li></ul><div class="cta"><a class="btn sm solid" href="index.html#demo">Demo buchen</a></div></div></nav>
-<main class="wrap doc">
-  <nav aria-label="Inhalt"><a href="#s1">Zusammenfassung</a><a href="#s2">1. Ausgangslage</a><a href="#s3">2. Was Tycho leistet</a><a href="#s4">3. Architektur</a><a href="#s5">4. Datenmodell</a><a href="#s6">5. Sicherheit</a><a href="#s7">6. Recht und Regulatorik (Österreich)</a><a href="#s8">7. Betrieb</a><a href="#s9">8. Roadmap</a><a href="#s10">9. Fazit</a></nav>
-  <article>
-<h1>Tycho – Whitepaper</h1>
+  <div class="topbar" id="topbar">
+    <div class="container topbar__inner">
+      <span class="topbar__dot" aria-hidden="true"></span>
+      <p>Tycho liest PVS, Telefon und Dokumentation zusammen. Nur lesend, lokal in der Ordination, verschlüsselt.</p>
+      <a href="produkt.html">Produkt ansehen <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="./" aria-label="Tycho Startseite"><img class="nav__logo" src="brand/logo-dark.svg" alt="Tycho"></a>
+    <nav class="nav__links" aria-label="Hauptnavigation">
+      <a href="produkt.html">Produkt</a>
+      <a href="sicherheit.html">Sicherheit</a>
+      <a href="integration.html">Anbindung</a>
+      <a href="einfuehrung.html">Einführung</a>
+      <a href="idee.html">Warum Tycho</a>
+    </nav>
+    <a class="nav__cta" href="kontakt.html">Demo buchen</a>
+    <button class="nav__burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
+  </header>
+  <div class="mobile-menu" id="mobileMenu" hidden>
+<a href="produkt.html">Produkt</a><a href="sicherheit.html">Sicherheit</a><a href="integration.html">Anbindung</a><a href="einfuehrung.html">Einführung</a><a href="idee.html">Warum Tycho</a><a href="kontakt.html">Kontakt</a>
+  </div>
+
+  <main id="top">
+    <section class="hero hero--sub">
+      <div class="video" aria-hidden="true"><video autoplay muted loop playsinline preload="auto" data-video src="https://d8j0ntlcm91z4.cloudfront.net/user_3AALlz5xLxMJqHp2cBRMiZvmBqJ/hf_20260930_094530_186b177c-60a3-4c03-bdad-e280757cc3b9.mp4"></video></div>
+      <div class="hero__content container">
+        <p class="label reveal-hero">Whitepaper · Version 1.0 · September 2026</p>
+        <h1 class="hero__title hero__title--sub reveal-hero">Die Daten bleiben, wo sie sind. Die Auswertung kommt zu den Daten.</h1>
+        <p class="hero__sub reveal-hero">Was Tycho liest, was es speichert und was es nie tut. Für Ordinationsleitung, IT-Betreuung und Datenschutz.</p>
+        <div class="hero__cta reveal-hero"><a class="btn btn--light" href="kontakt.html">Demo buchen</a><a class="btn btn--line" href="#s1">Lesen</a></div>
+      </div>
+    </section>
+    <section class="section" id="text">
+      <div class="container wp">
+        <nav class="article__toc" aria-label="Inhalt"><a href="#s1">Zusammenfassung</a><a href="#s2">1. Ausgangslage</a><a href="#s3">2. Was Tycho leistet</a><a href="#s4">3. Architektur</a><a href="#s5">4. Datenmodell</a><a href="#s6">5. Sicherheit</a><a href="#s7">6. Recht und Regulatorik (Österreich)</a><a href="#s8">7. Betrieb</a><a href="#s9">8. Roadmap</a><a href="#s10">9. Fazit</a></nav>
+        <article class="article">
 <p><b>Die lokale Kontrollinstanz für Ordinationen. Liest nur. Verlässt nie das Haus.</b></p>
 <p>Version 1.0 · September 2026 · Tycho Demo</p>
 <hr>
@@ -55,9 +77,9 @@
 <p>Tycho setzt deshalb einen anderen Rahmen: <b>Die Daten bleiben, wo sie sind. Die Auswertung kommt zu den Daten.</b></p>
 <h2 id="s3">2. Was Tycho leistet</h2>
 <div class="tbl"><table><thead><tr><th>Bereich</th><th>Was Tycho beantwortet</th><th>Quelle</th></tr></thead><tbody><tr><td><b>Station</b></td><td>Efficacy Score, KPIs, Handlungsbedarf, Zeitachse</td><td>alle</td></tr><tr><td><b>Finanzen &amp; Tarife</b></td><td>Umsatz je Kostenträger, Honorarkatalog (ÖGK-HO-Logik), Limits (z. B. Pos. 39), Kennzeichnungen 8a–8i/T, Fristen</td><td>PVS, e-card</td></tr><tr><td><b>Kreuzprüfung</b></td><td>Konsultationen ohne Grundleistung, Diktate mit erkannter Leistung ohne Position, Telemedizin ohne T-Kennzeichnung</td><td>PVS × Diktara × Ordicall</td></tr><tr><td><b>Prognose</b></td><td>Quartalsende mit 90-%-Band, Vergleich Vorquartal, Kostenträger-Mix</td><td>PVS, Historie</td></tr><tr><td><b>Produktivität &amp; Personal</b></td><td>Kontakte, Umsatz, Dokuzeit je Rolle oder Person; Team- oder Pro-Person-Modus</td><td>PVS, Diktara, AD</td></tr><tr><td><b>Tailwind</b></td><td>Honorarnoten, Inkasso-KI (Erinnerung, Ratenzahlung), Zahlungsabgleich</td><td>PVS, Bank</td></tr><tr><td><b>Tailwind HR</b></td><td>Personalkosten, Kostenquote, Umsatz je Arztstunde gegen Richtwert 120 €/h, Überstunden, Frühwarnungen</td><td>Planery, Lohnverrechnung</td></tr><tr><td><b>Ordicall / Diktara</b></td><td>Anrufe nach Ergebnis und Anliegen, KI-Quote, Stoßzeiten; Dokuzeit, Akzeptanz, ICD-10-Quote</td><td>Exporte / Metadaten</td></tr><tr><td><b>Termine, Zuweiser, Verordnungen, QM, NPS</b></td><td>Auslastung, No-Shows, Zuweiserbindung, Verordnungs-Ausreißer, Fristen, Zufriedenheit</td><td>PVS, Import</td></tr><tr><td><b>Digest</b></td><td>Montags 06:00 als signierte Mail an die Leitung</td><td>Store</td></tr><tr><td><b>Assistent</b></td><td>Fragen in natürlicher Sprache, Antworten mit Tabellen und Sprüngen in die passende Ansicht</td><td>Store, lokales LLM</td></tr></tbody></table></div>
-<h3 id="">Der Efficacy Score</h3>
+<h3>Der Efficacy Score</h3>
 <p>Der Score verdichtet je Rolle sechs bis sieben Komponenten auf 0–100: Durchsatz, Ertrag, Dokumentation, Diktara-Nutzung, Telemedizin, No-Show-Quote, Abrechnungsqualität. Gewichte und Zielwerte sind je Rolle hinterlegt und in der Oberfläche sichtbar. Der Score ist zeitraumbezogen: Er gilt für den gewählten Zeitraum und wird gegen den Vergleichszeitraum ausgewiesen. Es gibt keinen Peer-Vergleich zwischen Ordinationen.</p>
-<h3 id="">Team-basiert oder pro Person</h3>
+<h3>Team-basiert oder pro Person</h3>
 <p>Bei der Erstkonfiguration entscheidet der Haupt-Admin zwischen <b>Team-basiert</b> (nur Gruppenkennzahlen, k-Anonymität ≥ 5, keine Rankings) und <b>Pro Person</b> (Einzelwerte, nur mit NDA und dokumentierter Zustimmung). Die Entscheidung steht im Audit-Log und ist nur durch den Admin umkehrbar.</p>
 <h2 id="s4">3. Architektur</h2>
 <pre>Quellen (nur lesend)           Tycho-Kern (TS-ORD-01)            Oberfläche
@@ -80,15 +102,15 @@ Lohnverrechnung (CSV)          AES-256-GCM · TPM                 Tools nur lese
 <p><b>Nicht gespeichert:</b> Patientennamen, Sozialversicherungsnummern, Diagnosen im Klartext, Kartei-Freitexte, Audio, Transkripte, Befunde.</p>
 <p>Aufbewahrung: Aggregate 36 Monate, Personenwerte 24 Monate, Audit-Log 10 Jahre.</p>
 <h2 id="s6">5. Sicherheit</h2>
-<h3 id="">Grundsatz: abgekapselt</h3>
+<h3>Grundsatz: abgekapselt</h3>
 <p>Der Tycho-Dienst hat keine ausgehende Netzwerkverbindung. Das ist keine Konfiguration, sondern eine Firewall-Regel auf Host-Ebene, die im Onboarding gesetzt und im Audit-Log dokumentiert wird. Es gibt keinen Update-Kanal, keine Telemetrie, keine Lizenzprüfung gegen einen Server. Updates werden als signiertes Paket eingespielt. Einzige optionale Ausnahme ist der interne SMTP-Relay für den Digest.</p>
-<h3 id="">Beweisführung „nur lesend“</h3>
+<h3>Beweisführung „nur lesend“</h3>
 <div class="tbl"><table><thead><tr><th>Ebene</th><th>Maßnahme</th></tr></thead><tbody><tr><td>Datenbank-Login</td><td>eigener Login <code>tycho_ro</code>: <code>db_datareader</code> + <code>db_denydatawriter</code>, keine DDL</td></tr><tr><td>Verbindung</td><td><code>ApplicationIntent=ReadOnly</code>; Firebird nur <code>GRANT SELECT</code>; Btrieve/Pervasive nur Backup-Kopie</td></tr><tr><td>Quelle</td><td>Snapshot statt Produktivdatenbank, nach dem Lauf verworfen</td></tr><tr><td>Code</td><td>Adapter kennen nur <code>SELECT</code>; Schreib-APIs existieren nicht (Lint-Regel, Review)</td></tr><tr><td>Selbsttest</td><td>täglicher Schreibversuch (<code>INSERT</code>) muss scheitern; Ergebnis im Audit-Log und in der Oberfläche</td></tr><tr><td>Netzwerk</td><td>keine ausgehenden Verbindungen (Host-Firewall)</td></tr></tbody></table></div>
-<h3 id="">Verschlüsselung und Identität</h3>
+<h3>Verschlüsselung und Identität</h3>
 <ul><li>Store: AES-256-GCM, Schlüssel im TPM 2.0, an die Maschine gebunden</li><li>Personaldaten (Tailwind HR): eigener Schlüssel, eigenes Audit-Log</li><li>Transport: HTTPS nur auf 127.0.0.1 des Terminalservers, Kerberos/Negotiate-SSO, Fallback LDAPS</li><li>Dienstkonto: gMSA mit automatischer Passwortrotation, Kerberos AES-only</li><li>Rollen: <code>G_Tycho_Leitung</code>, <code>G_Tycho_Admin</code>, <code>G_Tycho_Self</code>; optional <code>G_Tycho_Audit</code></li></ul>
-<h3 id="">Audit</h3>
+<h3>Audit</h3>
 <p>Jeder Lesezugriff, jede Anmeldung, jeder abgewiesene Versuch und jede Konfigurationsänderung wird als Ereignis in eine SHA-256-verkettete, append-only Datei geschrieben. Die Kette wird stündlich geprüft. Der Audit-Log ist in der Oberfläche einsehbar (Sicherheit &amp; Compliance) und exportierbar.</p>
-<h3 id="">Bedrohungsmodell (Auszug)</h3>
+<h3>Bedrohungsmodell (Auszug)</h3>
 <div class="tbl"><table><thead><tr><th>Bedrohung</th><th>Antwort</th></tr></thead><tbody><tr><td>Datenabfluss an Dritte</td><td>keine ausgehende Verbindung; nichts verlässt den Server</td></tr><tr><td>Kompromittierung des Servers</td><td>Store nur mit TPM-Schlüssel dieser Maschine lesbar; keine Klartext-Patientendaten vorhanden</td></tr><tr><td>Manipulation der Quellsysteme durch Tycho</td><td>technisch ausgeschlossen (Leselogin, Snapshot, Selbsttest)</td></tr><tr><td>Missbrauch von Personendaten</td><td>Team-Modus als Standard; Pro-Person nur mit NDA, Zustimmung, k-Anonymität, Audit</td></tr><tr><td>Prompt-Injection über Daten</td><td>Assistent hat nur lesende Tools und keinen Netzwerkzugang; Antworten sind auf Store-Daten begrenzt</td></tr><tr><td>Insider mit Leitungsrechten</td><td>vollständiges Audit; Pro-Person-Modus nur durch Admin mit protokollierter Entscheidung</td></tr></tbody></table></div>
 <h2 id="s7">6. Recht und Regulatorik (Österreich)</h2>
 <ul><li><b>DSGVO</b>: Art. 9 (Gesundheitsdaten), Art. 35 Datenschutz-Folgenabschätzung (DSFA-V Z 1: Leistungsbewertung von Beschäftigten), Art. 22 (keine automatisierte Entscheidung), Art. 28 (Hersteller als Auftragsverarbeiter nur für Wartung, ohne Datenzugriff)</li><li><b>ÄrzteG § 54</b> Verschwiegenheit, <b>§ 51</b> Dokumentation und Aufbewahrung</li><li><b>ArbVG § 96 Abs 1 Z 3 / § 96a</b>: Kontrollmaßnahmen und Personaldaten-Systeme; ohne Betriebsrat <b>§ 10 AVRAG</b> (Einzelzustimmung). Tycho unterstützt das durch Team-Modus, Zustimmungsverwaltung und Audit.</li><li><b>EU AI Act</b> Anhang III (Beschäftigung): Hochrisiko-Anwendung bei Personenbewertung; Tycho liefert menschliche Aufsicht (keine automatischen Entscheidungen), Information (Mein Score für jede Person) und Protokollierung.</li><li><b>Abrechnung</b>: ASVG §§ 338 ff., Gesamtverträge ÖGK/SVS/BVAEB, Honorarordnungen mit Limits und Kennzeichnungen; Einreichfristen im QM-Modul</li><li><b>Dokumentation</b>: ELGA, e-Medikation, e-Befund; ICD-10 ambulant seit 01.07.2026; WAHonline für Wahlärzt:innen</li></ul>
@@ -100,9 +122,28 @@ Lohnverrechnung (CSV)          AES-256-GCM · TPM                 Tools nur lese
 <p>Tycho gibt der Ordinationsleitung das, was bisher gefehlt hat: ein tägliches, belastbares Bild des Betriebs, ohne dass eine einzige Patienteninformation das Haus verlässt und ohne dass ein einziger Datensatz in einem Quellsystem verändert wird. Die Kontrollinstanz kontrolliert nur durch Lesen.</p>
 <hr>
 <p><em>Kontakt und Demo: siehe Landingpage. Dieses Dokument beschreibt den Stand der Demo-Version; Tarife und Kennzahlen darin sind Beispieldaten.</em></p>
-  </article>
-</main>
-<footer><div class="wrap"><img src="brand/logo-dark.svg" alt="Tycho"><span>© 2026 Tycho</span><a href="index.html">Startseite</a><a href="index.html#demo">Demo</a></div></footer>
-<script src="app.js"></script>
+        </article>
+      </div>
+    </section>
+    <section class="contact section--dark ctaband">
+      <div class="container head head--center">
+        <p class="label reveal">Nächster Schritt</p>
+        <h2 class="h2 reveal">Fragen zum Whitepaper?</h2>
+        <p class="lead reveal" style="margin-inline:auto">Wir gehen es mit Ihnen durch, an Ihren Systemen und Ihren Fragen.</p>
+        <div class="hero__cta reveal" style="justify-content:center"><a class="btn btn--light" href="kontakt.html">Demo buchen</a><a class="btn btn--line" href="sicherheit.html">Sicherheit im Detail</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__row">
+      <span class="footer__brand"><img class="footer__logo" src="brand/logo-dark.svg" alt="Tycho"><span class="footer__claim">Kontrollinstanz für die Ordinationsleitung</span></span>
+      <nav class="footer__links"><a href="produkt.html">Produkt</a><a href="sicherheit.html">Sicherheit</a><a href="integration.html">Anbindung</a><a href="einfuehrung.html">Einführung</a><a href="idee.html">Warum Tycho</a><a href="ordicall.html">ordicall</a><a href="diktara.html">diktara</a><a href="kontakt.html">Kontakt</a><a href="whitepaper.html">Whitepaper</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+      <span class="footer__credit">Videos erstellt mit Higgsfield &middot; &copy; 2026 Tycho</span>
+    </div>
+  </footer>
+
+  <script src="main.js" defer></script>
+  <script src="addons.js" defer></script>
 </body>
 </html>

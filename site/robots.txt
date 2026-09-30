@@ -1,0 +1,4 @@
+# Vorschauadresse. Die kanonischen Verweise zeigen auf tycho.at,
+# deshalb wird diese Ausgabe nicht indexiert.
+User-agent: *
+Disallow: /

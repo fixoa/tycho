@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de-AT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sicherheit: nur lesend, lokal, verschlüsselt | Tycho</title>
+  <meta name="description" content="Wie Tycho beweist, dass es nie schreibt: eigener Leselogin, Momentaufnahme statt Produktivsystem, nächtlicher Test, AES-256-GCM mit Schlüssel im Sicherheitschip, verkettetes Protokoll. Dazu Zustimmungen, Mindestgruppengröße und menschliche Prüfung.">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://tycho.at/sicherheit.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tycho">
+  <meta property="og:locale" content="de_AT">
+  <meta property="og:url" content="https://tycho.at/sicherheit.html">
+  <meta property="og:title" content="Sicherheit: nur lesend, lokal, verschlüsselt | Tycho">
+  <meta property="og:description" content="Wie Tycho beweist, dass es nie schreibt: eigener Leselogin, Momentaufnahme statt Produktivsystem, nächtlicher Test, AES-256-GCM mit Schlüssel im Sicherheitschip, verkettetes Protokoll. Dazu Zustimmungen, Mindestgruppengröße und menschliche Prüfung.">
+  <meta property="og:image" content="https://tycho.at/shots/station-hell.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sicherheit: nur lesend, lokal, verschlüsselt | Tycho">
+  <meta name="twitter:description" content="Wie Tycho beweist, dass es nie schreibt: eigener Leselogin, Momentaufnahme statt Produktivsystem, nächtlicher Test, AES-256-GCM mit Schlüssel im Sicherheitschip, verkettetes Protokoll. Dazu Zustimmungen, Mindestgruppengröße und menschliche Prüfung.">
+  <meta name="twitter:image" content="https://tycho.at/shots/station-hell.png">
+  <meta name="theme-color" content="#1F2D3B">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="topbar" id="topbar">
+    <div class="container topbar__inner">
+      <span class="topbar__dot" aria-hidden="true"></span>
+      <p>Tycho liest PVS, Telefon und Dokumentation zusammen. Nur lesend, lokal in der Ordination, verschlüsselt.</p>
+      <a href="produkt.html">Produkt ansehen <span aria-hidden="true">&rarr;</span></a>
+    </div>
+  </div>
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="./" aria-label="Tycho Startseite"><img class="nav__logo" src="brand/logo-dark.svg" alt="Tycho"></a>
+    <nav class="nav__links" aria-label="Hauptnavigation">
+      <a href="produkt.html">Produkt</a>
+      <a href="sicherheit.html">Sicherheit</a>
+      <a href="integration.html">Anbindung</a>
+      <a href="einfuehrung.html">Einführung</a>
+      <a href="idee.html">Warum Tycho</a>
+    </nav>
+    <a class="nav__cta" href="kontakt.html">Demo buchen</a>
+    <button class="nav__burger" id="burger" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
+  </header>
+  <div class="mobile-menu" id="mobileMenu" hidden>
+<a href="produkt.html">Produkt</a><a href="sicherheit.html">Sicherheit</a><a href="integration.html">Anbindung</a><a href="einfuehrung.html">Einführung</a><a href="idee.html">Warum Tycho</a><a href="kontakt.html">Kontakt</a>
+  </div>
+
+  <main id="top">
+    <section class="hero hero--sub">
+      <div class="video" aria-hidden="true"><video autoplay muted loop playsinline preload="auto" data-video><source src="https://d8j0ntlcm91z4.cloudfront.net/user_3AALlz5xLxMJqHp2cBRMiZvmBqJ/hf_20260930_094945_2ddc56a9-6d6c-428c-b4ec-21e719d4bb16.mp4" type="video/mp4"></video></div>
+      <div class="hero__content container">
+        <p class="label reveal-hero">Sicherheit</p>
+        <h1 class="hero__title hero__title--sub reveal-hero">Voller Einblick. Kein Risiko.</h1>
+        <p class="hero__sub reveal-hero">Tycho hat Zugriff auf das Herz Ihrer Ordination. Deshalb ist es so gebaut, dass es dort nichts anrichten kann, selbst wenn jemand es wollte. Nicht durch ein Versprechen, sondern durch Rechte, die es nicht hat, und durch einen Test, der das jede Nacht nachweist.</p>
+<div class="hero__cta reveal-hero"><a class="btn btn--light" href="kontakt.html">Demo anfragen</a><a class="btn btn--line" href="integration.html">Anbindung</a></div>
+            </div>
+    </section>
+    <section class="section" id="regeln">
+      <div class="container head">
+        <p class="label reveal">Die vier Regeln<span class="label__idx">/01</span></p>
+        <h2 class="h2 reveal">Worauf Sie sich<br>verlassen können.</h2>
+      </div>
+      <div class="container rules reveal">
+        <article class="rule"><span class="rule__n">01</span><b>Tycho schreibt nie</b><p>Es gibt einen eigenen Datenbanklogin, der ausschließlich lesen darf und dem das Schreiben ausdrücklich verboten ist. Die Verbindung trägt einen Lesevermerk. Im Programmcode existiert keine schreibende Funktion, das wird bei jeder Änderung geprüft.</p></article>
+        <article class="rule"><span class="rule__n">02</span><b>Der Betrieb merkt nichts</b><p>Zwischen halb acht und sechs rührt Tycho die Produktivdatenbank nicht an. Danach wird eine Momentaufnahme erstellt und nur diese gelesen. Keine Erweiterung im Praxisprogramm, kein Dienst auf den Arbeitsplätzen.</p></article>
+        <article class="rule"><span class="rule__n">03</span><b>Rechte wie ein Benutzer</b><p>Tycho bekommt genau die Leserechte, die eine Person für Auswertungen bräuchte. Angemeldet wird über das Windows-Konto, berechtigt über eine Gruppe im Verzeichnisdienst. Das Dienstkonto wechselt sein Passwort selbsttätig.</p></article>
+        <article class="rule"><span class="rule__n">04</span><b>Alles verschlüsselt, alles im Haus</b><p>Der Speicher ist mit AES-256-GCM verschlüsselt, der Hauptschlüssel liegt im Sicherheitschip des Servers und lässt sich nicht herauskopieren. Keine ausgehende Verbindung, keine Cloud, keine Telemetrie.</p></article>
+      </div>
+    </section>
+    <section class="section section--mist" id="beweis">
+      <div class="container head">
+        <p class="label reveal">Der Nachweis<span class="label__idx">/02</span></p>
+        <h2 class="h2 reveal">Sechs Ebenen, die<br>das Schreiben verhindern.</h2>
+        <p class="lead reveal">Eine Zusage ist wenig wert, wenn sie nur im Vertrag steht. Diese sechs Ebenen wirken unabhängig voneinander. Fällt eine aus, greifen die anderen weiter.</p>
+      </div>
+      <div class="container spec__wrap reveal">
+        <table class="spec">
+          <caption class="sr">Maßnahmen gegen Schreibzugriffe</caption>
+          <thead><tr><th>Ebene</th><th>Maßnahme</th></tr></thead>
+          <tbody>
+            <tr><td>Datenbanklogin</td><td>Eigener Leselogin mit der Rolle für reines Lesen und einer ausdrücklichen Sperre für Schreibvorgänge. Keine Rechte auf Struktur, keine Eigentümerrolle.</td></tr>
+            <tr><td>Verbindung</td><td>Verbindung mit Lesevermerk. Bei älteren Systemen nur ein Leserecht auf einzelne Tabellen, bei sehr alten Datenbanken gar kein Zugriff auf die laufende Datei, sondern nur auf eine Sicherungskopie.</td></tr>
+            <tr><td>Quelle</td><td>Gelesen wird von einer Momentaufnahme, nicht vom laufenden System. Die Aufnahme wird nach dem Lauf verworfen.</td></tr>
+            <tr><td>Programmcode</td><td>Die Zugriffsschicht kennt ausschließlich Lesebefehle. Schreibende Funktionen gibt es im Code nicht. Das wird bei jeder Änderung geprüft und automatisch durchgesetzt.</td></tr>
+            <tr><td>Nächtlicher Test</td><td>Jede Nacht versucht Tycho absichtlich einen Schreibvorgang. Er muss abgewiesen werden. Das Ergebnis steht im Protokoll und in der Ansicht Sicherheit. Gelingt der Schreibvorgang, schlägt Tycho Alarm.</td></tr>
+            <tr><td>Netzwerk</td><td>Keine ausgehenden Verbindungen, abgesichert über eine Regel auf dem Server selbst. Die einzige Ausnahme ist auf Wunsch ein Mailrelais im Haus für den Wochenbericht.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="container" style="margin-top:clamp(28px,3vw,44px)">
+        <figure class="shotfig reveal">
+          <span class="shotfig__tag">Sicherheit</span>
+          <div class="shotfig__frame"><img src="shots/sicherheit-hell.png" alt="Ansicht Sicherheit und Compliance in Tycho mit Nachweisen für den lesenden Zugriff, Datenquellen, Zustimmungen und Protokoll" loading="lazy" width="1600" height="950"></div>
+          <figcaption>Die Ansicht Sicherheit zeigt jederzeit, wann der letzte Test lief, welche Quelle über welchen Weg gelesen wird, welche Zustimmungen vorliegen und was im Protokoll steht.</figcaption>
+        </figure>
+      </div>
+    </section>
+    <section class="section section--dark" id="daten">
+      <div class="container head">
+        <p class="label reveal">Was gespeichert wird<span class="label__idx">/03</span></p>
+        <h2 class="h2 reveal">Und vor allem:<br>was nicht.</h2>
+        <p class="lead reveal">Tycho braucht keine Patientendaten, um eine Ordination auszuwerten. Es braucht Zahlen über Vorgänge. Genau das wird gespeichert, alles andere bleibt, wo es ist.</p>
+      </div>
+      <div class="container split2 reveal">
+        <div class="stack">
+          <p class="label">Gespeichert</p>
+          <ul class="ticks">
+            <li>Tageswerte je Rolle und Position</li>
+            <li>Leistungscodes, Tarife, Limitierungen</li>
+            <li>Zeitstempel von Termin, Aufruf und Abschluss</li>
+            <li>Fallkennungen in pseudonymisierter Form</li>
+            <li>Bestandteile des Score und der Prognose</li>
+            <li>Ergebnisse der Kreuzprüfung</li>
+          </ul>
+        </div>
+        <div class="stack">
+          <p class="label">Nicht gespeichert</p>
+          <ul class="ticks ticks--no">
+            <li>Namen von Patientinnen und Patienten</li>
+            <li>Diagnosen im Freitext und Karteitexte</li>
+            <li>Befunde und Arztbriefe im Wortlaut</li>
+            <li>Tonaufnahmen und Abschriften aus der Diktier-KI</li>
+            <li>Inhalte von Telefonaten</li>
+          </ul>
+        </div>
+      </div>
+      <div class="container mtline reveal">
+        <p class="lead">Die Dokumentations-KI liefert Tycho ausschließlich Kennzahlen über den Vorgang: wie lange ein Diktat dauerte, wie viel davon übernommen wurde, welche Leistungscodes erkannt wurden. Der Inhalt bleibt dort, wo er hingehört.</p>
+      </div>
+    </section>
+    <section class="section" id="krypto">
+      <div class="container head">
+        <p class="label reveal">Verschlüsselung und Rechte<span class="label__idx">/04</span></p>
+        <h2 class="h2 reveal">Der Schlüssel verlässt<br>Ihren Server nicht.</h2>
+      </div>
+      <div class="container spec__wrap reveal">
+        <table class="spec">
+          <caption class="sr">Kryptografie und Zugriffsrechte</caption>
+          <thead><tr><th>Bereich</th><th>Umsetzung</th></tr></thead>
+          <tbody>
+            <tr><td>Speicher</td><td>Verschlüsselt mit AES-256-GCM, ein eigener Datenschlüssel je Datei.</td></tr>
+            <tr><td>Schlüsselkette</td><td>Der Hauptschlüssel liegt im Sicherheitschip des Servers und ist nicht auslesbar. Er umschließt die Datenschlüssel, diese sind zusätzlich an Maschine und Dienstkonto gebunden.</td></tr>
+            <tr><td>Sicherung</td><td>Sicherungen des Speichers bleiben verschlüsselt. Eine Wiederherstellung gelingt nur auf derselben Maschine oder mit einem Notfallschlüssel, den Sie offline verwahren.</td></tr>
+            <tr><td>Oberfläche</td><td>Verschlüsselte Verbindung mit einem internen Zertifikat, gebunden an den lokalen Rechner. Keine Ressourcen von fremden Servern, auch keine Schriften.</td></tr>
+            <tr><td>Anmeldung</td><td>Über das Windows-Konto, im Rückfall über eine verschlüsselte Verzeichnisabfrage. Kein eigenes Passwort, keine zweite Benutzerverwaltung.</td></tr>
+            <tr><td>Rollen</td><td>Eine Gruppe für die Leitung, eine für den Selbstzugriff auf die eigenen Werte, auf Wunsch eine eigene Gruppe, die nur das Protokoll sehen darf.</td></tr>
+            <tr><td>Protokoll</td><td>Jeder Zugriff und jede Einstellung landet in einem Protokoll, dessen Einträge über Prüfsummen miteinander verkettet sind. Ein nachträgliches Entfernen fällt auf.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="section section--mist" id="recht">
+      <div class="container head">
+        <p class="label reveal">Recht und Mitbestimmung<span class="label__idx">/05</span></p>
+        <h2 class="h2 reveal">Auswertung von Leistung<br>ist kein Selbstläufer.</h2>
+        <p class="lead reveal">Ein System, das Leistung je Person sichtbar macht, berührt Arbeitsrecht, Datenschutz und die Regeln für den Einsatz künstlicher Intelligenz. Tycho nimmt Ihnen diese Fragen nicht ab, aber es zwingt Sie, sie zu beantworten, bevor Einzelwerte überhaupt erscheinen.</p>
+      </div>
+      <div class="container spec__wrap reveal">
+        <table class="spec">
+          <caption class="sr">Rechtlicher Rahmen</caption>
+          <thead><tr><th>Thema</th><th>Regelung</th></tr></thead>
+          <tbody>
+            <tr><td>Wahl beim ersten Start</td><td>Der Hauptverantwortliche entscheidet einmalig zwischen teambasierter Auswertung und Auswertung pro Person. Die Entscheidung wird protokolliert und wirkt auf jede Ansicht.</td></tr>
+            <tr><td>Teambasiert</td><td>Auswertung nach Gruppen, Gruppen unter fünf Personen werden nicht ausgewiesen. Keine Einzelzustimmung nötig, keine Einstufung als besonders kritisches System.</td></tr>
+            <tr><td>Pro Person</td><td>Nur mit Zustimmung jeder betroffenen Person, mit Verschwiegenheitserklärung, Datenschutz-Folgenabschätzung und menschlicher Prüfung. Die Bestätigung verlangt eine ausdrückliche Eingabe, kein beiläufiges Häkchen.</td></tr>
+            <tr><td>Widerruf</td><td>Zieht eine Person ihre Zustimmung zurück, verschwindet ihr Einzelwert sofort, auch im Modus pro Person. Ihr Beitrag zählt nur noch in die Gruppe.</td></tr>
+            <tr><td>Keine automatische Folge</td><td>Tycho löst nie selbsttätig eine Konsequenz aus. Jede Entscheidung trifft ein Mensch, dem die vollständige Aufschlüsselung vorliegt.</td></tr>
+            <tr><td>Einsicht für alle</td><td>Jede Person im Haus kann ihre eigenen Werte einsehen, unabhängig vom gewählten Modus und ohne Leitungsrechte.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="container" style="margin-top:clamp(28px,3vw,44px)">
+        <figure class="shotfig reveal">
+          <span class="shotfig__tag">Mein Score</span>
+          <div class="shotfig__frame"><img src="shots/meinscore-hell.png" alt="Selbstauskunft in Tycho: eine Mitarbeiterin sieht ihre eigenen Kennzahlen mit Zielwerten" loading="lazy" width="1600" height="950"></div>
+          <figcaption>Die Selbstauskunft. Jede Person sieht ihre eigenen Werte samt Zielen und Gewichtung, ohne dass jemand sie dafür freischalten muss.</figcaption>
+        </figure>
+      </div>
+      <div class="container mtline reveal">
+        <p class="hint">Die Vorlagen für Zustimmung und Verschwiegenheitserklärung liefern wir mit. Prüfen lassen müssen Sie sie im eigenen Haus, arbeitsrechtlich und datenschutzrechtlich. Wir sagen Ihnen das lieber vorher als hinterher.</p>
+      </div>
+    </section>
+    <section class="contact section--dark ctaband">
+      <div class="container head head--center">
+        <p class="label reveal">Nächster Schritt</p>
+        <h2 class="h2 reveal">Lassen Sie uns über den Zugriff reden.</h2>
+        <p class="lead reveal" style="margin-inline:auto">Wir gehen mit Ihrer Betreuung für das Praxisverwaltungssystem durch, wie der lesende Zugang aussieht, und zeigen den nächtlichen Test live.</p>
+        <div class="hero__cta reveal" style="justify-content:center"><a class="btn btn--light" href="kontakt.html">Demo anfragen</a><a class="btn btn--line" href="integration.html">Anbindung ansehen</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__row">
+      <span class="footer__brand"><img class="footer__logo" src="brand/logo-dark.svg" alt="Tycho"><span class="footer__claim">Kontrollinstanz für die Ordinationsleitung</span></span>
+      <nav class="footer__links"><a href="produkt.html">Produkt</a><a href="sicherheit.html">Sicherheit</a><a href="integration.html">Anbindung</a><a href="einfuehrung.html">Einführung</a><a href="idee.html">Warum Tycho</a><a href="ordicall.html">ordicall</a><a href="diktara.html">diktara</a><a href="kontakt.html">Kontakt</a><a href="whitepaper.html">Whitepaper</a><a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></nav>
+      <span class="footer__credit">Videos erstellt mit Higgsfield &middot; &copy; 2026 Tycho</span>
+    </div>
+  </footer>
+
+  <script src="main.js" defer></script>
+  <script src="addons.js" defer></script>
+</body>
+</html>
